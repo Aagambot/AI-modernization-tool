@@ -65,10 +65,3 @@ class CodeGraphPipeline:
         
         print(f"Graph built: {self.G.number_of_nodes()} nodes, {self.G.number_of_edges()} edges.")
         return self.G
-
-# Usage
-if __name__ == "__main__":
-    pipeline = CodeGraphPipeline()
-    # List of local file paths to process
-    my_files = ["app/main.py", "app/utils.py"] 
-    graph = pipeline.process_files(my_files)

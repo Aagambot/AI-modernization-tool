@@ -5,9 +5,8 @@ class VectorStore:
     def __init__(self, db_path: str = "./code_index_db"):
         self.db = lancedb.connect(db_path)
         self.table_name = "code_vectors"
-        # BGE-Large uses 1024 dimensions
         self.schema = pa.schema([
-            pa.field("vector", pa.list_(pa.float32(), 1024)),
+            pa.field("vector", pa.list_(pa.float32(), 768)),
             pa.field("content", pa.string()),
             pa.field("file_path", pa.string()),
             pa.field("name", pa.string())

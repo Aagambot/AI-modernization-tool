@@ -6,6 +6,6 @@ class BGEEmbedder:
         vectors = []
         for text in texts:
             response = requests.post("http://localhost:11434/api/embeddings", 
-                                     json={"model": "bge-large", "prompt": text})
+                                     json={"model": "nomic-embed-text", "prompt": text})
             vectors.append(response.json()['embedding'])
         return vectors

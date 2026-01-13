@@ -1,78 +1,105 @@
+import os
+import time
+import json
 import networkx as nx
 import lancedb
-import requests
-import json
-import time
-from embedder import BGEEmbedder
+import google.generativeai as genai
+from embedder import BGEEmbedder 
 
 class ModernizationChat:
     def __init__(self):
+        # 1. Fetch Key from Environment
+        # Note: Added a check to ensure the key is actually found
+        self.api_key = "AIzaSyAJOAmWKDVa24VGyewrXbxZ2i57B1z0NHg"
+        if not self.api_key:
+            raise ValueError("❌ Error: GENAI_API_KEY not found in environment variables.")
+
+        # 2. Configure Gemini explicitly with the API Key
+        # This prevents the 'Insufficient Scopes' error by bypassing ADC
+        genai.configure(api_key=self.api_key)
+        self.llm = genai.GenerativeModel('gemini-2.5-flash')
+        
+        # 3. Initialize local intelligence (Embedder + Vector DB + Graph)
         self.embedder = BGEEmbedder()
         self.db = lancedb.connect("./code_index_db")
         self.table = self.db.open_table("code_vectors")
+        
         try:
             self.G = nx.read_gexf("sales_invoice_graph.gexf")
-        except:
+        except Exception:
             self.G = nx.DiGraph()
 
-    def get_context(self, query: str):
+    def get_context(self, query: str, limit: int = 5):
+        """Retrieves code chunks and enriches with Graph dependencies."""
         start_time = time.time()
         query_vec = self.embedder.embed_batch([query])[0]
-        
-        # PERFORMANCE: limit to 3 high-quality chunks to keep prompt light
-        results = self.table.search(query_vec).limit(3).to_list()
-        latency = (time.time() - start_time) * 1000
+        results = self.table.search(query_vec).limit(limit).to_list()
+        latency_ms = (time.time() - start_time) * 1000
         
         context_blocks = []
         for res in results:
-            # Metadata-First: Extract function signatures and docfields only
-            # This prevents prompt overflow and focuses on "Logic Findability"
+            path = res['file_path']
+            deps = []
+            if self.G.has_node(path):
+                deps = [t for _, t, d in self.G.out_edges(path, data=True)]
+
             context_blocks.append({
-                "file": res['file_path'],
-                "content": res['content'][:3000] # Increased for better logic coverage
+                "file": path,
+                "global_calls": deps[:10],
+                "code": res['content']
             })
-        return context_blocks, latency
-
-    def extract_domain_model(self):
-        # ANCHOR QUERY: Forces retrieval of both JSON metadata and Python logic
-        context, lat = self.get_context("Sales Invoice docfields fields validate on_submit controllers")
-
-        prompt = f"""
-        You are a software architect. Extract the structural domain model from this ERPNext code.
         
-        RULES:
-        1. If you see a list of 'fields' in a JSON-like structure, extract their 'fieldname' and 'fieldtype'.
-        2. Identify core methods (e.g., validate, on_submit) and their outgoing calls.
-        3. Isolate business rules (e.g., credit limit checks).
+        return context_blocks, latency_ms
 
-        CONTEXT:
-        {json.dumps(context)}
+    def generate_domain_model(self):
+            query = "Sales Invoice fields types and on_submit call chain"
+            context, r_lat = self.get_context(query, limit=7)
 
-        RESPONSE FORMAT (JSON ONLY):
-        {{
-            "entity": "SalesInvoice",
-            "fields": [{{ "name": "...", "type": "..." }}],
-            "methods": [{{ "name": "...", "calls": [] }}],
-            "business_rules": []
-        }}
-        """
+            # THE "GOLD STANDARD" EXAMPLE (Few-Shot)
+            example_format = {
+                "entity": "SalesInvoice",
+                "fields": [{"name": "customer", "type": "Link", "target": "Customer"}],
+                "methods": [{"name": "validate", "calls": ["check_credit_limit"]}],
+                "business_rules": ["Credit limit check before save"]
+            }
 
-        response = requests.post("http://localhost:11434/api/generate", 
-                                 json={
-                                     "model": "llama3.2:latest", 
-                                     "prompt": prompt, 
-                                     "stream": False,
-                                     "format": "json", # Forces JSON mode in Ollama
-                                     "options": {
-                                         "temperature": 0, # Makes output predictable
-                                         "num_ctx": 8192   # Ensures enough room for schema
-                                     }
-                                 })
-        return response.json().get('response', '{}'), lat
+            prompt = f"""
+            Analyze the ERPNext code context and return a Domain Model.
+            
+            STRICT FORMAT REQUIRED:
+            Follow this structure exactly: {json.dumps(example_format)}
+
+            - 'fields': Find the exact 'fieldtype' from the code (Link, Date, Currency, etc.).
+            - 'methods': Identify which functions are called INSIDE validate and on_submit.
+            
+            CONTEXT:
+            {json.dumps(context)}
+            """
+
+            start_gen = time.time()
+            response = self.llm.generate_content(
+                prompt, 
+                generation_config={"response_mime_type": "application/json"}
+            )
+            g_lat = (time.time() - start_gen) * 1000
+            
+            return response.text, r_lat, g_lat
 
 if __name__ == "__main__":
-    chat = ModernizationChat()
-    print("🧠 Performing Structural Extraction...")
-    model_json, latency = chat.extract_domain_model()
-    print(model_json)
-    print(f"\n⏱️ Retrieval Latency: {latency:.2f}ms")
+    try:
+        chat = ModernizationChat()
+        print("🚀 Starting Domain Model Extraction")
+        
+        model_json, r_lat, g_lat = chat.generate_domain_model()
+        
+        # Parse and Prettify
+        output = json.loads(model_json)
+        print("\n✅ EXTRACTED DOMAIN MODEL:")
+        print(json.dumps(output, indent=4))
+        
+        print("\n" + "="*40)
+        print(f"⏱️ Retrieval Latency: {r_lat:.2f}ms")
+        print(f"⏱️ Generation Latency: {g_lat:.2f}ms")
+        print("="*40)  
+    except Exception as e:
+        print(f"❌ Critical Error: {e}")
