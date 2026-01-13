@@ -1,45 +1,38 @@
 import tree_sitter_python as tspython
-from tree_sitter import Language, Parser
+from tree_sitter import Language, Parser, Query
 
-class GraphParser:
-    def __init__(self):
-        self.lang = Language(tspython.language())
-        self.parser = Parser(self.lang)
+# 1. Setup (Modern API)
+PY_LANG = Language(tspython.language())
+parser = Parser(PY_LANG)
+# This query looks for function definitions and captures their 'name'
+QUERY = Query(PY_LANG, "(function_definition name: (identifier) @name) @func")
 
-    def extract_nodes_and_edges(self, file_path: str):
-        with open(file_path, "rb") as f:
-            code = f.read()
-        
-        tree = self.parser.parse(code)
-        # Using native tree-sitter node types for robust extraction
-        data = {"definitions": [], "calls": []}
+def extract_functions_ast(code: str) -> list[dict]:
+    tree = parser.parse(bytes(code, "utf8"))
+    functions = []
+    
+    # 2. Execute Query
+    captures = QUERY.c(tree.root_node)
+    
+    # 3. Process Captures (Modern tree-sitter returns a dict of {tag: [nodes]})
+    # We iterate through the '@func' nodes to get the full function body
+    for node in captures.get("func", []):
+        # Find the specific 'name' node inside this function
+        name = "unknown"
+        for n in captures.get("name", []):
+            if n.start_byte >= node.start_byte and n.end_byte <= node.end_byte:
+                name = code[n.start_byte:n.end_byte]
+                break
 
-        def traverse(node, parent_class=None):
-            # Capture class and function definitions
-            if node.type in ["class_definition", "function_definition"]:
-                name_node = node.child_by_field_name("name")
-                if name_node:
-                    name = code[name_node.start_byte:name_node.end_byte].decode()
-                    data["definitions"].append({
-                        "name": name, 
-                        "type": node.type,
-                        "parent": parent_class
-                    })
-                    # Pass class context to nested methods
-                    current_class = name if node.type == "class_definition" else parent_class
-                    for child in node.children:
-                        traverse(child, current_class)
-                    return
+        functions.append({
+            'name': name,
+            'start_line': node.start_point[0],
+            'code': code[node.start_byte:node.end_byte]
+        })
+    return functions
 
-            # Capture function/method calls
-            if node.type == "call":
-                func_node = node.child_by_field_name("function")
-                if func_node:
-                    callee = code[func_node.start_byte:func_node.end_byte].decode()
-                    data["calls"].append(callee)
-
-            for child in node.children:
-                traverse(child, parent_class)
-
-        traverse(tree.root_node)
-        return data
+# --- TEST ---
+if __name__ == "__main__":
+    example = "def greet():\n    print('hello')\n\ndef add(a, b): return a + b"
+    for f in extract_functions_ast(example):
+        print(f"Name: {f['name']} | Line: {f['start_line']}")
