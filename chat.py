@@ -5,12 +5,13 @@ import networkx as nx
 import lancedb
 import google.generativeai as genai
 from embedder import BGEEmbedder 
-
+from dotenv import load_dotenv
 class ModernizationChat:
     def __init__(self):
         # 1. Fetch Key from Environment
         # Note: Added a check to ensure the key is actually found
-        self.api_key = "AIzaSyAJOAmWKDVa24VGyewrXbxZ2i57B1z0NHg"
+        load_dotenv()
+        self.api_key = os.getenv("GENAI_API_KEY")
         if not self.api_key:
             raise ValueError("❌ Error: GENAI_API_KEY not found in environment variables.")
 
