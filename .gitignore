@@ -1,0 +1,35 @@
+# --- Python Specific ---
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.env
+.venv/
+venv/
+ENV/
+
+# --- Vector Database (LanceDB) ---
+# Ignore the local folder where LanceDB stores your 1024-dim vectors
+code_index_db/
+*.lancedb/
+
+# --- Tree-sitter ---
+# Ignore compiled language grammars and build artifacts
+build/
+*.so
+*.dylib
+*.dll
+
+# --- Log Files ---
+*.log
+pip-log.txt
+
+# --- IDEs and OS ---
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+
+# --- ERPNext Specific (Optional if working in Frappe bench) ---
+node_modules/
+erpnext/public/dist/
