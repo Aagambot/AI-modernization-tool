@@ -17,7 +17,7 @@ This makes code understanding traceable, reproducible, and grounded in actual ex
 
 **Project Structure**
 ### 🏗️ Project Structure
-
+```
 AI-MODERNIZATION-TOOL/
 ├── main.py                # Central execution engine for ingestion, indexing, and graphing
 ├── chat.py                # Primary interface for LLM synthesis of domain logic
@@ -36,7 +36,7 @@ AI-MODERNIZATION-TOOL/
 ├── assets/                # Visual artifacts including ER diagrams and flowcharts
 ├── code_index_db/         # Persistent LanceDB vector database (auto-generated)
 └── mlruns/                # MLflow experiment tracking and metric storage
-
+```
 ### Technical Architecture
 
 * **Intelligence Layer:** LLM-driven synthesis of extracted business logic and entity relationships.
