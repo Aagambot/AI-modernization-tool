@@ -1,14 +1,16 @@
 from transformers import AutoTokenizer
+import requests
 import math
 from typing import List, Dict
 
 class HybridChunker:
-    def __init__(self, model_name: str = "BAAI/bge-large-en-v1.5", max_tokens: int = 512, overlap: int = 50):
+    def __init__(self, model_name: str = "nomic-embed-text", max_tokens: int = 2048, overlap: int = 150):
         """
-        Independent Chunker that handles token-safe splitting.
+        Refactored Chunker optimized for Nomic's 2048 context window.
+        Uses BERT tokenizer locally to ensure alignment with Nomic's architecture.
         """
         # Load the actual tokenizer from HuggingFace
-        self.tokenizer = AutoTokenizer.from_pretrained(model_name)
+        self.tokenizer = AutoTokenizer.from_pretrained("bert-base-uncased")
         self.max_tokens = max_tokens
         self.overlap = overlap
 
@@ -31,22 +33,20 @@ class HybridChunker:
         return chunks
 
     def process_nodes(self, nodes: List[Dict]) -> List[Dict]:
-        """
-        Takes the structured list from parser.py and returns token-sized chunks.
-        """
-        final_chunks = []
-        for node in nodes:
-            content = node['content']
-            tokens = self.tokenizer.encode(content, add_special_tokens=False)
-            token_count = len(tokens)
+            """Processes structured code nodes into larger, Nomic-compatible chunks."""
+            final_chunks = []
+            for node in nodes:
+                content = node['content']
+                tokens = self.tokenizer.encode(content, add_special_tokens=False)
+                token_count = len(tokens)
 
-            if token_count <= self.max_tokens:
-                node['token_count'] = token_count
-                node['is_partial'] = False
-                final_chunks.append(node)
-            else:
-                final_chunks.extend(self._sliding_window(node, tokens))
-        return final_chunks
+                if token_count <= self.max_tokens:
+                    node['token_count'] = token_count
+                    node['is_partial'] = False
+                    final_chunks.append(node)
+                else:
+                    final_chunks.extend(self._sliding_window(node, tokens))
+            return final_chunks
 
     def _sliding_window(self, node: Dict, tokens: List[int]) -> List[Dict]:
         """Splits large token arrays into overlapping windows."""

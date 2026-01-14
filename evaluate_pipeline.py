@@ -22,12 +22,10 @@ class PipelineEvaluator:
         data = json.loads(model_json)
         
         # 2. Retrieval & Findability (Metric 1 & 3)
-        # Check if core fields were found (Target >= 0.75)
         found_fields = [f['name'] for f in data.get('fields', [])]
         field_precision = sum(1 for f in expected_fields if f in found_fields) / len(expected_fields)
         
         # 3. Workflow Traceability (Metric 4)
-        # Check if complex methods (like on_submit) were reconstructed
         found_methods = [m['name'] for m in data.get('methods', [])]
         method_recall = sum(1 for m in expected_methods if m in found_methods) / len(expected_methods)
 
