@@ -19,7 +19,6 @@ This makes code understanding traceable, reproducible, and grounded in actual ex
 ### 🏗️ Project Structure
 
 AI-MODERNIZATION-TOOL/
-|
 ├── main.py                # Central execution engine for ingestion, indexing, and graphing
 ├── chat.py                # Primary interface for LLM synthesis of domain logic
 ├── scanner.py             # Recursive crawler for identifying legacy repository source files
