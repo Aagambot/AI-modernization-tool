@@ -11,7 +11,14 @@ class VectorStore:
             pa.field("file_path", pa.string()),
             pa.field("name", pa.string())
         ])
-
+    def get_table(self):
+            """Returns the LanceDB table object."""
+            try:
+                return self.db.open_table(self.table_name)
+            except Exception as e:
+                print(f"❌ Could not open table: {e}")
+                return None
+    
     def save_chunks(self, chunks, mode="overwrite"):
         """
         Saves chunks and automatically drops any that have incorrect vector lengths.

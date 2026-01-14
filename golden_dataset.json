@@ -1,0 +1,17 @@
+[
+  {
+    "query": "How is customer credit limit enforced during submission?",
+    "expected_file": "erpnext/accounts/doctype/sales_invoice/sales_invoice.py",
+    "expected_logic": "check_credit_limit"
+  },
+  {
+    "query": "Where are the taxes and charges templates applied to the invoice?",
+    "expected_file": "erpnext/accounts/doctype/sales_invoice/sales_invoice.py",
+    "expected_logic": "validate_taxes_and_charges"
+  },
+  {
+    "query": "Which function handles the creation of General Ledger entries?",
+    "expected_file": "erpnext/accounts/doctype/sales_invoice/sales_invoice.py",
+    "expected_logic": "make_gl_entries"
+  }
+]
