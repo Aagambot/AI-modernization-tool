@@ -6,17 +6,43 @@ import lancedb
 import google.generativeai as genai
 from embedder import BGEEmbedder 
 from dotenv import load_dotenv
+ 
+load_dotenv()
+PROMPT_TEMPLATE = """
+    Analyze the {entity_name} module. Group the results into logical tiers to ensure a scannable, 
+    high-value modernization blueprint.
+
+    STRICT CATEGORIZED JSON OUTPUT:
+    {{
+    "entity": "{entity_name}",
+    "schema": {{
+        "core_identity": ["Primary fields like customer, company, date"],
+        "financials": ["Currency and total fields"],
+        "relationships": ["Links and Child Tables"]
+    }},
+    "lifecycle_methods": {{
+        "initialization": ["onload, before_save"],
+        "transactional": ["validate, on_submit, make_gl_entries"]
+    }},
+    "business_logic_clusters": {{
+        "validation_rules": ["Rules that stop a save"],
+        "integration_rules": ["Rules about GL, Stock, or external links"]
+    }}
+    }}
+
+    CONTEXT:
+    {context_data}
+"""
+
 class ModernizationChat:
+    # In your chat.py, define this as a constant
+
     def __init__(self):
         # 1. Fetch Key from Environment
-        # Note: Added a check to ensure the key is actually found
-        load_dotenv()
         self.api_key = os.getenv("GENAI_API_KEY")
         if not self.api_key:
             raise ValueError("❌ Error: GENAI_API_KEY not found in environment variables.")
 
-        # 2. Configure Gemini explicitly with the API Key
-        # This prevents the 'Insufficient Scopes' error by bypassing ADC
         genai.configure(api_key=self.api_key)
         self.llm = genai.GenerativeModel('gemini-2.5-flash')
         
@@ -52,46 +78,37 @@ class ModernizationChat:
         
         return context_blocks, latency_ms
 
-    def generate_domain_model(self):
-            query = "Sales Invoice fields types and on_submit call chain"
-            context, r_lat = self.get_context(query, limit=7)
+    def generate_domain_model(self, folder_path):
+        # Dynamically determine entity name from path (e.g., "sales_invoice" -> "SalesInvoice")
+        raw_name = folder_path.split('/')[-1]
+        entity_name = "".join(x.title() for x in raw_name.split('_'))
+        
+        # 1. Get Context (RAG)
+        query = f"{entity_name} schema and core logic"
+        context, r_lat = self.get_context(query)
 
-            # THE "GOLD STANDARD" EXAMPLE (Few-Shot)
-            example_format = {
-                "entity": "SalesInvoice",
-                "fields": [{"name": "customer", "type": "Link", "target": "Customer"}],
-                "methods": [{"name": "validate", "calls": ["check_credit_limit"]}],
-                "business_rules": ["Credit limit check before save"]
-            }
+        # 2. Fill the Template
+        final_prompt = PROMPT_TEMPLATE.format(
+            entity_name=entity_name,
+            context_data=json.dumps(context)
+        )
 
-            prompt = f"""
-            Analyze the ERPNext code context and return a Domain Model.
-            
-            STRICT FORMAT REQUIRED:
-            Follow this structure exactly: {json.dumps(example_format)}
+        # 3. Generate
+        start_gen = time.time()
+        response = self.llm.generate_content(
+            final_prompt,
+            generation_config={"response_mime_type": "application/json"}
+        )
+        g_lat = (time.time() - start_gen) * 1000
 
-            - 'fields': Find the exact 'fieldtype' from the code (Link, Date, Currency, etc.).
-            - 'methods': Identify which functions are called INSIDE validate and on_submit.
-            
-            CONTEXT:
-            {json.dumps(context)}
-            """
-
-            start_gen = time.time()
-            response = self.llm.generate_content(
-                prompt, 
-                generation_config={"response_mime_type": "application/json"}
-            )
-            g_lat = (time.time() - start_gen) * 1000
-            
-            return response.text, r_lat, g_lat
+        return response.text, r_lat, g_lat
 
 if __name__ == "__main__":
     try:
         chat = ModernizationChat()
         print("🚀 Starting Domain Model Extraction")
-        
-        model_json, r_lat, g_lat = chat.generate_domain_model()
+        TARGET_DIR = r"C:/Users/Aagam/OneDrive/Desktop/erpnext/erpnext/accounts/doctype/sales_invoice"
+        model_json, r_lat, g_lat = chat.generate_domain_model(TARGET_DIR)
         
         # Parse and Prettify
         output = json.loads(model_json)
