@@ -6,40 +6,34 @@ import lancedb
 import google.generativeai as genai
 from embedder import BGEEmbedder 
 from dotenv import load_dotenv
- 
+#change the prompt template to match requirements
 load_dotenv()
 PROMPT_TEMPLATE = """
-    Analyze the {entity_name} module. Group the results into logical tiers to ensure a scannable, 
-    high-value modernization blueprint.
+    Act as an MCP Context Provider. Generate a technical specification for {entity_name} to be used by a coding agent (Cursor).
 
-    STRICT CATEGORIZED JSON OUTPUT:
-    {{
-    "entity": "{entity_name}",
-    "schema": {{
-        "core_identity": ["Primary fields like customer, company, date"],
-        "financials": ["Currency and total fields"],
-        "relationships": ["Links and Child Tables"]
-    }},
-    "lifecycle_methods": {{
-        "initialization": ["onload, before_save"],
-        "transactional": ["validate, on_submit, make_gl_entries"]
-    }},
-    "business_logic_clusters": {{
-        "validation_rules": ["Rules that stop a save"],
-        "integration_rules": ["Rules about GL, Stock, or external links"]
-    }}
-    }}
+    FORMAT: Use a hierarchical tree with one-line functional descriptions.
 
-    CONTEXT:
-    {context_data}
+    STRUCTURE:
+    1. ENTRY POINT: Define the exact file:line for the .submit() anchor.
+    2. PHASE-BASED WORKFLOW:
+    - [VALIDATION]: Rules that guard state.
+    - [ACCOUNTING]: Ledger/GL impact.
+    - [STOCK]: Inventory/Valuation impact.
+    - [HOOKS]: Background jobs and side effects.
+    3. CONTEXTUAL OVERLAYS:
+    - Mention specific PRs, Jira issues, or "Quirks" found in comments.
+
+    CONSTRAINT: Every method MUST have a single-line explanation following a '→' symbol.
+    Example: make_gl_entries() → orchestrates the creation of debit/credit lines for the ledger.
 """
 
 class ModernizationChat:
     # In your chat.py, define this as a constant
 
-    def __init__(self):
+    def __init__(self,target_folder=None):
         # 1. Fetch Key from Environment
         self.api_key = os.getenv("GENAI_API_KEY")
+        self.target_folder = target_folder
         if not self.api_key:
             raise ValueError("❌ Error: GENAI_API_KEY not found in environment variables.")
 
