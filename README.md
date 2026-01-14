@@ -20,21 +20,21 @@ This makes code understanding traceable, reproducible, and grounded in actual ex
 ```
 AI-MODERNIZATION-TOOL/
 ├── main.py                # Central execution engine for ingestion, indexing, and graphing
-├── chat.py                # Primary interface for LLM synthesis of domain logic
-├── scanner.py             # Recursive crawler for identifying legacy repository source files
-├── parser.py              # AST-based syntax tree parser for functions, classes, and metadata
+├── chat.py                # Primary interface for LLM synthesis
+├── scanner.py             # file for identifying legacy repository source files
+├── parser.py              # AST-based syntax tree parser
 ├── chunker.py             # Intelligent logic for semantically splitting code into blocks
 ├── embedder.py            # Interface for Nomic-Embed-Text (2048-token context window)
-├── storage.py             # CRUD interface layer for the LanceDB vector store
+├── storage.py             # file to store the embeddings in the lanceDB
 ├── search.py              # Metadata-aware similarity search logic for the RAG engine
-├── graph_builder.py       # Call-graph constructor utilizing NetworkX
-├── graph_to_mermaid.py    # Utility for exporting graph data to Mermaid.js diagrams
+├── graph_builder.py       # file for Calling-graph constructor utilizing NetworkX
+├── graph_to_mermaid.py    # file for converting graph data to Mermaid.js diagrams
 ├── verify_retrieval.py    # Validation suite for calculating Hit Rate @ 5 and MRR
-├── logger.py              # Centralized telemetry and pipeline execution logging
-├── README.md              # Core documentation and technical modernization report
-├── golden_dataset.json    # "Ground Truth" queries for system accuracy benchmarking
-├── assets/                # Visual artifacts including ER diagrams and flowcharts
-├── code_index_db/         # Persistent LanceDB vector database (auto-generated)
+├── logger.py              # logging param for mlflow
+├── README.md              # Documentation
+├── golden_dataset.json    # 10 queries for evaluation
+├── assets/                # ER and mermaid diagrams 
+├── code_index_db/         # LanceDB vector database
 └── mlruns/                # MLflow experiment tracking and metric storage
 ```
 ### Technical Architecture
