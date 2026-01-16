@@ -156,6 +156,7 @@ These metrics validate that:
 * Path normalization ensures graph and vector indexes stay aligned
 * Graph traversal surfaces dependencies missed by vector search alone
 
+
 ---
 
 ## Key Learnings So Far
