@@ -54,7 +54,6 @@ class ModernizationChat:
         latency_ms = (time.time() - start_time) * 1000
         
         # 2. Confidence Check (Distance Score)
-        # LanceDB '_distance': lower is better. 0.4-0.5 is a common threshold for 'uncertainty'.
         top_distance = results[0]['_distance'] if results else 1.0
         
         context_blocks = []

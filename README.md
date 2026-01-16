@@ -42,7 +42,7 @@ The result is a **searchable and inspectable knowledge layer** over the existing
 
 ---
 
-## Current Scope (Explicit)
+## Current Scope 
 
 This project is intentionally scoped for learning and validation:
 
@@ -54,6 +54,144 @@ This project is intentionally scoped for learning and validation:
 * **Goal:** Understanding and impact analysis, not migration
 
 ---
+
+## Example Query : Explain the core domain logic and state transitions of {self.entity_name}
+```
+{
+    "SalesInvoice": {
+        "entry_point": "erpnext/accounts/doctype/sales_invoice/sales_invoice.py:submit()",
+        "entry_point_description": "Framework method call to submit the Sales Invoice, triggering business logic, accounting updates, and stock movements.",
+        "workflow": {
+            "VALIDATION": [
+                {
+                    "method": "Advance Allocation Strategy",
+                    "description": "Controls whether advances are automatically allocated or require manual specification and validation.",
+                    "context": "erpnext/accounts/doctype/sales_invoice/test_sales_invoice.py:test_sales_invoice_with_advance"
+                },
+                {
+                    "method": "Deferred Revenue Account Check",
+                    "description": "Ensures that a deferred revenue account is specified if deferred revenue booking is enabled for an item.",
+                    "context": "erpnext/accounts/doctype/sales_invoice/test_sales_invoice.py:test_deferred_revenue_missing_account"
+                },
+                {
+                    "method": "Item Tax Template Range Application",
+                    "description": "Dynamically selects and applies the correct item tax template based on the net rate of the item, adjusting for discounts.", 
+                    "context": "erpnext/accounts/doctype/sales_invoice/test_sales_invoice.py:test_item_tax_net_range"
+                },
+                {
+                    "method": "Inter-company Address Link Verification",
+                    "description": "Validates that company and customer addresses are correctly linked to their respective entities for inter-company transactions.",
+                    "context": "erpnext/accounts/doctype/sales_invoice/test_sales_invoice.py:test_validate_inter_company_transaction_address_links"
+                },
+                {
+                    "method": "Serial Number Consistency Check",
+                    "description": "Verifies that serial numbers assigned to items on the Sales Invoice match those from the originating Delivery Note.",       
+                    "context": "erpnext/accounts/doctype/sales_invoice/test_sales_invoice.py:test_serial_numbers_against_delivery_note"
+                }
+            ],
+            "ACCOUNTING": [
+                {
+                    "method": "General Ledger (GL) Entry Generation",
+                    "description": "Creates debits and credits for accounts such as Debtors, Sales, Income, Discount, and Cost of Goods Sold upon submission.", 
+                    "context": "erpnext/accounts/doctype/sales_invoice/test_sales_invoice.py:test_sales_invoice_gl_entry_with_perpetual_inventory_non_stock_item"
+                },
+                {
+                    "method": "Advance Allocation and Outstanding Amount Update",
+                    "description": "Allocates specified advances to reduce the invoice's outstanding amount and reflects this in GL entries.",
+                    "context": "erpnext/accounts/doctype/sales_invoice/test_sales_invoice.py:test_sales_invoice_with_advance"
+                },
+                {
+                    "method": "Deferred Revenue Recognition",
+                    "description": "Generates GL entries to progressively recognize deferred revenue based on service dates and accounting periods.",
+                    "context": "erpnext/accounts/doctype/sales_invoice/test_sales_invoice.py:test_deferred_revenue"
+                },
+                {
+                    "method": "Discount Accounting Posting",
+                    "description": "Posts item-level and additional discounts to a dedicated discount account when discount accounting is enabled.",
+                    "context": "erpnext/accounts/doctype/sales_invoice/test_sales_invoice.py:test_sales_invoice_with_discount_accounting_enabled"
+                },
+                {
+                    "method": "Tax Account Posting",
+                    "description": "Records calculated taxes (e.g., VAT, TDS) against the relevant tax account heads in the GL.",
+                    "context": "erpnext/accounts/doctype/sales_invoice/test_sales_invoice.py:test_additional_discount_for_sales_invoice_with_discount_accounting_enabled"
+                },
+                {
+                    "method": "Stock Transfer Rounding Adjustment",
+                    "description": "Creates GL adjustment entries to account for precision differences during stock unit of measure conversions in internal transfers.",
+                    "context": "erpnext/accounts/doctype/sales_invoice/test_sales_invoice.py:test_internal_transfer_gl_precision_issues"
+                }
+            ],
+            "STOCK": [
+                {
+                    "method": "Stock Quantity Reduction",
+                    "description": "Updates warehouse stock levels by reducing the quantity of items sold or, for returns, increasing it.",
+                    "context": "erpnext/accounts/doctype/sales_invoice/test_sales_invoice.py:test_return_sales_invoice"
+                },
+                {
+                    "method": "Serialized Item Status Management",
+                    "description": "Marks serialized items as sold (updating their warehouse status to null) upon invoice submission and reinstates them upon cancellation.",
+                    "context": "erpnext/accounts/doctype/sales_invoice/test_sales_invoice.py:test_serialized"
+                },
+                {
+                    "method": "Stock Ledger Entry (SLE) Creation",
+                    "description": "Records detailed stock movements, valuations, and cost of goods sold in the Stock Ledger.",
+                    "context": "erpnext/accounts/doctype/sales_invoice/test_sales_invoice.py:test_return_sales_invoice"
+                },
+                {
+                    "method": "Stock Unit of Measure Conversion",
+                    "description": "Performs conversions between non-stock and stock units of measure, especially relevant for internal transfers.",
+                    "context": "erpnext/accounts/doctype/sales_invoice/test_sales_invoice.py:test_internal_transfer_gl_precision_issues"
+                }
+            ],
+            "HOOKS": [
+                {
+                    "method": "Inter-company Transaction Creation",
+                    "description": "Automatically triggers the creation of a corresponding Purchase Invoice or Purchase Order when a Sales Invoice is raised for an internal customer.",
+                    "context": "erpnext/accounts/doctype/sales_invoice/test_sales_invoice.py:test_inter_company_transaction"
+                },
+                {
+                    "method": "Implicit Accounting Ledger Reposting",
+                    "description": "Modifications and saves to a submitted Sales Invoice automatically trigger a reposting of associated accounting ledgers to reflect changes.",
+                    "context": "erpnext/accounts/doctype/sales_invoice/test_sales_invoice.py:test_additional_discount_for_sales_invoice_with_discount_accounting_enabled"
+                }
+            ]
+        },
+        "contextual_overlays": [
+            {
+                "type": "Setting",
+                "name": "unlink_payment_on_cancellation_of_invoice",
+                "description": "A system setting that dictates whether payments linked to an invoice are automatically unlinked when the invoice is cancelled.",
+                "context": "erpnext/accounts/doctype/sales_invoice/test_sales_invoice.py:test_sales_invoice_with_advance"
+            },
+            {
+                "type": "Setting",
+                "name": "book_deferred_entries_based_on",
+                "description": "A system setting determining the basis ('days' or 'months') for prorating deferred revenue recognition.",
+                "context": "erpnext/accounts/doctype/sales_invoice/test_sales_invoice.py:test_deferred_revenue"
+            },
+            {
+                "type": "Setting",
+                "name": "book_deferred_entries_via_journal_entry",
+                "description": "A system setting indicating whether deferred revenue entries are processed via Journal Entries or direct GL updates (0 implies direct GL in these tests).",
+                "context": "erpnext/accounts/doctype/sales_invoice/test_sales_invoice.py:test_deferred_revenue"
+            },
+            {
+                "type": "Setting",
+                "name": "enable_discount_accounting",
+                "description": "A system setting that, when enabled, allows discounts to be separately accounted for in the General Ledger.",
+                "context": "erpnext/accounts/doctype/sales_invoice/test_sales_invoice.py:test_sales_invoice_with_discount_accounting_enabled"
+            },
+            {
+                "type": "Quirk",
+                "name": "GL Precision Handling for Internal Transfers",
+                "description": "The system specifically handles potential rounding errors arising from unit of measure conversions in internal transfers by creating adjustment GL entries.",
+                "context": "erpnext/accounts/doctype/sales_invoice/test_sales_invoice.py:test_internal_transfer_gl_precision_issues"
+            }
+        ]
+    }
+}
+
+```
 
 ## Technical Architecture
 
