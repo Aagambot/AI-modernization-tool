@@ -55,7 +55,8 @@ This project is intentionally scoped for learning and validation:
 
 ---
 
-## Example Query : Explain the core domain logic and state transitions of {self.entity_name}
+## Example Query : 
+`Explain the core domain logic and state transitions of {self.entity_name}`
 ```
 {
     "SalesInvoice": {
@@ -227,7 +228,11 @@ This project is intentionally scoped for learning and validation:
    * All runs are versioned and logged using **MLflow**
 
 ---
-
+<p align="center">
+  <img src="assets/sales_invoice_er.png" alt="System Dependency Map">
+  <br>
+  <i>Figure 1: Automated Graph-to-Mermaid export showing SalesInvoice dependencies.</i>
+</p>
 ## Project Structure
 
 ```
