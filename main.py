@@ -7,9 +7,9 @@ from graph_builder import CodeGraphPipeline
 from storage import VectorStore
 from embedder import BGEEmbedder
 from chunker import HybridChunker
-from chat import ModernizationChat 
-from evaluate_pipeline import PipelineEvaluator
 from logger import PipelineLogger
+from verify_retrieval import RetrievalEvaluator
+from graph_to_mermaid import export_folder_to_mermaid
 
 def run_modernization_pipeline(repo_path: str, target_subfolder_str: str):
     # --- Initialization ---
@@ -18,6 +18,7 @@ def run_modernization_pipeline(repo_path: str, target_subfolder_str: str):
     embedder = BGEEmbedder()
     store = VectorStore()
     chunker = HybridChunker()
+    evaluator = RetrievalEvaluator()
     logger = PipelineLogger()
     
     root = Path(repo_path).resolve()
@@ -56,8 +57,13 @@ def run_modernization_pipeline(repo_path: str, target_subfolder_str: str):
 
     # --- PASS 3: Vector Indexing ---
     graph_filename = f"{target_path.name}_graph.gexf"
+    mermaid_filename = f"{target_path.name}_flow.md"
     nx.write_gexf(builder.G, graph_filename)
-    
+
+    #creating mermaid diagram
+    export_folder_to_mermaid(graph_filename, folder_name=entity_name, output_file=mermaid_filename)
+    print(f"🗂️ Graph saved to {graph_filename} and {mermaid_filename}")
+
     if target_chunks:
         print(f"🧠 Embedding {len(target_chunks)} chunks...")
         for chunk in target_chunks:
@@ -67,7 +73,7 @@ def run_modernization_pipeline(repo_path: str, target_subfolder_str: str):
         print("❌ Error: No chunks found.")
         return
     
-
+    eval_results = evaluator.run_benchmark("golden_dataset.json")   
     # --- INTEGRATION: Logging & Versioning ---
     config = {
         "entity": entity_name,
@@ -80,10 +86,14 @@ def run_modernization_pipeline(repo_path: str, target_subfolder_str: str):
     artifacts = {
         "vector_db": "./code_index_db",
         "graph_file": graph_filename,
-        "evaluation_report": "domain_model.json" 
+        "evaluation_report": "domain_model.json" ,
+        "mermaid_diagram": mermaid_filename
     }
-    
-    logger.log_run(config , artifacts)
+    metrics = {
+        "hit_rate_at_5": eval_results.get("hit_rate", 0),
+        "mrr": eval_results.get("mrr", 0)
+    }
+    logger.log_run(config ,metrics,artifacts)
     print("✅ Full Pipeline Run and Versioning Complete.")
 
 if __name__ == "__main__":

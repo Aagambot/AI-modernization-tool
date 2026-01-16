@@ -1,70 +1,97 @@
 import json
 import time
-from storage import VectorStore  # Your existing LanceDB store
-from embedder import BGEEmbedder # Your existing embedder
 import os
-def verify_rag_performance(golden_data_path):
-    store = VectorStore()
-    embedder = BGEEmbedder()
-    
-    with open(golden_data_path, 'r') as f:
-        golden_queries = json.load(f)
+# Use flat imports to match your restored root directory structure
+from storage import VectorStore  
+from embedder import BGEEmbedder 
 
-    results = []
-    hits_at_5 = 0
-    reciprocal_ranks = []
+class RetrievalEvaluator:
+    """
+    OOP-based evaluator to provide metrics for the MLflow logger in main.py.
+    """
+    def __init__(self):
+        self.store = VectorStore()
+        self.embedder = BGEEmbedder()
+        self.reset_metrics()
 
-    print(f"🧪 Evaluating {len(golden_queries)} Golden Queries...\n")
+    def reset_metrics(self):
+        self.results = []
+        self.hits_at_5 = 0
+        self.reciprocal_ranks = []
 
-    for item in golden_queries:
-        query = item['query']
-        expected = item['expected_file']
-        
-        # 1. Search Vector DB
+    def _normalize_path(self, path):
+        return path.replace('\\', '/').lower()
+
+    def evaluate_query(self, query, expected_file, k=5):
         start_time = time.time()
-        query_vector = embedder.embed_batch([query])[0]
-        table = store.get_table()
-        if table:
-            search_results = table.search(query_vector).limit(5).to_list()
-        else:
-            print("❌ Table not found. Did you run the indexer first?")
-            return
+        query_vector = self.embedder.embed_batch([query])[0]
+        table = self.store.get_table()
+        
+        if not table:
+            # Friendly error if main.py hasn't been run yet
+            return {"error": "Table not found"}
+
+        search_results = table.search(query_vector).limit(k).to_list()
         latency = (time.time() - start_time) * 1000
 
-        # 2. Check Rank
         rank = 0
         found = False
-        for i, res in enumerate(search_results):
-            actual_path = res.get('file_path', '').replace('\\', '/').lower()
-            expected_path = expected.replace('\\', '/').lower()
-            print(f"DEBUG: Found {res.get('file_path')} | Expected {expected}")
-            if expected_path in actual_path:
-                    rank = i + 1
-                    found = True
-                    break
-        
-        # 3. Calculate Metrics
-        if found:
-            hits_at_5 += 1
-            reciprocal_ranks.append(1.0 / rank)
-        else:
-            reciprocal_ranks.append(0.0)
+        expected_path = self._normalize_path(expected_file)
 
-        results.append({
+        for i, res in enumerate(search_results):
+            actual_path = self._normalize_path(res.get('file_path', ''))
+            if expected_path in actual_path:
+                rank = i + 1
+                found = True
+                break
+        
+        if found:
+            self.hits_at_5 += 1
+            self.reciprocal_ranks.append(1.0 / rank)
+        else:
+            self.reciprocal_ranks.append(0.0)
+
+        return {
             "query": query,
             "found": found,
             "rank": rank if found else "N/A",
             "latency_ms": latency
-        })
+        }
 
-    # Final Aggregates
-    final_hit_rate = (hits_at_5 / len(golden_queries)) * 100
-    final_mrr = sum(reciprocal_ranks) / len(golden_queries)
+    def run_benchmark(self, dataset_path="golden_dataset.json"):
+        """
+        Main entry point for main.py. 
+        Returns the dictionary needed for PipelineLogger.log_run().
+        """
+        self.reset_metrics()
+        
+        if not os.path.exists(dataset_path):
+            print(f"❌ Dataset not found: {dataset_path}")
+            return {"hit_rate": 0, "mrr": 0}
 
-    print(f"📊 --- FINAL WEEK 1 REPORT ---")
-    print(f"✅ Hit Rate @ 5: {final_hit_rate:.2f}%")
-    print(f"🏆 Mean Reciprocal Rank (MRR): {final_mrr:.3f}")
-    return results
+        with open(dataset_path, 'r') as f:
+            golden_queries = json.load(f)
+
+        for item in golden_queries:
+            res = self.evaluate_query(item['query'], item['expected_file'])
+            if "error" in res:
+                print("❌ Critical Error: Table not found. Run main.py first.")
+                return {"hit_rate": 0, "mrr": 0}
+            self.results.append(res)
+
+        # Calculate final values for the logger
+        total = len(golden_queries)
+        final_hit_rate = (self.hits_at_5 / total) * 100
+        final_mrr = sum(self.reciprocal_ranks) / total
+
+        return {
+            "hit_rate": final_hit_rate,
+            "mrr": final_mrr,
+            "detailed_results": self.results
+        }
 
 if __name__ == "__main__":
-    verify_rag_performance("golden_dataset.json")
+    evaluator = RetrievalEvaluator()
+    report = evaluator.run_benchmark()
+    print(f"📊 Hit Rate @ 5: {report['hit_rate']:.2f}%")
+    print(f"🏆 MRR: {report['mrr']:.3f}")

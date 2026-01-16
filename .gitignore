@@ -12,7 +12,8 @@ ENV/
 # Ignore the local folder where LanceDB stores your 1024-dim vectors
 code_index_db/
 *.lancedb/
-
+mlruns/
+mlflow.db
 # --- Tree-sitter ---
 # Ignore compiled language grammars and build artifacts
 build/

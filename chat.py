@@ -25,6 +25,8 @@ PROMPT_TEMPLATE = """
 
     CONSTRAINT: Every method MUST have a single-line explanation following a '→' symbol.
     Example: make_gl_entries() → orchestrates the creation of debit/credit lines for the ledger.
+
+    OUTPUT: Return only the structured JSON representation of this domain model.
 """
 
 class ModernizationChat:
