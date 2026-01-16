@@ -19,29 +19,43 @@ This makes code understanding traceable, reproducible, and grounded in actual ex
 ### 🏗️ Project Structure
 ```
 AI-MODERNIZATION-TOOL/
-├── main.py                # Central execution engine for ingestion, indexing, and graphing
-├── chat.py                # Primary interface for LLM synthesis
-├── scanner.py             # file for identifying legacy repository source files
-├── parser.py              # AST-based syntax tree parser
-├── chunker.py             # Intelligent logic for semantically splitting code into blocks
-├── embedder.py            # Interface for Nomic-Embed-Text (2048-token context window)
-├── storage.py             # file to store the embeddings in the lanceDB
-├── search.py              # Metadata-aware similarity search logic for the RAG engine
-├── graph_builder.py       # file for Calling-graph constructor utilizing NetworkX
-├── graph_to_mermaid.py    # file for converting graph data to Mermaid.js diagrams
-├── verify_retrieval.py    # Validation suite for calculating Hit Rate @ 5 and MRR
-├── logger.py              # logging param for mlflow
-├── README.md              # Documentation
-├── golden_dataset.json    # 10 queries for evaluation
-├── assets/                # ER and mermaid diagrams 
-├── code_index_db/         # LanceDB vector database
-└── mlruns/                # MLflow experiment tracking and metric storage
+├── core/                    # Core scanning and graph logic
+│   ├── __init__.py
+│   ├── scanner.py          # LocalScanner - Repository file scanning
+│   ├── graph_builder.py    # CodeGraphPipeline - AST & dependency graph
+│   └── parser.py           # LocalGraphParser - Tree-sitter parsing
+│
+├── data/                    # Storage and DB management
+│   ├── __init__.py
+│   └── storage.py          # VectorStore - LanceDB vector operations
+│
+├── engine/                  # AI/ML logic (Embedding, Chunking)
+│   ├── __init__.py
+│   ├── embedder.py         # BGEEmbedder - Nomic embedding API
+│   └── chunker.py          # HybridChunker - Token-aware text splitting
+│
+├── utils/                   # Helpers and visualization
+│   ├── __init__.py
+│   ├── logger.py           # PipelineLogger - MLflow experiment tracking
+│   ├── graph_to_mermaid.py # Mermaid diagram generation
+│   └── search.py           # CodeSearcher - Vector search interface
+│
+├── tests/                   # Evaluation and benchmarks
+│   ├── __init__.py
+│   └── verify_retrieval.py # RetrievalEvaluator - RAG metrics
+│
+├── main.py                  # Entry point - Full pipeline orchestration
+├── chat.py                  # Retrieval/User interface - LLM chat
+├── .env                     # Environment variables
+├── .gitignore              # Git exclusion rules
+├── golden_dataset.json     # Benchmark data
+└── code_index_db/          # LanceDB vector database (auto-created)
 ```
 ### Technical Architecture
 
 * **Intelligence Layer:** LLM-driven synthesis of extracted business logic and entity relationships.
 * **Vector Engine:** **LanceDB** for high-density storage and sub-second semantic search of code chunks.
-* **Graph Engine:** **NetworkX** for initial call-graph extraction, with a roadmap for **Neo4j** integration for advanced multi-hop relationship queries.
+* **Graph Engine:** **NetworkX** for initial call-graph extraction.
 * **Data Pipeline:** Standardized ingestion using **Nomic-Embed-Text** to maintain method-level context.
 * **Observability:** **MLflow** for tracking retrieval accuracy, latency, and model versioning.
 
@@ -155,8 +169,8 @@ The pipeline successfully extracted the core schema and relationships for the `S
 To ensure the pipeline is enterprise-ready, we implemented a **Retrieval Verification Suite** to measure the accuracy of our context engine.
 
 * **Metrics:** across golden queries through file `golden_dataset.json` (e.g., "How is credit limit enforced?").
-✅ Hit Rate @ 5: 100.00%
-🏆 Mean Reciprocal Rank (MRR): 0.750
+**✅ Hit Rate @ 5**: 100.00%
+**🏆 Mean Reciprocal Rank (MRR)**: 0.750
 * **Verification:** Automatic normalization of absolute Windows paths to ensure cross-platform retrieval consistency.
 * **Graph Utility:** Confirmed that the call-graph improves "Logic Findability" by identifying downstream effects of function calls (e.g., from `on_submit` to `make_gl_entries`).
 

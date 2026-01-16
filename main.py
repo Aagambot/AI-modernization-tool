@@ -2,14 +2,14 @@ import os
 import networkx as nx
 import time
 from pathlib import Path
-from scanner import LocalScanner
-from graph_builder import CodeGraphPipeline
-from storage import VectorStore
-from embedder import BGEEmbedder
-from chunker import HybridChunker
-from logger import PipelineLogger
-from verify_retrieval import RetrievalEvaluator
-from graph_to_mermaid import export_folder_to_mermaid
+from core.scanner import LocalScanner
+from core.graph_builder import CodeGraphPipeline
+from data.storage import VectorStore
+from engine.embedder import BGEEmbedder
+from engine.chunker import HybridChunker
+from utils.logger import PipelineLogger
+from tests.verify_retrieval import RetrievalEvaluator
+from utils.graph_to_mermaid import export_folder_to_mermaid
 
 def run_modernization_pipeline(repo_path: str, target_subfolder_str: str):
     # --- Initialization ---

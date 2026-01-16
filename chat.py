@@ -4,7 +4,7 @@ import json
 import networkx as nx
 import lancedb
 import google.generativeai as genai
-from embedder import BGEEmbedder 
+from engine.embedder import BGEEmbedder 
 from dotenv import load_dotenv
 #change the prompt template to match requirements
 load_dotenv()

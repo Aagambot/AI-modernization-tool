@@ -33,20 +33,20 @@ class HybridChunker:
         return chunks
 
     def process_nodes(self, nodes: List[Dict]) -> List[Dict]:
-            """Processes structured code nodes into larger, Nomic-compatible chunks."""
-            final_chunks = []
-            for node in nodes:
-                content = node['content']
-                tokens = self.tokenizer.encode(content, add_special_tokens=False)
-                token_count = len(tokens)
+        """Processes structured code nodes into larger, Nomic-compatible chunks."""
+        final_chunks = []
+        for node in nodes:
+            content = node['content']
+            tokens = self.tokenizer.encode(content, add_special_tokens=False)
+            token_count = len(tokens)
 
-                if token_count <= self.max_tokens:
-                    node['token_count'] = token_count
-                    node['is_partial'] = False
-                    final_chunks.append(node)
-                else:
-                    final_chunks.extend(self._sliding_window(node, tokens))
-            return final_chunks
+            if token_count <= self.max_tokens:
+                node['token_count'] = token_count
+                node['is_partial'] = False
+                final_chunks.append(node)
+            else:
+                final_chunks.extend(self._sliding_window(node, tokens))
+        return final_chunks
 
     def _sliding_window(self, node: Dict, tokens: List[int]) -> List[Dict]:
         """Splits large token arrays into overlapping windows."""

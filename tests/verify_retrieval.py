@@ -1,9 +1,8 @@
 import json
 import time
 import os
-# Use flat imports to match your restored root directory structure
-from storage import VectorStore  
-from embedder import BGEEmbedder 
+from data.storage import VectorStore  
+from engine.embedder import BGEEmbedder 
 
 class RetrievalEvaluator:
     """

@@ -1,5 +1,5 @@
-from storage import VectorStore
-from embedder import BGEEmbedder
+from data.storage import VectorStore
+from engine.embedder import BGEEmbedder
 
 class CodeSearcher:
     def __init__(self):
