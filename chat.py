@@ -5,91 +5,101 @@ import networkx as nx
 import lancedb
 import google.generativeai as genai
 from engine.embedder import BGEEmbedder 
+from data.storage import VectorStore 
 from dotenv import load_dotenv
-#change the prompt template to match requirements
+
 load_dotenv()
+
 PROMPT_TEMPLATE = """
-    Act as an MCP Context Provider. Generate a technical specification for {entity_name} to be used by a coding agent (Cursor).
+Act as an MCP Context Provider. Generate a technical specification for {entity_name}.
+Use the provided CODE CONTEXT and RELATED DEPENDENCIES to build the model.
 
-    FORMAT: Use a hierarchical tree with one-line functional descriptions.
+CONTEXT DATA:
+{context_data}
 
-    STRUCTURE:
-    1. ENTRY POINT: Define the exact file:line for the .submit() anchor.
-    2. PHASE-BASED WORKFLOW:
-    - [VALIDATION]: Rules that guard state.
-    - [ACCOUNTING]: Ledger/GL impact.
-    - [STOCK]: Inventory/Valuation impact.
-    - [HOOKS]: Background jobs and side effects.
-    3. CONTEXTUAL OVERLAYS:
-    - Mention specific PRs, Jira issues, or "Quirks" found in comments.
+FORMAT: Use a hierarchical tree with one-line functional descriptions.
+STRUCTURE:
+1. ENTRY POINT: Define the exact file:line for the .submit() anchor.
+2. PHASE-BASED WORKFLOW: [VALIDATION], [ACCOUNTING], [STOCK], [HOOKS].
+3. CONTEXTUAL OVERLAYS: Mention specific PRs or "Quirks".
 
-    CONSTRAINT: Every method MUST have a single-line explanation following a '→' symbol.
-    Example: make_gl_entries() → orchestrates the creation of debit/credit lines for the ledger.
-
-    OUTPUT: Return only the structured JSON representation of this domain model.
+CONSTRAINT: Every method MUST have a single-line explanation following a '→'.
+OUTPUT: Return only the structured JSON representation.
 """
 
 class ModernizationChat:
-    # In your chat.py, define this as a constant
-
-    def __init__(self,target_folder=None):
-        # 1. Fetch Key from Environment
+    def __init__(self, target_folder=None):
         self.api_key = os.getenv("GENAI_API_KEY")
-        self.target_folder = target_folder
         if not self.api_key:
-            raise ValueError("❌ Error: GENAI_API_KEY not found in environment variables.")
+            raise ValueError("❌ GENAI_API_KEY not found.")
 
         genai.configure(api_key=self.api_key)
-        self.llm = genai.GenerativeModel('gemini-2.5-flash')
-        
-        # 3. Initialize local intelligence (Embedder + Vector DB + Graph)
+        self.llm = genai.GenerativeModel('gemini-2.5-flash') 
         self.embedder = BGEEmbedder()
-        self.db = lancedb.connect("./code_index_db")
-        self.table = self.db.open_table("code_vectors")
+        self.store = VectorStore() 
+        self.table = self.store.get_table()
         
-        try:
-            self.G = nx.read_gexf("sales_invoice_graph.gexf")
-        except Exception:
-            self.G = nx.DiGraph()
+        # Determine current entity name
+        self.entity_name = "SalesInvoice"
 
-    def get_context(self, query: str, limit: int = 5):
-        """Retrieves code chunks and enriches with Graph dependencies."""
+    def get_smart_context(self, query: str, limit: int = 3):
+        """
+        Implements Adaptive RAG: Uses Confidence Scores to trigger Graph Research.
+        """
         start_time = time.time()
         query_vec = self.embedder.embed_batch([query])[0]
+        
+        # 1. Standard Vector Search
         results = self.table.search(query_vec).limit(limit).to_list()
         latency_ms = (time.time() - start_time) * 1000
         
+        # 2. Confidence Check (Distance Score)
+        # LanceDB '_distance': lower is better. 0.4-0.5 is a common threshold for 'uncertainty'.
+        top_distance = results[0]['_distance'] if results else 1.0
+        
         context_blocks = []
+        use_graph = top_distance > 0.45
+        
+        # Load Graph only if needed to save memory/time
+        G = self.store.load_graph(self.entity_name) if use_graph else None
+
         for res in results:
             path = res['file_path']
             deps = []
-            if self.G.has_node(path):
-                deps = [t for _, t, d in self.G.out_edges(path, data=True)]
-
+            
+            # 3. Graph Augmentation
+            if G and G.has_node(path):
+                # Fetch callers and callees (neighbors) to provide 'Modernization' context
+                deps = self.store.get_neighbors(G, path)
+            
             context_blocks.append({
                 "file": path,
-                "global_calls": deps[:10],
+                "confidence": round(1 - top_distance, 2),
+                "graph_enriched": use_graph,
+                "related_files": deps[:5],
                 "code": res['content']
             })
         
-        return context_blocks, latency_ms
+        return context_blocks, latency_ms, use_graph
 
     def generate_domain_model(self, folder_path):
-        # Dynamically determine entity name from path (e.g., "sales_invoice" -> "SalesInvoice")
-        raw_name = folder_path.split('/')[-1]
-        entity_name = "".join(x.title() for x in raw_name.split('_'))
+        raw_name = folder_path.replace('\\', '/').split('/')[-1]
+        self.entity_name = "".join(x.title() for x in raw_name.split('_'))
         
-        # 1. Get Context (RAG)
-        query = f"{entity_name} schema and core logic"
-        context, r_lat = self.get_context(query)
+        # 1. Retrieve enriched context
+        query = f"Explain the core domain logic and state transitions of {self.entity_name}"
+        context, r_lat, graph_triggered = self.get_smart_context(query)
 
-        # 2. Fill the Template
+        if graph_triggered:
+            print(f"🔍 Low vector confidence ({context[0]['confidence']}). Activated Graph Research.")
+
+        # 2. Build Prompt
         final_prompt = PROMPT_TEMPLATE.format(
-            entity_name=entity_name,
-            context_data=json.dumps(context)
+            entity_name=self.entity_name,
+            context_data=json.dumps(context, indent=2)
         )
 
-        # 3. Generate
+        # 3. LLM Generation
         start_gen = time.time()
         response = self.llm.generate_content(
             final_prompt,
@@ -102,11 +112,11 @@ class ModernizationChat:
 if __name__ == "__main__":
     try:
         chat = ModernizationChat()
-        print("🚀 Starting Domain Model Extraction")
         TARGET_DIR = r"C:/Users/Aagam/OneDrive/Desktop/erpnext/erpnext/accounts/doctype/sales_invoice"
+        
+        print(f"🚀 Analyzing {TARGET_DIR}...")
         model_json, r_lat, g_lat = chat.generate_domain_model(TARGET_DIR)
         
-        # Parse and Prettify
         output = json.loads(model_json)
         print("\n✅ EXTRACTED DOMAIN MODEL:")
         print(json.dumps(output, indent=4))

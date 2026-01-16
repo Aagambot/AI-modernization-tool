@@ -14,7 +14,7 @@ from utils.graph_to_mermaid import export_folder_to_mermaid
 def run_modernization_pipeline(repo_path: str, target_subfolder_str: str):
     # --- Initialization ---
     scanner = LocalScanner(repo_path)
-    builder = CodeGraphPipeline()
+    builder = CodeGraphPipeline(repo_path)
     embedder = BGEEmbedder()
     store = VectorStore()
     chunker = HybridChunker()
@@ -56,17 +56,21 @@ def run_modernization_pipeline(repo_path: str, target_subfolder_str: str):
             print(f"⚠️ Error processing {f_path}: {e}")
 
     # --- PASS 3: Vector Indexing ---
+
     graph_filename = f"{target_path.name}_graph.gexf"
     mermaid_filename = f"{target_path.name}_flow.md"
     nx.write_gexf(builder.G, graph_filename)
+    graph_path = store.save_graph(builder.G, entity_name)
+    print(f"📊 Graph persisted at: {graph_path}")
 
     #creating mermaid diagram
     export_folder_to_mermaid(graph_filename, folder_name=entity_name, output_file=mermaid_filename)
     print(f"🗂️ Graph saved to {graph_filename} and {mermaid_filename}")
 
     if target_chunks:
-        print(f"🧠 Embedding {len(target_chunks)} chunks...")
+        # Standardize paths in chunks to match Graph Node IDs
         for chunk in target_chunks:
+            chunk['file_path'] = os.path.relpath(chunk['file_path'], repo_path).replace('\\', '/')
             chunk['vector'] = embedder.embed_batch([chunk['content']])[0]
         store.save_chunks(target_chunks, mode="overwrite")
     else:
@@ -87,7 +91,8 @@ def run_modernization_pipeline(repo_path: str, target_subfolder_str: str):
         "vector_db": "./code_index_db",
         "graph_file": graph_filename,
         "evaluation_report": "domain_model.json" ,
-        "mermaid_diagram": mermaid_filename
+        "mermaid_diagram": mermaid_filename,
+        "graph_file":graph_path
     }
     metrics = {
         "hit_rate_at_5": eval_results.get("hit_rate", 0),

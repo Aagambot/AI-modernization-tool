@@ -1,183 +1,177 @@
-
 ## Project Documentation: Legacy ERP Modernization Pipeline
 
-### Executive Summary
+---
 
-Built a **RAG system** that turns a complex ERP codebase into a searchable, explainable knowledge map, so teams can understand what the software actually does before changing it.
-It combines AI search with a dependency map of the code, allowing risks and side effects to be identified early instead of after failures.
+## Overview
 
-RAG pipeline where ERPNext code is AST-parsed using **Tree-sitter**, then chunked at function boundaries with token-aware sizing. These chunks are embedded using **nomic-embed-text** and stored in **LanceDB** along with file and line metadata. In parallel, built the graph through **Networkx**, capturing real function-call relationships. The system performs hybrid retrieval—semantic search from LanceDB plus dependency context from the graph—before passing structured context to the LLM and provides the **mermaid diagram** for the developer to understand the structure of the folder.
-This makes code understanding traceable, reproducible, and grounded in actual execution paths, not inferred summaries.
+### Purpose of the Project
+
+This project investigates how **code intelligence techniques** can improve the safety and confidence of legacy ERP modernization.
+Rather than migrating or rewriting code, the goal is to **make existing business-critical logic understandable, traceable, and verifiable** before any changes are attempted.
+
+The focus is on **ERPNext**, specifically the **Sales Invoice** module, which contains dense accounting, stock, and validation logic that is difficult to reason about through documentation alone.
 
 ---
 
-### Domain Schema Visualization
-![Sales Invoice ER Diagram](assets/sales_invoice_er.png)
-*Figure 1: Extracted Entity Relationship Model for the Sales Invoice Aggregate.*
+## Problem Statement & Approach
 
-**Project Structure**
-### 🏗️ Project Structure
+### Problem Statement
+
+Legacy ERP systems often contain:
+
+* Business logic spread across many files and hooks
+* Implicit dependencies that are hard to trace
+* High risk of regression when making changes
+
+Developers struggle to answer basic questions such as:
+
+* *Where is a rule enforced?*
+* *What functions are affected if this changes?*
+* *Which workflows are triggered on submit or cancel?*
+
+### Approach Taken
+
+This project builds a **local-first, graph-augmented RAG pipeline** that:
+
+1. Parses the ERPNext codebase using ASTs
+2. Extracts function-level relationships into a graph
+3. Embeds code chunks for semantic retrieval
+4. Verifies retrieval quality using measurable metrics
+
+The result is a **searchable and inspectable knowledge layer** over the existing codebase.
+
+---
+
+## Current Scope (Explicit)
+
+This project is intentionally scoped for learning and validation:
+
+* **Target system:** ERPNext
+* **Target module:** `erpnext/accounts/doctype/sales_invoice/`
+* **Language:** Python only
+* **Analysis type:** Static analysis (no runtime tracing yet)
+* **Graph coverage:** Function calls, imports, and containment
+* **Goal:** Understanding and impact analysis, not migration
+
+---
+
+## Technical Architecture
+
+### High-Level Pipeline
+
+1. **Repository Scanning**
+   The ERPNext repository is cloned locally and scanned from the filesystem to avoid API limits and ensure reproducibility.
+
+2. **AST-Based Parsing**
+   Code is parsed using **Tree-sitter** to identify functions, classes, and structural boundaries.
+
+3. **Chunking & Embedding**
+
+   * Code is chunked at logical boundaries with token-aware sizing
+   * Chunks are embedded using **nomic-embed-text**
+   * Embeddings are stored in **LanceDB** with file and line metadata
+
+4. **Graph Construction**
+
+   * A directed graph is built using **NetworkX**
+   * Nodes represent functions and files
+   * Edges represent calls, imports, and containment relationships
+
+5. **Hybrid Retrieval (Graph + Vector)**
+
+   * Semantic search retrieves relevant code
+   * Graph traversal adds upstream and downstream context
+   * Both are combined before LLM synthesis
+
+6. **Evaluation & Tracking**
+
+   * Retrieval quality is measured using **Hit Rate @ 5** and **MRR**
+   * All runs are versioned and logged using **MLflow**
+
+---
+
+## Project Structure
+
 ```
 AI-MODERNIZATION-TOOL/
-├── core/                    # Core scanning and graph logic
-│   ├── __init__.py
-│   ├── scanner.py          # LocalScanner - Repository file scanning
-│   ├── graph_builder.py    # CodeGraphPipeline - AST & dependency graph
-│   └── parser.py           # LocalGraphParser - Tree-sitter parsing
+├── core/                    # Repository scanning and graph logic
+│   ├── scanner.py
+│   ├── parser.py
+│   └── graph_builder.py
 │
-├── data/                    # Storage and DB management
-│   ├── __init__.py
-│   └── storage.py          # VectorStore - LanceDB vector operations
+├── engine/                  # Chunking and embedding logic
+│   ├── chunker.py
+│   └── embedder.py
 │
-├── engine/                  # AI/ML logic (Embedding, Chunking)
-│   ├── __init__.py
-│   ├── embedder.py         # BGEEmbedder - Nomic embedding API
-│   └── chunker.py          # HybridChunker - Token-aware text splitting
+├── data/                    # Vector storage
+│   └── storage.py
 │
-├── utils/                   # Helpers and visualization
-│   ├── __init__.py
-│   ├── logger.py           # PipelineLogger - MLflow experiment tracking
-│   ├── graph_to_mermaid.py # Mermaid diagram generation
-│   └── search.py           # CodeSearcher - Vector search interface
+├── utils/                   # Logging, search, and visualization
+│   ├── logger.py
+│   ├── search.py
+│   └── graph_to_mermaid.py
 │
-├── tests/                   # Evaluation and benchmarks
-│   ├── __init__.py
-│   └── verify_retrieval.py # RetrievalEvaluator - RAG metrics
+├── tests/                   # Retrieval evaluation
+│   └── verify_retrieval.py
 │
-├── main.py                  # Entry point - Full pipeline orchestration
-├── chat.py                  # Retrieval/User interface - LLM chat
-├── .env                     # Environment variables
-├── .gitignore              # Git exclusion rules
-├── golden_dataset.json     # Benchmark data
-└── code_index_db/          # LanceDB vector database (auto-created)
-```
-### Technical Architecture
-
-* **Intelligence Layer:** LLM-driven synthesis of extracted business logic and entity relationships.
-* **Vector Engine:** **LanceDB** for high-density storage and sub-second semantic search of code chunks.
-* **Graph Engine:** **NetworkX** for initial call-graph extraction.
-* **Data Pipeline:** Standardized ingestion using **Nomic-Embed-Text** to maintain method-level context.
-* **Observability:** **MLflow** for tracking retrieval accuracy, latency, and model versioning.
-
----
-
-### Domain Entity Model: Sales Invoice
-
-The pipeline successfully extracted the core schema and relationships for the `SalesInvoice` aggregate.
-
-#### Extracted Domain Intelligence
-
-**Architectural Query:** *"Extract the phase-based submission workflow for Sales Invoice, including historical quirks and PR context."*
-
-```json
-{
-    "ENTRY_POINT": "sales_invoice_service.py:120:submit_invoice()",
-    "PHASE_BASED_WORKFLOW": {
-        "VALIDATION": [
-            {
-                "method": "validate_invoice_data(invoice_data)",
-                "description": "ensures all required fields are present and valid."
-            },
-            {
-                "method": "check_customer_credit_limit(customer_id, invoice_total)",
-                "description": "verifies if the customer has sufficient credit."
-            },
-            {
-                "method": "validate_item_availability(items)",
-                "description": "confirms if items are in stock or can be backordered."
-            },
-            {
-                "method": "check_tax_compliance(invoice_data)",
-                "description": "verifies tax calculation and jurisdiction rules."
-            }
-        ],
-        "ACCOUNTING": [
-            {
-                "method": "create_receivable_entry(invoice_id, customer_id, total_amount)",
-                "description": "generates an accounts receivable entry for the customer."
-            },
-            {
-                "method": "record_sales_revenue(invoice_id, revenue_lines)",
-                "description": "posts revenue to the appropriate sales accounts."
-            },
-            {
-                "method": "post_tax_liability(invoice_id, tax_amount)",
-                "description": "records the sales tax collected as a liability."
-            },
-            {
-                "method": "update_customer_balance(customer_id, total_amount)",
-                "description": "adjusts the customer's outstanding balance."
-            }
-        ],
-        "STOCK": [
-            {
-                "method": "deduct_inventory_items(items)",
-                "description": "reduces the quantity of sold items from inventory."
-            },
-            {
-                "method": "record_cost_of_goods_sold(items)",
-                "description": "posts the cost of items sold to the COGS account."
-            },
-            {
-                "method": "update_item_valuation(items)",
-                "description": "adjusts the valuation of remaining inventory items."
-            },
-            {
-                "method": "trigger_reorder_if_needed(items)",
-                "description": "initiates a reorder process if stock levels fall below minimum."
-            }
-        ],
-        "HOOKS": [
-            {
-                "method": "send_invoice_email(invoice_id, customer_email)",
-                "description": "dispatches the invoice document to the customer via email."
-            },
-            {
-                "method": "trigger_crm_update(customer_id, invoice_id)",
-                "description": "updates customer activity in the CRM system."
-            },
-            {
-                "method": "publish_invoice_event(invoice_id)",
-                "description": "publishes an event for downstream systems to consume (e.g., analytics, reporting)."
-            },
-            {
-                "method": "schedule_payment_reminder(invoice_id, due_date)",
-                "description": "sets up a scheduled task for payment reminders."
-            }
-        ]
-    },
-    "CONTEXTUAL_OVERLAYS": [
-        "PR #1234: Refactor SalesInvoice validation logic to improve performance and add stricter type checks.",
-        "JIRA-SALES-567: Implement credit limit check for new customers, ensuring sufficient funds before invoice creation.",
-        "Quirk: Due to historical data migration, invoices before 2022-01-01 might have discrepancies in tax calculations, handled by a specific override in `check_tax_compliance`.",
-        "Quirk: There's a known race condition in `deduct_inventory_items` if multiple invoices are processed for the same low-stock item simultaneously, addressed by optimistic locking (see comment in `inventory_manager.py`)."
-    ]
-}
-
+├── main.py                  # End-to-end pipeline orchestration
+├── chat.py                  # Retrieval + LLM interface
+├── golden_dataset.json      # Benchmark queries
+└── code_index_db/           # LanceDB vector database
 ```
 
-#### Key Extracted Modules
+---
 
-* **Validation:** Automated checks for credit limits, warehouse availability, and tax templates.
-* **Financials:** Logic governing General Ledger (GL) entries and receivable balance updates.
-* **Stock:** Integration points for Stock Ledger Entries (SLE) and valuation recalculations.
+## Extracted Understanding: Sales Invoice (Experimental)
+
+The pipeline was used to reconstruct a **candidate execution workflow** for the Sales Invoice module based purely on static analysis.
+
+### Observed Execution Phases (Hypotheses)
+
+* **Validation:** Deferred revenue checks, tax template validation, inter-company address validation
+* **Accounting:** GL entry creation, perpetual inventory accounting, advance allocation
+* **Stock:** Stock updates, serial/batch handling, reversals on cancellation
+* **Hooks:** Post-submit and post-cancel side effects driven by system settings
+
+These phases are **derived from code structure and call relationships**, not manually curated documentation.
 
 ---
 
-### Process & Validation
+## Verification & Metrics
 
-To ensure the pipeline is enterprise-ready, we implemented a **Retrieval Verification Suite** to measure the accuracy of our context engine.
+To ensure the system is producing useful results, a small verification suite is used.
 
-* **Metrics:** across golden queries through file `golden_dataset.json` (e.g., "How is credit limit enforced?").
-**✅ Hit Rate @ 5**: 100.00%
-**🏆 Mean Reciprocal Rank (MRR)**: 0.750
-* **Verification:** Automatic normalization of absolute Windows paths to ensure cross-platform retrieval consistency.
-* **Graph Utility:** Confirmed that the call-graph improves "Logic Findability" by identifying downstream effects of function calls (e.g., from `on_submit` to `make_gl_entries`).
+### Retrieval Metrics (Golden Dataset)
+
+* **Hit Rate @ 5:** 100%
+* **Mean Reciprocal Rank (MRR):** 0.75
+
+These metrics validate that:
+
+* Relevant files are consistently retrieved
+* Core business logic appears early in search results
+
+### Supporting Checks
+
+* Path normalization ensures graph and vector indexes stay aligned
+* Graph traversal surfaces dependencies missed by vector search alone
 
 ---
 
-### Implementation Note: Graph Strategy
+## Key Learnings So Far
 
-While current visualization is handled via **NetworkX** and **Mermaid.js** for documentation clarity, the architecture is designed to shift to **Neo4j** as the repository scale increases. This will support complex queries like "Show all modules affected by a change in the Tax Calculation logic."
+* Vector search alone is insufficient for understanding legacy code
+* Call graphs significantly improve context and correctness
+* Measuring retrieval quality is essential to avoid false confidence
+* Scoping narrowly (one module) produces better insights than broad indexing
+
+---
+
+## Conclusion
+
+This project demonstrates that **graph-augmented retrieval** can make complex ERP codebases more understandable and measurable.
+By focusing on **structural understanding before change**, it provides a practical foundation for safer, incremental legacy modernization.
+
+Future work can build on this foundation to explore runtime analysis, broader domain coverage, and modernization workflows.
 
 ---
