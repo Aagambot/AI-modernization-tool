@@ -1,47 +1,34 @@
 import os
 import networkx as nx
+import requests
 import tree_sitter_python as tspython
 from tree_sitter import Language, Parser
-from pathlib import Path
 
 class CodeGraphPipeline:
-    def __init__(self, repo_root):
+    def __init__(self):
         """
-        Initialize with repo_root to enable relative path normalization.
+        No repo_root needed; GitHub API provides relative paths automatically.
         """
-        self.repo_root = os.path.abspath(repo_root)
         self.lang = Language(tspython.language())
         self.parser = Parser(self.lang)
-        
         self.G = nx.MultiDiGraph() 
         self.symbol_table = {} 
-    def _normalize_path(self, absolute_path):
-        """
-        Converts absolute system paths to standardized relative paths.
-        This acts as a 'Primary Key' for both the Graph and Vector DB.
-        """
-        return os.path.relpath(absolute_path, self.repo_root).replace('\\', '/')
 
     def _get_name(self, node, code_bytes):
-        """Helper to extract identifier name from a node."""
         name_node = node.child_by_field_name("name")
         if name_node:
             return code_bytes[name_node.start_byte:name_node.end_byte].decode()
         return None
     
-    def pass_1_symbols(self, file_path, code_bytes):
-        """Extracts definitions using relative paths for standardized node IDs."""
-        rel_path = self._normalize_path(file_path)
+    def pass_1_symbols(self, rel_path, code_bytes):
+        """Standardized node IDs using GitHub paths."""
         tree = self.parser.parse(code_bytes)
-        
-        # Add the file node using its relative path
         self.G.add_node(rel_path, type='file')
 
         def traverse(node):
             if node.type in ['function_definition', 'class_definition']:
                 name = self._get_name(node, code_bytes)
                 if name:
-                    # Map name to its relative source file for global resolution
                     self.symbol_table[name] = rel_path
                     node_id = f"{rel_path}:{name}"
                     self.G.add_node(node_id, type=node.type, name=name)
@@ -51,26 +38,21 @@ class CodeGraphPipeline:
         
         traverse(tree.root_node)
 
-    def pass_2_calls(self, file_path, code_bytes):
-        """Links function calls to their definitions across the codebase."""
-        source_rel_path = self._normalize_path(file_path)
+    def pass_2_calls(self, rel_path, code_bytes):
         tree = self.parser.parse(code_bytes)
 
         def traverse(node, current_caller=None):
             if node.type == 'function_definition':
                 current_caller = self._get_name(node, code_bytes)
-
             elif node.type == 'call' and current_caller:
                 func_node = node.child_by_field_name('function')
                 if func_node:
                     callee_name = code_bytes[func_node.start_byte:func_node.end_byte].decode()
-                    # Resolve call: Link using standardized relative paths
                     if callee_name in self.symbol_table:
-                        source_id = f"{source_rel_path}:{current_caller}"
+                        source_id = f"{rel_path}:{current_caller}"
                         target_rel_path = self.symbol_table[callee_name]
                         target_id = f"{target_rel_path}:{callee_name}"
                         
-                        # Verify source node exists before adding edge
                         if self.G.has_node(source_id):
                             self.G.add_edge(source_id, target_id, type='CALLS')
             
@@ -79,23 +61,29 @@ class CodeGraphPipeline:
                 
         traverse(tree.root_node)
 
-    def process_files(self, file_list):
-        """Orchestrates the two-pass graph construction with standardized paths."""
+    def process_remote_files(self, remote_file_list):
+        """
+        remote_file_list: list of {'path': ..., 'download_url': ...}
+        """
         contents = {}
-        for f in file_list:
+        headers = {"Authorization": f"token {os.getenv('GITHUB_TOKEN')}"} if os.getenv('GITHUB_TOKEN') else {}
+
+        # 1. Fetch all bytes into memory
+        for f_info in remote_file_list:
             try:
-                with open(f, 'rb') as file:
-                    contents[f] = file.read()
+                resp = requests.get(f_info['download_url'], headers=headers)
+                if resp.status_code == 200:
+                    contents[f_info['path']] = resp.content
             except Exception as e:
-                print(f"⚠️ Warning: Could not read {f}: {e}")
+                print(f"⚠️ Failed to fetch {f_info['path']}: {e}")
         
-        # Pass 1: Build the symbol table
-        for f, code in contents.items(): 
-            self.pass_1_symbols(f, code)
+        # 2. Pass 1: Symbols
+        for rel_path, code in contents.items(): 
+            self.pass_1_symbols(rel_path, code)
             
-        # Pass 2: Connect the calls based on the symbol table
-        for f, code in contents.items(): 
-            self.pass_2_calls(f, code)
+        # 3. Pass 2: Relationships
+        for rel_path, code in contents.items(): 
+            self.pass_2_calls(rel_path, code)
         
-        print(f"✅ Graph built: {self.G.number_of_nodes()} nodes, {self.G.number_of_edges()} edges.")
+        print(f"✅ Remote Graph built: {self.G.number_of_nodes()} nodes, {self.G.number_of_edges()} edges.")
         return self.G

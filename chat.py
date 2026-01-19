@@ -54,7 +54,6 @@ class ModernizationChat:
         t_start = time.perf_counter()
 
         # Step 1: Run Embedding and initial Graph check in parallel
-        # We use asyncio.to_thread because BGEEmbedder is likely a blocking CPU task
         t0 = time.perf_counter()
         query_vec_task = asyncio.to_thread(self.embedder.embed_batch, [query])
         
