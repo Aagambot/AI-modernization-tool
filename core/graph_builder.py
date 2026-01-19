@@ -12,10 +12,9 @@ class CodeGraphPipeline:
         self.repo_root = os.path.abspath(repo_root)
         self.lang = Language(tspython.language())
         self.parser = Parser(self.lang)
-        # Using MultiDiGraph to support multiple types of relationships if needed
+        
         self.G = nx.MultiDiGraph() 
-        self.symbol_table = {}  # Maps "FunctionName" -> "relative_file_path"
-
+        self.symbol_table = {} 
     def _normalize_path(self, absolute_path):
         """
         Converts absolute system paths to standardized relative paths.

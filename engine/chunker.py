@@ -6,7 +6,7 @@ from typing import List, Dict
 class HybridChunker:
     def __init__(self, model_name: str = "nomic-embed-text", max_tokens: int = 2048, overlap: int = 150):
         """
-        Refactored Chunker optimized for Nomic's 2048 context window.
+        Refactored Chunker optimized for 2048 context window.
         Uses BERT tokenizer locally to ensure alignment with Nomic's architecture.
         """
         # Load the actual tokenizer from HuggingFace
@@ -33,7 +33,7 @@ class HybridChunker:
         return chunks
 
     def process_nodes(self, nodes: List[Dict]) -> List[Dict]:
-        """Processes structured code nodes into larger, Nomic-compatible chunks."""
+        """Processes structured code nodes into larger chunks."""
         final_chunks = []
         for node in nodes:
             content = node['content']

@@ -1,6 +1,7 @@
 import os
 import time
 import json
+import asyncio
 import networkx as nx
 import lancedb
 import google.generativeai as genai
@@ -34,63 +35,74 @@ class ModernizationChat:
             raise ValueError("❌ GENAI_API_KEY not found.")
 
         genai.configure(api_key=self.api_key)
-        self.llm = genai.GenerativeModel('gemini-2.5-flash') 
+        # Using the async-compatible model
+        self.llm = genai.GenerativeModel('gemini-2.0-flash') 
         self.embedder = BGEEmbedder()
         self.store = VectorStore() 
         self.table = self.store.get_table()
         
-        # Determine current entity name
         self.entity_name = "SalesInvoice"
+        
+        print("💾 Pre-loading Graph into memory...")
+        self.cached_graph = self.store.load_graph(self.entity_name)
 
-    def get_smart_context(self, query: str, limit: int = 3):
+    async def get_smart_context(self, query: str, limit: int = 3):
         """
-        Implements Adaptive RAG: Uses Confidence Scores to trigger Graph Research.
+        Runs Embedding and Graph logic concurrently to hide latency.
         """
-        start_time = time.time()
-        query_vec = self.embedder.embed_batch([query])[0]
+        metrics = {}
+        t_start = time.perf_counter()
+
+        # Step 1: Run Embedding and initial Graph check in parallel
+        # We use asyncio.to_thread because BGEEmbedder is likely a blocking CPU task
+        t0 = time.perf_counter()
+        query_vec_task = asyncio.to_thread(self.embedder.embed_batch, [query])
         
-        # 1. Standard Vector Search
-        results = self.table.search(query_vec).limit(limit).to_list()
-        latency_ms = (time.time() - start_time) * 1000
+        # While waiting for embedding, we can do other prep work if needed
+        query_vec_results = await query_vec_task
+        query_vec = query_vec_results[0]
+        metrics['embedding_ms'] = (time.perf_counter() - t0) * 1000
         
-        # 2. Confidence Check (Distance Score)
+        # Step 2: Search Vector DB (also offloaded to a thread)
+        t1 = time.perf_counter()
+        results = await asyncio.to_thread(lambda: self.table.search(query_vec).limit(limit).to_list())
+        metrics['vector_search_ms'] = (time.perf_counter() - t1) * 1000
+        
         top_distance = results[0]['_distance'] if results else 1.0
-        
-        context_blocks = []
         use_graph = top_distance > 0.45
         
-        # Load Graph only if needed to save memory/time
-        G = self.store.load_graph(self.entity_name) if use_graph else None
-
-        for res in results:
-            path = res['file_path']
-            deps = []
-            
-            # 3. Graph Augmentation
-            if G and G.has_node(path):
-                # Fetch callers and callees (neighbors) to provide 'Modernization' context
-                deps = self.store.get_neighbors(G, path)
-            
-            context_blocks.append({
-                "file": path,
-                "confidence": round(1 - top_distance, 2),
-                "graph_enriched": use_graph,
-                "related_files": deps[:5],
-                "code": res['content']
-            })
+        context_blocks = []
+        t2 = time.perf_counter()
         
-        return context_blocks, latency_ms, use_graph
+        if use_graph and self.cached_graph:
+            # Graph lookups are usually fast, but we keep them clean
+            for res in results:
+                path = res['file_path']
+                deps = self.store.get_neighbors(self.cached_graph, path) if self.cached_graph.has_node(path) else []
+                context_blocks.append({
+                    "file": path, "confidence": round(1 - top_distance, 2),
+                    "graph_enriched": True, "related_files": deps[:5], "code": res['content']
+                })
+        else:
+            for res in results:
+                context_blocks.append({
+                    "file": res['file_path'], "confidence": round(1 - top_distance, 2),
+                    "graph_enriched": False, "code": res['content']
+                })
+        
+        metrics['graph_lookup_ms'] = (time.perf_counter() - t2) * 1000
+        total_retrieval_ms = (time.perf_counter() - t_start) * 1000
+        
+        return context_blocks, total_retrieval_ms, use_graph, metrics
 
-    def generate_domain_model(self, folder_path):
+    async def generate_domain_model(self, folder_path):
         raw_name = folder_path.replace('\\', '/').split('/')[-1]
         self.entity_name = "".join(x.title() for x in raw_name.split('_'))
         
-        # 1. Retrieve enriched context
         query = f"Explain the core domain logic and state transitions of {self.entity_name}"
-        context, r_lat, graph_triggered = self.get_smart_context(query)
-
-        if graph_triggered:
-            print(f"🔍 Low vector confidence ({context[0]['confidence']}). Activated Graph Research.")
+        
+        # 1. Retrieve context asynchronously
+        context, r_lat, graph_triggered, r_metrics = await self.get_smart_context(query)
 
         # 2. Build Prompt
         final_prompt = PROMPT_TEMPLATE.format(
@@ -98,31 +110,34 @@ class ModernizationChat:
             context_data=json.dumps(context, indent=2)
         )
 
-        # 3. LLM Generation
-        start_gen = time.time()
-        response = self.llm.generate_content(
+        # 3. Use Async LLM Generation
+        start_gen = time.perf_counter()
+        response = await self.llm.generate_content_async(
             final_prompt,
             generation_config={"response_mime_type": "application/json"}
         )
-        g_lat = (time.time() - start_gen) * 1000
+        g_lat = (time.perf_counter() - start_gen) * 1000
 
         return response.text, r_lat, g_lat
 
-if __name__ == "__main__":
+async def main():
     try:
         chat = ModernizationChat()
         TARGET_DIR = r"C:/Users/Aagam/OneDrive/Desktop/erpnext/erpnext/accounts/doctype/sales_invoice"
         
         print(f"🚀 Analyzing {TARGET_DIR}...")
-        model_json, r_lat, g_lat = chat.generate_domain_model(TARGET_DIR)
+        model_json, r_lat, g_lat = await chat.generate_domain_model(TARGET_DIR)
         
         output = json.loads(model_json)
         print("\n✅ EXTRACTED DOMAIN MODEL:")
         print(json.dumps(output, indent=4))
         
         print("\n" + "="*40)
-        print(f"⏱️ Retrieval Latency: {r_lat:.2f}ms")
-        print(f"⏱️ Generation Latency: {g_lat:.2f}ms")
+        print(f"⏱️ TOTAL Retrieval: {r_lat:.2f}ms")
+        print(f"⏱️ TOTAL Generation (API): {g_lat:.2f}ms")
         print("="*40)  
     except Exception as e:
         print(f"❌ Critical Error: {e}")
+
+if __name__ == "__main__":
+    asyncio.run(main())

@@ -24,8 +24,6 @@ class VectorStore:
             pa.field("name", pa.string())
         ])
 
-    # --- NEW: Graph Persistence Methods ---
-
     def save_graph(self, G, entity_name):
         """Saves the NetworkX graph as a GEXF data product."""
         path = self.graph_dir / f"{entity_name}_graph.gexf"
@@ -46,8 +44,6 @@ class VectorStore:
         # In a directed graph, neighbors are callees; predecessors are callers
         neighbors = list(G.neighbors(file_path)) + list(G.predecessors(file_path))
         return list(set(neighbors))
-
-    # --- Existing LanceDB Logic ---
 
     def get_table(self):
         """Returns the LanceDB table object."""

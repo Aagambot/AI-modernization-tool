@@ -6,7 +6,7 @@ from engine.embedder import BGEEmbedder
 
 class RetrievalEvaluator:
     """
-    OOP-based evaluator to provide metrics for the MLflow logger in main.py.
+    evaluator to provide metrics in main.py.
     """
     def __init__(self):
         self.store = VectorStore()
