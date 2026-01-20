@@ -49,7 +49,6 @@ async def run_modernization_pipeline(github_url: str):
     target_chunks = []
     for f_info in remote_files:
         try:
-            
             import requests
             content_bytes = requests.get(f_info['download_url']).content
             content_str = content_bytes.decode('utf-8', errors='ignore')
@@ -79,7 +78,6 @@ async def run_modernization_pipeline(github_url: str):
     if target_chunks:
         print(f"🧬 Embedding {len(target_chunks)} chunks...")
         for chunk in target_chunks:
-            # Paths are already standardized from GitHub API
             chunk['vector'] = embedder.embed_batch([chunk['content']])[0]
         
         store.save_chunks(target_chunks, mode="overwrite")
@@ -87,19 +85,37 @@ async def run_modernization_pipeline(github_url: str):
         print("❌ Error: No chunks found.")
         return
     
-    # --- Evaluation ---
-    eval_results = evaluator.run_benchmark("golden_dataset.json")   
+    # --- Evaluation (Updated for LLM-as-a-Judge) ---
+    print("🧠 Starting Automated Evaluation...")
+    eval_results = await evaluator.run_benchmark("golden_dataset.json") 
     
     metrics = {
         "hit_rate_at_5": eval_results.get("hit_rate", 0),
-        "mrr": eval_results.get("mrr", 0)
+        "mrr": eval_results.get("mrr", 0),
+        "avg_accuracy": eval_results.get("avg_accuracy", 0),
+        "avg_completeness": eval_results.get("avg_completeness", 0)
     }
+        
+    # --- Artifact Paths ---
+    artifact_paths = {
+        "graph": graph_path,
+        "mermaid": mermaid_filename,
+        "detailed_results": "evaluation_report.json"
+    }
+
+    # Save detailed results for MLflow logging
+    with open("evaluation_report.json", "w") as f:
+        json.dump(eval_results.get("detailed_results", []), f, indent=4)
     
-    logger.log_run({"entity": entity_name, "source": "GitHub"}, metrics, {"graph": graph_path})
+    # Log everything to MLflow
+    logger.log_run(
+        {"entity": entity_name, "source": "GitHub", "chunk_size": 500}, 
+        metrics, 
+        artifact_paths
+    )
+    
     print("✅ Remote Pipeline Complete.")
 
 if __name__ == "__main__":
-    # URL of the Sales Invoice directory in ERPNext
     GITHUB_URL = "https://github.com/frappe/erpnext/tree/develop/erpnext/accounts/doctype/sales_invoice"
-    
     asyncio.run(run_modernization_pipeline(GITHUB_URL))

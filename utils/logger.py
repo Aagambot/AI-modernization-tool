@@ -30,7 +30,7 @@ class PipelineLogger:
             scripts = [
                 "main.py", "chat.py", "utils/logger.py", "engine/chunker.py",
                 "core/graph_builder.py", "core/scanner.py", "data/storage.py", 
-                "engine/embedder.py"
+                "engine/embedder.py","engine/utils.py"
             ]
             for script in scripts:
                 if os.path.exists(script):

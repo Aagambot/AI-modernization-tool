@@ -1,17 +1,52 @@
 [
   {
-    "query": "How is customer credit limit enforced during submission?",
+    "query": "How does ERPNext handle deferred revenue when a Sales Invoice is submitted?",
     "expected_file": "erpnext/accounts/doctype/sales_invoice/sales_invoice.py",
-    "expected_logic": "check_credit_limit"
+    "expected_logic": "process_deferred_revenue_accounting"
   },
   {
-    "query": "Where are the taxes and charges templates applied to the invoice?",
+    "query": "Where is stock updated when 'Update Stock' is enabled on a Sales Invoice?",
     "expected_file": "erpnext/accounts/doctype/sales_invoice/sales_invoice.py",
-    "expected_logic": "validate_taxes_and_charges"
+    "expected_logic": "update_stock"
   },
   {
-    "query": "Which function handles the creation of General Ledger entries?",
+    "query": "Which function allocates advance payments against a Sales Invoice?",
     "expected_file": "erpnext/accounts/doctype/sales_invoice/sales_invoice.py",
-    "expected_logic": "make_gl_entries"
+    "expected_logic": "allocate_advances_against_sales_invoice"
+  },
+  {
+    "query": "How does the system validate POS paid amounts during submission?",
+    "expected_file": "erpnext/accounts/doctype/sales_invoice/sales_invoice.py",
+    "expected_logic": "validate_pos_paid_amount"
+  },
+  {
+    "query": "Where are inter-company transactions triggered from a Sales Invoice?",
+    "expected_file": "erpnext/accounts/doctype/sales_invoice/sales_invoice.py",
+    "expected_logic": "make_inter_company_purchase_invoice"
+  },
+  {
+    "query": "Which logic handles asset depreciation when a fixed asset is sold through a Sales Invoice?",
+    "expected_file": "erpnext/accounts/doctype/sales_invoice/sales_invoice.py",
+    "expected_logic": "process_asset_depreciation"
+  },
+  {
+    "query": "How are Serial and Batch Bundles updated during Sales Invoice submission?",
+    "expected_file": "erpnext/accounts/doctype/sales_invoice/sales_invoice.py",
+    "expected_logic": "create_serial_batch_bundle"
+  },
+  {
+    "query": "Where is the customer's outstanding amount updated after submission?",
+    "expected_file": "erpnext/accounts/doctype/sales_invoice/sales_invoice.py",
+    "expected_logic": "update_outstanding"
+  },
+  {
+    "query": "Which function handles GL entry precision and rounding adjustments?",
+    "expected_file": "erpnext/accounts/doctype/sales_invoice/sales_invoice.py",
+    "expected_logic": "check_gl_precision_for_internal_transfers"
+  },
+  {
+    "query": "How does ERPNext handle unlinking payments when a Sales Invoice is cancelled?",
+    "expected_file": "erpnext/accounts/doctype/sales_invoice/sales_invoice.py",
+    "expected_logic": "unlink_payment_on_cancellation_of_invoice"
   }
 ]

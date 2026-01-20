@@ -12,41 +12,23 @@ from dotenv import load_dotenv
 load_dotenv()
 
 # Updated Template to enforce your exact JSON schema
-PROMPT_TEMPLATE = """
-Act as a Senior ERPNext Architect conducting a System Assessment.
-Explain the internal execution flow for {entity_name} during: "{user_query}"
-
-CONTEXT DATA (Code & Call Graph):
-{context_data}
-
-STRICT OUTPUT FORMAT (JSON ONLY):
-{{
-  "event": "{user_query}",
-  "executive_summary": "A 2-sentence overview of the primary goal of this event.",
-  "execution_phases": {{
-    "VALIDATION": [
-      {{ "function": "...", "description": "...", "condition": "Mandatory/If POS/If Asset" }}
-    ],
-    "ACCOUNTING_LOGIC": [
-      {{ "function": "...", "description": "...", "condition": "Mandatory/If Perpetual Inventory" }}
-    ],
-    "STOCK_LOGIC": [
-      {{ "function": "...", "description": "...", "condition": "If update_stock is checked" }}
-    ],
-    "POST_SUBMISSION_HOOKS": [
-      {{ "function": "...", "description": "...", "condition": "e.g., If Inter-company" }}
-    ]
-  }},
-  "accounting_impact": "Summary of GL entries (Debtors, Sales, COGS, etc.)",
-  "stock_impact": "Summary of Warehouse/Qty changes",
-  "critical_business_rules": ["List the top 3-5 most important constraints identified"]
-}}
-
-INSTRUCTIONS:
-1. Do not list every tiny function. Group related calls into the phases above.
-2. Explicitly state the 'condition' for each step (e.g., Is it always executed or only in specific settings?).
-3. Ensure the 'executive_summary' addresses the business intent.
-"""
+TEMPLATES = {
+    "summary": """
+        Act as a Technical Architect. Provide a high-level Domain Model for {entity_name}.
+        Focus on: Fields, Core Methods, and Primary Business Rules.
+        CONTEXT: {context_data}
+    """,
+    "process_flow": """
+        Act as a Senior System Analyst. Explain the step-by-step internal execution flow 
+        for {user_query} in {entity_name}. Group by VALIDATION, ACCOUNTING, and STOCK phases.
+        CONTEXT: {context_data}
+    """,
+    "debugging": """
+        Act as a Lead Developer. Help me understand the specific logic for: {user_query}.
+        Trace the dependencies and potential failure points in {entity_name}.
+        CONTEXT: {context_data}
+    """
+}
 class ModernizationChat:
     def __init__(self, target_folder=None):
         self.api_key = os.getenv("GENAI_API_KEY")
@@ -122,35 +104,42 @@ class ModernizationChat:
 
 
     async def generate_domain_model(self, folder_path, query=None):
-        raw_name = folder_path.replace('\\', '/').rstrip('/').split('/')[-1]
-        self.entity_name = "".join(x.title() for x in raw_name.split('_'))
-        
-        # Use the specific query if provided, else use a default summary query
-        active_query = query if query else f"Analyze the core domain logic of {self.entity_name}"
-        
-        # Increase the limit to 8 to ensure we catch 'on_submit' and 'make_gl_entries'
+        # 1. Determine the Intent
+        intent = "summary" # Default
+        if query:
+            if any(word in query.lower() for word in ["how", "what happens", "flow", "process", "submit"]):
+                intent = "process_flow"
+            elif any(word in query.lower() for word in ["where", "debug", "error", "find"]):
+                intent = "debugging"
+
+        # 2. Get Context (using the user's specific query)
+        active_query = query if query else f"Overview of {self.entity_name}"
         context, r_lat, _ = await self.get_smart_context(active_query, limit=8)
 
-        final_prompt = PROMPT_TEMPLATE.format(
+        # 3. Select the template dynamically
+        selected_template = TEMPLATES.get(intent, TEMPLATES["summary"])
+        
+        final_prompt = selected_template.format(
             entity_name=self.entity_name,
             user_query=active_query,
             context_data=json.dumps(context, indent=2)
         )
+
+        # 4. Generate with standardized JSON config
         start_gen = time.perf_counter()
-        # Use JSON mode for structured response
         response = await self.llm.generate_content_async(
             final_prompt,
             generation_config={"response_mime_type": "application/json", "temperature": 0.1}
         )
         g_lat = (time.perf_counter() - start_gen) * 1000
-        
-        return response.text, r_lat , g_lat
 
+        return response.text, r_lat, g_lat
+    
 async def main():
     try:
         chat = ModernizationChat()
         TARGET_DIR = r"C:/Users/Aagam/OneDrive/Desktop/erpnext/erpnext/accounts/doctype/sales_invoice"
-        my_query = "What happens internally when a Sales Invoice is submitted in ERPNext?"
+        my_query = "Which function allocates advance payments against a Sales Invoice??"
         print(f"🚀 Analyzing {TARGET_DIR}...")
         model_json, r_lat, g_lat = await chat.generate_domain_model(TARGET_DIR,query=my_query)
         
