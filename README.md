@@ -56,140 +56,130 @@ This project is intentionally scoped for learning and validation:
 ---
 
 ## Example Query : 
-`Explain the core domain logic and state transitions of {self.entity_name}`
+`What happens internally when a Sales Invoice is submitted in ERPNext?`
 ```
 {
-    "SalesInvoice": {
-        "entry_point": "erpnext/accounts/doctype/sales_invoice/sales_invoice.py:submit()",
-        "entry_point_description": "Framework method call to submit the Sales Invoice, triggering business logic, accounting updates, and stock movements.",
-        "workflow": {
-            "VALIDATION": [
-                {
-                    "method": "Advance Allocation Strategy",
-                    "description": "Controls whether advances are automatically allocated or require manual specification and validation.",
-                    "context": "erpnext/accounts/doctype/sales_invoice/test_sales_invoice.py:test_sales_invoice_with_advance"
-                },
-                {
-                    "method": "Deferred Revenue Account Check",
-                    "description": "Ensures that a deferred revenue account is specified if deferred revenue booking is enabled for an item.",
-                    "context": "erpnext/accounts/doctype/sales_invoice/test_sales_invoice.py:test_deferred_revenue_missing_account"
-                },
-                {
-                    "method": "Item Tax Template Range Application",
-                    "description": "Dynamically selects and applies the correct item tax template based on the net rate of the item, adjusting for discounts.", 
-                    "context": "erpnext/accounts/doctype/sales_invoice/test_sales_invoice.py:test_item_tax_net_range"
-                },
-                {
-                    "method": "Inter-company Address Link Verification",
-                    "description": "Validates that company and customer addresses are correctly linked to their respective entities for inter-company transactions.",
-                    "context": "erpnext/accounts/doctype/sales_invoice/test_sales_invoice.py:test_validate_inter_company_transaction_address_links"
-                },
-                {
-                    "method": "Serial Number Consistency Check",
-                    "description": "Verifies that serial numbers assigned to items on the Sales Invoice match those from the originating Delivery Note.",       
-                    "context": "erpnext/accounts/doctype/sales_invoice/test_sales_invoice.py:test_serial_numbers_against_delivery_note"
-                }
-            ],
-            "ACCOUNTING": [
-                {
-                    "method": "General Ledger (GL) Entry Generation",
-                    "description": "Creates debits and credits for accounts such as Debtors, Sales, Income, Discount, and Cost of Goods Sold upon submission.", 
-                    "context": "erpnext/accounts/doctype/sales_invoice/test_sales_invoice.py:test_sales_invoice_gl_entry_with_perpetual_inventory_non_stock_item"
-                },
-                {
-                    "method": "Advance Allocation and Outstanding Amount Update",
-                    "description": "Allocates specified advances to reduce the invoice's outstanding amount and reflects this in GL entries.",
-                    "context": "erpnext/accounts/doctype/sales_invoice/test_sales_invoice.py:test_sales_invoice_with_advance"
-                },
-                {
-                    "method": "Deferred Revenue Recognition",
-                    "description": "Generates GL entries to progressively recognize deferred revenue based on service dates and accounting periods.",
-                    "context": "erpnext/accounts/doctype/sales_invoice/test_sales_invoice.py:test_deferred_revenue"
-                },
-                {
-                    "method": "Discount Accounting Posting",
-                    "description": "Posts item-level and additional discounts to a dedicated discount account when discount accounting is enabled.",
-                    "context": "erpnext/accounts/doctype/sales_invoice/test_sales_invoice.py:test_sales_invoice_with_discount_accounting_enabled"
-                },
-                {
-                    "method": "Tax Account Posting",
-                    "description": "Records calculated taxes (e.g., VAT, TDS) against the relevant tax account heads in the GL.",
-                    "context": "erpnext/accounts/doctype/sales_invoice/test_sales_invoice.py:test_additional_discount_for_sales_invoice_with_discount_accounting_enabled"
-                },
-                {
-                    "method": "Stock Transfer Rounding Adjustment",
-                    "description": "Creates GL adjustment entries to account for precision differences during stock unit of measure conversions in internal transfers.",
-                    "context": "erpnext/accounts/doctype/sales_invoice/test_sales_invoice.py:test_internal_transfer_gl_precision_issues"
-                }
-            ],
-            "STOCK": [
-                {
-                    "method": "Stock Quantity Reduction",
-                    "description": "Updates warehouse stock levels by reducing the quantity of items sold or, for returns, increasing it.",
-                    "context": "erpnext/accounts/doctype/sales_invoice/test_sales_invoice.py:test_return_sales_invoice"
-                },
-                {
-                    "method": "Serialized Item Status Management",
-                    "description": "Marks serialized items as sold (updating their warehouse status to null) upon invoice submission and reinstates them upon cancellation.",
-                    "context": "erpnext/accounts/doctype/sales_invoice/test_sales_invoice.py:test_serialized"
-                },
-                {
-                    "method": "Stock Ledger Entry (SLE) Creation",
-                    "description": "Records detailed stock movements, valuations, and cost of goods sold in the Stock Ledger.",
-                    "context": "erpnext/accounts/doctype/sales_invoice/test_sales_invoice.py:test_return_sales_invoice"
-                },
-                {
-                    "method": "Stock Unit of Measure Conversion",
-                    "description": "Performs conversions between non-stock and stock units of measure, especially relevant for internal transfers.",
-                    "context": "erpnext/accounts/doctype/sales_invoice/test_sales_invoice.py:test_internal_transfer_gl_precision_issues"
-                }
-            ],
-            "HOOKS": [
-                {
-                    "method": "Inter-company Transaction Creation",
-                    "description": "Automatically triggers the creation of a corresponding Purchase Invoice or Purchase Order when a Sales Invoice is raised for an internal customer.",
-                    "context": "erpnext/accounts/doctype/sales_invoice/test_sales_invoice.py:test_inter_company_transaction"
-                },
-                {
-                    "method": "Implicit Accounting Ledger Reposting",
-                    "description": "Modifications and saves to a submitted Sales Invoice automatically trigger a reposting of associated accounting ledgers to reflect changes.",
-                    "context": "erpnext/accounts/doctype/sales_invoice/test_sales_invoice.py:test_additional_discount_for_sales_invoice_with_discount_accounting_enabled"
-                }
-            ]
-        },
-        "contextual_overlays": [
+    "event": "What happens internally when a Sales Invoice is submitted in ERPNext?",
+    "executive_summary": "When a Sales Invoice is submitted in ERPNext, the system validates the data, creates accounting entries, updates stock (if applicable), and triggers post-submission processes. This ensures accurate financial reporting, inventory management, and fulfillment of inter-company transactions.",
+    "execution_phases": {
+        "VALIDATION": [
             {
-                "type": "Setting",
-                "name": "unlink_payment_on_cancellation_of_invoice",
-                "description": "A system setting that dictates whether payments linked to an invoice are automatically unlinked when the invoice is cancelled.",
-                "context": "erpnext/accounts/doctype/sales_invoice/test_sales_invoice.py:test_sales_invoice_with_advance"
+                "function": "validate",
+                "description": "Performs various data integrity checks, including auto-setting posting time, validating write-off accounts, fixed assets, item cost centers, and income accounts.",
+                "condition": "Mandatory"
             },
             {
-                "type": "Setting",
-                "name": "book_deferred_entries_based_on",
-                "description": "A system setting determining the basis ('days' or 'months') for prorating deferred revenue recognition.",
-                "context": "erpnext/accounts/doctype/sales_invoice/test_sales_invoice.py:test_deferred_revenue"
+                "function": "validate_accounts",
+                "description": "Validates the accounts associated with the Sales Invoice, such as ensuring the write-off account is valid.",
+                "condition": "Mandatory"
             },
             {
-                "type": "Setting",
-                "name": "book_deferred_entries_via_journal_entry",
-                "description": "A system setting indicating whether deferred revenue entries are processed via Journal Entries or direct GL updates (0 implies direct GL in these tests).",
-                "context": "erpnext/accounts/doctype/sales_invoice/test_sales_invoice.py:test_deferred_revenue"
+                "function": "validate_for_repost",
+                "description": "Validates the document for reposting scenarios, ensuring data consistency.",
+                "condition": "Mandatory"
             },
             {
-                "type": "Setting",
-                "name": "enable_discount_accounting",
-                "description": "A system setting that, when enabled, allows discounts to be separately accounted for in the General Ledger.",
-                "context": "erpnext/accounts/doctype/sales_invoice/test_sales_invoice.py:test_sales_invoice_with_discount_accounting_enabled"
+                "function": "validate_fixed_asset",
+                "description": "Validates the fixed asset details if any asset is linked to the sales invoice.",
+                "condition": "If Asset"
             },
             {
-                "type": "Quirk",
-                "name": "GL Precision Handling for Internal Transfers",
-                "description": "The system specifically handles potential rounding errors arising from unit of measure conversions in internal transfers by creating adjustment GL entries.",
-                "context": "erpnext/accounts/doctype/sales_invoice/test_sales_invoice.py:test_internal_transfer_gl_precision_issues"
+                "function": "validate_item_cost_centers",
+                "description": "Validates the cost centers associated with each item in the Sales Invoice.",
+                "condition": "Mandatory"
+            },
+            {
+                "function": "validate_income_account",
+                "description": "Validates the income account associated with the Sales Invoice.",
+                "condition": "Mandatory"
+            },
+            {
+                "function": "validate_pos_paid_amount",
+                "description": "Validates the paid amount in POS invoices.",
+                "condition": "If POS"
+            },
+            {
+                "function": "validate_warehouse",
+                "description": "Validates the warehouse selected in the Sales Invoice.",
+                "condition": "Mandatory"
+            },
+            {
+                "function": "validate_created_using_pos",
+                "description": "Validates POS opening entry.",
+                "condition": "If POS"
+            }
+        ],
+        "ACCOUNTING_LOGIC": [
+            {
+                "function": "make_gl_entries",
+                "description": "Generates General Ledger (GL) entries based on the Sales Invoice data. This includes creating customer GL entries and GL entries for fixed assets.",
+                "condition": "Mandatory"
+            },
+            {
+                "function": "get_gl_entries",
+                "description": "Retrieves the GL entries for the Sales Invoice, including entries for customers and fixed assets.",
+                "condition": "Mandatory"
+            },
+            {
+                "function": "make_customer_gl_entry",
+                "description": "Creates GL entries specifically for the customer involved in the Sales Invoice.",
+                "condition": "Mandatory"
+            },
+            {
+                "function": "get_gl_entries_for_fixed_asset",
+                "description": "Creates GL entries for fixed assets.",
+                "condition": "If Perpetual Inventory"
+            },
+            {
+                "function": "make_pos_gl_entries",
+                "description": "Creates GL entries for POS invoices, including entries for change amounts.",
+                "condition": "If POS"
+            },
+            {
+                "function": "get_gle_for_change_amount",
+                "description": "Retrieves GL entries for change amounts in POS invoices.",
+                "condition": "If POS"
+            }
+        ],
+        "STOCK_LOGIC": [
+            {
+                "function": "update_stock",
+                "description": "Updates the stock levels in the warehouse based on the items sold in the Sales Invoice.",
+                "condition": "If update_stock is checked"
+            }
+        ],
+        "POST_SUBMISSION_HOOKS": [
+            {
+                "function": "make_inter_company_purchase_invoice",
+                "description": "Creates an inter-company purchase invoice if the Sales Invoice involves an inter-company transaction.",
+                "condition": "If Inter-company"
+            },
+            {
+                "function": "make_inter_company_transaction",
+                "description": "Creates an inter-company transaction document.",
+                "condition": "If Inter-company"
+            },
+            {
+                "function": "update_time_sheet",
+                "description": "Updates the time sheet details if the Sales Invoice is linked to a time sheet.",
+                "condition": "If Time Sheet"
+            },
+            {
+                "function": "update_billed_qty_in_scio",
+                "description": "Updates the billed quantity in subcontracting inward order received item.",
+                "condition": "If Subcontracting"
             }
         ]
-    }
+    },
+    "accounting_impact": "The submission of a Sales Invoice results in GL entries that debit the Debtors account (or a similar receivable account) and credit the Sales account (or relevant income account). If applicable, entries are also made for taxes, discounts, cost of goods sold (COGS), and inventory. For POS invoices, entries are made for the mode of payment and change amount.",    
+    "stock_impact": "If 'update_stock' is enabled, the submission of a Sales Invoice decreases the quantity of items in the specified warehouse. Stock Ledger Entries are created to track these changes.",
+    "critical_business_rules": [
+        "Credit limit validation: The system checks if the customer's credit limit is exceeded by the invoice amount.",
+        "Mandatory fields: Certain fields, such as customer, posting date, and item details, must be filled in for the Sales Invoice to be submitted.",
+        "Accounting period: The posting date must fall within an open accounting period.",
+        "Stock availability: If 'update_stock' is enabled, there must be sufficient stock in the warehouse to fulfill the order.",
+        "Inter-company transaction rules: If the Sales Invoice involves an inter-company transaction, specific rules and validations apply to ensure proper accounting between the companies."     
+    ]
 }
 
 ```
