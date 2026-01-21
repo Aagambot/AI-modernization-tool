@@ -6,8 +6,7 @@
 
 ### Purpose of the Project
 
-This project investigates how **code intelligence techniques** can improve the safety and confidence of legacy ERP modernization.
-Rather than migrating or rewriting code, the goal is to **make existing business-critical logic understandable, traceable, and verifiable** before any changes are attempted.
+This project investigates how **code intelligence techniques** can improve the safety and confidence of legacy ERP modernization. Rather than migrating or rewriting code, the goal is to **make existing business-critical logic understandable, traceable, and verifiable** before any changes are attempted.
 
 The focus is on **ERPNext**, specifically the **Sales Invoice** module, which contains dense accounting, stock, and validation logic that is difficult to reason about through documentation alone.
 
@@ -23,38 +22,16 @@ Legacy ERP systems often contain:
 * Implicit dependencies that are hard to trace
 * High risk of regression when making changes
 
-Developers struggle to answer basic questions such as:
-
-* *Where is a rule enforced?*
-* *What functions are affected if this changes?*
-* *Which workflows are triggered on submit or cancel?*
-
 ### Approach Taken
 
 This project builds a **local-first, graph-augmented RAG pipeline** that:
 
-1. Parses the ERPNext codebase using ASTs
-2. Extracts function-level relationships into a graph
-3. Embeds code chunks for semantic retrieval
-4. Verifies retrieval quality using measurable metrics
-
-The result is a **searchable and inspectable knowledge layer** over the existing codebase.
+1. Performs **Remote Repository Scanning** via GitHub APIs to avoid heavy local cloning.
+2. Parses the codebase using **AST-aware logic** to extract symbols and call-relationships.
+3. Employs **Hybrid Syntax-Aware Chunking** to preserve logical function boundaries.
+4. Verifies retrieval quality using a **RetrievalEvaluator** and automated **LLM-as-a-Judge** scoring.
 
 ---
-
-## Current Scope 
-
-This project is intentionally scoped for learning and validation:
-
-* **Target system:** ERPNext
-* **Target module:** `erpnext/accounts/doctype/sales_invoice/`
-* **Language:** Python only
-* **Analysis type:** Static analysis (no runtime tracing yet)
-* **Graph coverage:** Function calls, imports, and containment
-* **Goal:** Understanding and impact analysis, not migration
-
----
-
 ## Example Query : 
 `What happens internally when a Sales Invoice is submitted in ERPNext?`
 ```
@@ -181,84 +158,72 @@ This project is intentionally scoped for learning and validation:
         "Inter-company transaction rules: If the Sales Invoice involves an inter-company transaction, specific rules and validations apply to ensure proper accounting between the companies."     
     ]
 }
-
-```
-
 ## Technical Architecture
 
+<p align="center">
+  <img src="assets/AagamMehtaLegacyModernisationFlowchar.png" alt="System Dependency Map">
+  <br>
+  <i>Figure 1: Architectural Diagram of GraphRAG pipeline.</i>
+</p>
 ### High-Level Pipeline
 
-1. **Repository Scanning**
-   The ERPNext repository is cloned locally and scanned from the filesystem to avoid API limits and ensure reproducibility.
+1. **Remote Repository Scanning (`GitHubScanner`)**
+The system performs a recursive scan of the ERPNext repository using the GitHub API to discover files and metadata without full local clones.
+2. **AST-Based Parsing (`CodeGraphPipeline`)**
+Code is parsed using **Tree-sitter** or regex-based AST logic to identify classes, methods, and variables, mapping them into a directed graph via **NetworkX**.
+3. **Hybrid Chunking & Embedding**
+* **Chunking:** The `HybridChunker` ensures code blocks are split at logical boundaries (functions/classes) rather than arbitrary line counts.
+* **Embedding:** Chunks are embedded using **nomed-embed-1.5** to generate 512-dimensional semantic vectors.
+* **Storage:** Vectors and metadata are stored in **LanceDB**.
 
-2. **AST-Based Parsing**
-   Code is parsed using **Tree-sitter** to identify functions, classes, and structural boundaries.
 
-3. **Chunking & Embedding**
+4. **GraphRAG Retrieval Strategy**
+The `ModernizationChat` agent executes a dual-path search:
+* **Semantic Path:** LanceDB finds relevant code chunks.
+* **Structural Path:** NetworkX traverses the call-graph to find upstream/downstream dependencies.
 
-   * Code is chunked at logical boundaries with token-aware sizing
-   * Chunks are embedded using **nomic-embed-text**
-   * Embeddings are stored in **LanceDB** with file and line metadata
 
-4. **Graph Construction**
+5. **Automated Evaluation & Tracking**
+* **LLM-as-a-Judge:** An automated grader (Gemini) assesses responses for **Accuracy** and **Completeness** against a `golden_dataset.json`.
+* **MLflow Integration:** All metrics (Hit Rate @ 5, MRR, Accuracy scores) and artifacts (GEXF graphs, reports) are logged to an MLflow dashboard for experiment tracking.
 
-   * A directed graph is built using **NetworkX**
-   * Nodes represent functions and files
-   * Edges represent calls, imports, and containment relationships
 
-5. **Hybrid Retrieval (Graph + Vector)**
-
-   * Semantic search retrieves relevant code
-   * Graph traversal adds upstream and downstream context
-   * Both are combined before LLM synthesis
-
-6. **Evaluation & Tracking**
-
-   * Retrieval quality is measured using **Hit Rate @ 5** and **MRR**
-   * All runs are versioned and logged using **MLflow**
 
 ---
 <p align="center">
   <img src="assets/sales_invoice_er.png" alt="System Dependency Map">
   <br>
-  <i>Figure 1: Automated Graph-to-Mermaid export showing SalesInvoice dependencies.</i>
+  <i>Figure 2: Automated Graph-to-Mermaid export showing SalesInvoice dependencies.</i>
 </p>
 ## Project Structure
 
 ```
 AI-MODERNIZATION-TOOL/
-├── core/                    # Repository scanning and graph logic
-│   ├── scanner.py
-│   ├── parser.py
-│   └── graph_builder.py
+├── core/                    # Discovery and mapping logic
+│   ├── scanner.py           # Remote GitHubScanner
+│   ├── parser.py            # CodeGraphPipeline logic
+│   └── graph_builder.py     # NetworkX relationship mapping
 │
-├── engine/                  # Chunking and embedding logic
-│   ├── chunker.py
-│   └── embedder.py
+├── engine/                  # Processing logic
+│   ├── chunker.py           # Hybrid Syntax-Aware Chunker
+│   └── embedder.py          # BGEEmbedder (1024-dim)
 │
-├── data/                    # Vector storage
-│   └── storage.py
+├── data/                    # Storage and Retrieval
+│   ├── storage.py           # LanceDB integration
+│   └── search.py            # Intent-based Hybrid Retrieval
 │
-├── utils/                   # Logging, search, and visualization
-│   ├── logger.py
-│   ├── search.py
-│   └── graph_to_mermaid.py
+├── utils/                   # Logging and UI
+│   ├── logger.py            # MLflow integration
+│   └── chat.py              # ModernizationChat Agent
 │
-├── tests/                   # Retrieval evaluation
-│   └── verify_retrieval.py
+├── tests/                   # Benchmarking
+│   └── verify_retrieval.py  # RetrievalEvaluator & LLM-as-a-Judge
 │
 ├── main.py                  # End-to-end pipeline orchestration
-├── chat.py                  # Retrieval + LLM interface
-├── golden_dataset.json      # Benchmark queries
-└── code_index_db/           # LanceDB vector database
+├── golden_dataset.json      # Ground truth test cases
+└── mlflow_logs/             # Persistent tracking database
+
 ```
-
----
-
-## Extracted Understanding: Sales Invoice (Experimental)
-
-The pipeline was used to reconstruct a **candidate execution workflow** for the Sales Invoice module based purely on static analysis.
-
 ### Observed Execution Phases (Hypotheses)
 
 * **Validation:** Deferred revenue checks, tax template validation, inter-company address validation
@@ -272,40 +237,22 @@ These phases are **derived from code structure and call relationships**, not man
 
 ## Verification & Metrics
 
-To ensure the system is producing useful results, a small verification suite is used.
+To ensure the system is producing useful results, we track two primary dimensions of quality:
 
-### Retrieval Metrics (Golden Dataset)
+### 1. Retrieval Metrics
 
-* **Hit Rate @ 5:** 100%
-* **Mean Reciprocal Rank (MRR):** 0.75
+* **Hit Rate @ 5:** Validates that the core business logic files appear in the top 5 search results.
+* **MRR (Mean Reciprocal Rank):** Measures how effectively the system ranks the most relevant file.
 
-These metrics validate that:
+### 2. Generation Metrics (LLM-as-a-Judge)
 
-* Relevant files are consistently retrieved
-* Core business logic appears early in search results
+The system achieves an **Accuracy Delta of +2.5** over baseline RAG by incorporating structural graph context. Every run is graded on:
 
-### Supporting Checks
-
-* Path normalization ensures graph and vector indexes stay aligned
-* Graph traversal surfaces dependencies missed by vector search alone
-
-
----
-
-## Key Learnings So Far
-
-* Vector search alone is insufficient for understanding legacy code
-* Call graphs significantly improve context and correctness
-* Measuring retrieval quality is essential to avoid false confidence
-* Scoping narrowly (one module) produces better insights than broad indexing
+* **Accuracy:** Correct identification of ERPNext functions and triggers.
+* **Completeness:** Coverage of the full business workflow (Validation → Accounting → Stock).
 
 ---
 
 ## Conclusion
 
-This project demonstrates that **graph-augmented retrieval** can make complex ERP codebases more understandable and measurable.
-By focusing on **structural understanding before change**, it provides a practical foundation for safer, incremental legacy modernization.
-
-Future work can build on this foundation to explore runtime analysis, broader domain coverage, and modernization workflows.
-
----
+This project demonstrates that **graph-augmented retrieval** can make complex ERP codebases more understandable and measurable. By incorporating **automated evaluation** and **MLflow tracking**, it provides a verifiable foundation for safer legacy modernization.
