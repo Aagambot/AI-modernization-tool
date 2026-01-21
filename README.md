@@ -1,6 +1,4 @@
-## Project Documentation: Legacy ERP Modernization Pipeline
-
----
+# Project Documentation: Legacy ERP Modernization Pipeline
 
 ## Overview
 
@@ -10,17 +8,15 @@ This project investigates how **code intelligence techniques** can improve the s
 
 The focus is on **ERPNext**, specifically the **Sales Invoice** module, which contains dense accounting, stock, and validation logic that is difficult to reason about through documentation alone.
 
----
-
 ## Problem Statement & Approach
 
 ### Problem Statement
 
 Legacy ERP systems often contain:
 
-* Business logic spread across many files and hooks
-* Implicit dependencies that are hard to trace
-* High risk of regression when making changes
+- Business logic spread across many files and hooks
+- Implicit dependencies that are hard to trace
+- High risk of regression when making changes
 
 ### Approach Taken
 
@@ -31,10 +27,11 @@ This project builds a **local-first, graph-augmented RAG pipeline** that:
 3. Employs **Hybrid Syntax-Aware Chunking** to preserve logical function boundaries.
 4. Verifies retrieval quality using a **RetrievalEvaluator** and automated **LLM-as-a-Judge** scoring.
 
----
-## Example Query : 
+## Example Query
+
 `What happens internally when a Sales Invoice is submitted in ERPNext?`
-```
+
+```json
 {
     "event": "What happens internally when a Sales Invoice is submitted in ERPNext?",
     "executive_summary": "When a Sales Invoice is submitted in ERPNext, the system validates the data, creates accounting entries, updates stock (if applicable), and triggers post-submission processes. This ensures accurate financial reporting, inventory management, and fulfillment of inter-company transactions.",
@@ -158,6 +155,8 @@ This project builds a **local-first, graph-augmented RAG pipeline** that:
         "Inter-company transaction rules: If the Sales Invoice involves an inter-company transaction, specific rules and validations apply to ensure proper accounting between the companies."     
     ]
 }
+```
+
 ## Technical Architecture
 
 <p align="center">
@@ -165,75 +164,91 @@ This project builds a **local-first, graph-augmented RAG pipeline** that:
   <br>
   <i>Figure 1: Architectural Diagram of GraphRAG pipeline.</i>
 </p>
+
 ### High-Level Pipeline
 
-1. **Remote Repository Scanning (`GitHubScanner`)**
-The system performs a recursive scan of the ERPNext repository using the GitHub API to discover files and metadata without full local clones.
-2. **AST-Based Parsing (`CodeGraphPipeline`)**
-Code is parsed using **Tree-sitter** or regex-based AST logic to identify classes, methods, and variables, mapping them into a directed graph via **NetworkX**.
+1. **Remote Repository Scanning (`GitHubScanner`)**  
+   The system performs a recursive scan of the ERPNext repository using the GitHub API to discover files and metadata without full local clones.
+
+2. **AST-Based Parsing (`CodeGraphPipeline`)**  
+   Code is parsed using **Tree-sitter** or regex-based AST logic to identify classes, methods, and variables, mapping them into a directed graph via **NetworkX**.
+
 3. **Hybrid Chunking & Embedding**
-* **Chunking:** The `HybridChunker` ensures code blocks are split at logical boundaries (functions/classes) rather than arbitrary line counts.
-* **Embedding:** Chunks are embedded using **nomed-embed-1.5** to generate 512-dimensional semantic vectors.
-* **Storage:** Vectors and metadata are stored in **LanceDB**.
+   - **Chunking:** The `HybridChunker` ensures code blocks are split at logical boundaries (functions/classes) rather than arbitrary line counts.
+   - **Embedding:** Chunks are embedded using **BGE-Large-v1.5** to generate 1024-dimensional semantic vectors.
+   - **Storage:** Vectors and metadata are stored in **LanceDB**.
 
-
-4. **GraphRAG Retrieval Strategy**
-The `ModernizationChat` agent executes a dual-path search:
-* **Semantic Path:** LanceDB finds relevant code chunks.
-* **Structural Path:** NetworkX traverses the call-graph to find upstream/downstream dependencies.
-
+4. **GraphRAG Retrieval Strategy**  
+   The `ModernizationChat` agent executes a dual-path search:
+   - **Semantic Path:** LanceDB finds relevant code chunks.
+   - **Structural Path:** NetworkX traverses the call-graph to find upstream/downstream dependencies.
 
 5. **Automated Evaluation & Tracking**
-* **LLM-as-a-Judge:** An automated grader (Gemini) assesses responses for **Accuracy** and **Completeness** against a `golden_dataset.json`.
-* **MLflow Integration:** All metrics (Hit Rate @ 5, MRR, Accuracy scores) and artifacts (GEXF graphs, reports) are logged to an MLflow dashboard for experiment tracking.
+   - **LLM-as-a-Judge:** An automated grader (Gemini) assesses responses for **Accuracy** and **Completeness** against a `golden_dataset.json`.
+   - **MLflow Integration:** All metrics (Hit Rate @ 5, MRR, Accuracy scores) and artifacts (GEXF graphs, reports) are logged to an MLflow dashboard for experiment tracking.
 
-
-
----
 <p align="center">
   <img src="assets/sales_invoice_er.png" alt="System Dependency Map">
   <br>
   <i>Figure 2: Automated Graph-to-Mermaid export showing SalesInvoice dependencies.</i>
 </p>
+
 ## Project Structure
 
-```
-AI-MODERNIZATION-TOOL/
-├── core/                    # Discovery and mapping logic
-│   ├── scanner.py           # Remote GitHubScanner
-│   ├── parser.py            # CodeGraphPipeline logic
-│   └── graph_builder.py     # NetworkX relationship mapping
-│
-├── engine/                  # Processing logic
-│   ├── chunker.py           # Hybrid Syntax-Aware Chunker
-│   └── embedder.py          # BGEEmbedder (1024-dim)
-│
-├── data/                    # Storage and Retrieval
-│   ├── storage.py           # LanceDB integration
-│   └── search.py            # Intent-based Hybrid Retrieval
-│
-├── utils/                   # Logging and UI
-│   ├── logger.py            # MLflow integration
-│   └── chat.py              # ModernizationChat Agent
-│
-├── tests/                   # Benchmarking
-│   └── verify_retrieval.py  # RetrievalEvaluator & LLM-as-a-Judge
-│
-├── main.py                  # End-to-end pipeline orchestration
-├── golden_dataset.json      # Ground truth test cases
-└── mlflow_logs/             # Persistent tracking database
+The project follows a modular, enterprise-grade package structure:
 
 ```
+
+AI-MODERNIZATION-TOOL/
+├── core/                    # Core scanning and graph logic
+│   ├── __init__.py
+│   ├── scanner.py          # LocalScanner - Repository file scanning
+│   ├── graph_builder.py    # CodeGraphPipeline - AST & dependency graph
+│   └── parser.py           # LocalGraphParser - Tree-sitter parsing
+│
+├── data/                    # Storage and DB management
+│   ├── __init__.py
+│   └── storage.py          # VectorStore - LanceDB vector operations
+│
+├── engine/                  # AI/ML logic (Embedding, Chunking)
+│   ├── __init__.py
+│   ├── embedder.py         # BGEEmbedder - Nomic embedding API
+│   └── chunker.py          # HybridChunker - Token-aware text splitting
+│
+├── utils/                   # Helpers and visualization
+│   ├── __init__.py
+│   ├── logger.py           # PipelineLogger - MLflow experiment tracking
+│   ├── graph_to_mermaid.py # Mermaid diagram generation
+│   └── search.py           # CodeSearcher - Vector search interface
+│
+├── tests/                   # Evaluation and benchmarks
+│   ├── __init__.py
+│   └── verify_retrieval.py # RetrievalEvaluator - RAG metrics
+│
+├── main.py                  # Entry point - Full pipeline orchestration
+├── chat.py                  # Retrieval/User interface - LLM chat
+├── .env                     # Environment variables
+├── .gitignore              # Git exclusion rules
+├── golden_dataset.json     # Benchmark data
+└── code_index_db/          # LanceDB vector database (auto-created)
+
+```
+
+### Key Architectural Features
+
+- **Modular Design**: Clear separation of concerns across packages
+- **Absolute Imports**: All internal imports use package paths (e.g., `from core.scanner import LocalScanner`)
+- **Path Anchoring**: Database always created at project root via `Path(__file__).resolve().parent.parent`
+- **Enterprise-Ready**: Professional package structure with proper `__init__.py` files
+
 ### Observed Execution Phases (Hypotheses)
 
-* **Validation:** Deferred revenue checks, tax template validation, inter-company address validation
-* **Accounting:** GL entry creation, perpetual inventory accounting, advance allocation
-* **Stock:** Stock updates, serial/batch handling, reversals on cancellation
-* **Hooks:** Post-submit and post-cancel side effects driven by system settings
+- **Validation:** Deferred revenue checks, tax template validation, inter-company address validation
+- **Accounting:** GL entry creation, perpetual inventory accounting, advance allocation
+- **Stock:** Stock updates, serial/batch handling, reversals on cancellation
+- **Hooks:** Post-submit and post-cancel side effects driven by system settings
 
 These phases are **derived from code structure and call relationships**, not manually curated documentation.
-
----
 
 ## Verification & Metrics
 
@@ -241,17 +256,15 @@ To ensure the system is producing useful results, we track two primary dimension
 
 ### 1. Retrieval Metrics
 
-* **Hit Rate @ 5:** Validates that the core business logic files appear in the top 5 search results.
-* **MRR (Mean Reciprocal Rank):** Measures how effectively the system ranks the most relevant file.
+- **Hit Rate @ 5:** Validates that the core business logic files appear in the top 5 search results.
+- **MRR (Mean Reciprocal Rank):** Measures how effectively the system ranks the most relevant file.
 
 ### 2. Generation Metrics (LLM-as-a-Judge)
 
 The system achieves an **Accuracy Delta of +2.5** over baseline RAG by incorporating structural graph context. Every run is graded on:
 
-* **Accuracy:** Correct identification of ERPNext functions and triggers.
-* **Completeness:** Coverage of the full business workflow (Validation → Accounting → Stock).
-
----
+- **Accuracy:** Correct identification of ERPNext functions and triggers.
+- **Completeness:** Coverage of the full business workflow (Validation → Accounting → Stock).
 
 ## Conclusion
 
