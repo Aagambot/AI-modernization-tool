@@ -4,13 +4,12 @@ import os
 import asyncio
 from data.storage import VectorStore  
 from engine.embedder import BGEEmbedder 
-from chat import ModernizationChat # Import your existing chat logic
-
+from chat import ModernizationChat 
 class RetrievalEvaluator:
     def __init__(self):
         self.store = VectorStore()
         self.embedder = BGEEmbedder()
-        self.chat = ModernizationChat() # Initialize the generator/agent
+        self.chat = ModernizationChat()
         self.reset_metrics()
 
     def reset_metrics(self):

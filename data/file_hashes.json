@@ -1,0 +1,8 @@
+{
+    "erpnext/accounts/doctype/sales_invoice/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "erpnext/accounts/doctype/sales_invoice/sales_invoice.json": "98c720adbb74d757946b7fd481bb2f82c4afb0be655dbf8a476877dc92626161",
+    "erpnext/accounts/doctype/sales_invoice/sales_invoice.py": "fee7b512cf13e26fc1e07ed007031894b0a23b085af49895d396ebf68a36a67e",
+    "erpnext/accounts/doctype/sales_invoice/sales_invoice_dashboard.py": "82a81c3f123b94105c7bf6a76f5775c72a3ebf52e2fd2fab9ec13fefbab6912b",
+    "erpnext/accounts/doctype/sales_invoice/test_records.json": "c2f2db016a6e673ff9e90c632697f70ce568883fc946b0f0d75069de96ba2c47",
+    "erpnext/accounts/doctype/sales_invoice/test_sales_invoice.py": "8633c24a28e9c7e5ecd0cbba60b3a4d3935a8f13fc4b66ae512ff82ac227a458"
+}

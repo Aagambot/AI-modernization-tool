@@ -1,6 +1,6 @@
 <?xml version='1.0' encoding='utf-8'?>
 <gexf xmlns="http://www.gexf.net/1.2draft" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.gexf.net/1.2draft http://www.gexf.net/1.2draft/gexf.xsd" version="1.2">
-  <meta lastmodifieddate="2026-01-20">
+  <meta lastmodifieddate="2026-01-23">
     <creator>NetworkX 3.4.2</creator>
   </meta>
   <graph defaultedgetype="directed" mode="static" name="">
@@ -13,9 +13,16 @@
       <attribute id="2" title="parent_class" type="string" />
     </attributes>
     <nodes>
-      <node id="erpnext/accounts/doctype/sales_invoice/__init__.py" label="erpnext/accounts/doctype/sales_invoice/__init__.py">
+      <node id="erpnext/accounts/doctype/sales_invoice/sales_invoice_dashboard.py" label="erpnext/accounts/doctype/sales_invoice/sales_invoice_dashboard.py">
         <attvalues>
           <attvalue for="0" value="file" />
+        </attvalues>
+      </node>
+      <node id="erpnext/accounts/doctype/sales_invoice/sales_invoice_dashboard.py:get_data" label="erpnext/accounts/doctype/sales_invoice/sales_invoice_dashboard.py:get_data">
+        <attvalues>
+          <attvalue for="0" value="function" />
+          <attvalue for="1" value="get_data" />
+          <attvalue for="2" value="" />
         </attvalues>
       </node>
       <node id="erpnext/accounts/doctype/sales_invoice/sales_invoice.py" label="erpnext/accounts/doctype/sales_invoice/sales_invoice.py">
@@ -1015,16 +1022,9 @@
           <attvalue for="2" value="" />
         </attvalues>
       </node>
-      <node id="erpnext/accounts/doctype/sales_invoice/sales_invoice_dashboard.py" label="erpnext/accounts/doctype/sales_invoice/sales_invoice_dashboard.py">
+      <node id="erpnext/accounts/doctype/sales_invoice/__init__.py" label="erpnext/accounts/doctype/sales_invoice/__init__.py">
         <attvalues>
           <attvalue for="0" value="file" />
-        </attvalues>
-      </node>
-      <node id="erpnext/accounts/doctype/sales_invoice/sales_invoice_dashboard.py:get_data" label="erpnext/accounts/doctype/sales_invoice/sales_invoice_dashboard.py:get_data">
-        <attvalues>
-          <attvalue for="0" value="function" />
-          <attvalue for="1" value="get_data" />
-          <attvalue for="2" value="" />
         </attvalues>
       </node>
       <node id="erpnext/accounts/doctype/sales_invoice/test_sales_invoice.py" label="erpnext/accounts/doctype/sales_invoice/test_sales_invoice.py">
@@ -2020,1537 +2020,1537 @@
       </node>
     </nodes>
     <edges>
-      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:PartialPaymentValidationError" id="0" type="CONTAINS">
+      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice_dashboard.py" target="erpnext/accounts/doctype/sales_invoice/sales_invoice_dashboard.py:get_data" id="0" type="CONTAINS">
         <attvalues>
           <attvalue for="3" value="0" />
         </attvalues>
       </edge>
-      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice" id="1" type="CONTAINS">
+      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:PartialPaymentValidationError" id="1" type="CONTAINS">
         <attvalues>
           <attvalue for="3" value="0" />
         </attvalues>
       </edge>
-      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:get_total_in_party_account_currency" id="2" type="CONTAINS">
+      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice" id="2" type="CONTAINS">
         <attvalues>
           <attvalue for="3" value="0" />
         </attvalues>
       </edge>
-      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:is_overdue" id="3" type="CONTAINS">
+      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:get_total_in_party_account_currency" id="3" type="CONTAINS">
         <attvalues>
           <attvalue for="3" value="0" />
         </attvalues>
       </edge>
-      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:get_discounting_status" id="4" type="CONTAINS">
+      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:is_overdue" id="4" type="CONTAINS">
         <attvalues>
           <attvalue for="3" value="0" />
         </attvalues>
       </edge>
-      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:validate_inter_company_party" id="5" type="CONTAINS">
+      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:get_discounting_status" id="5" type="CONTAINS">
         <attvalues>
           <attvalue for="3" value="0" />
         </attvalues>
       </edge>
-      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:update_linked_doc" id="6" type="CONTAINS">
+      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:validate_inter_company_party" id="6" type="CONTAINS">
         <attvalues>
           <attvalue for="3" value="0" />
         </attvalues>
       </edge>
-      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:unlink_inter_company_doc" id="7" type="CONTAINS">
+      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:update_linked_doc" id="7" type="CONTAINS">
         <attvalues>
           <attvalue for="3" value="0" />
         </attvalues>
       </edge>
-      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:get_list_context" id="8" type="CONTAINS">
+      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:unlink_inter_company_doc" id="8" type="CONTAINS">
         <attvalues>
           <attvalue for="3" value="0" />
         </attvalues>
       </edge>
-      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:get_bank_cash_account" id="9" type="CONTAINS">
+      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:get_list_context" id="9" type="CONTAINS">
         <attvalues>
           <attvalue for="3" value="0" />
         </attvalues>
       </edge>
-      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:make_maintenance_schedule" id="10" type="CONTAINS">
+      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:get_bank_cash_account" id="10" type="CONTAINS">
         <attvalues>
           <attvalue for="3" value="0" />
         </attvalues>
       </edge>
-      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:make_delivery_note" id="11" type="CONTAINS">
+      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:make_maintenance_schedule" id="11" type="CONTAINS">
         <attvalues>
           <attvalue for="3" value="0" />
         </attvalues>
       </edge>
-      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:set_missing_values" id="12" type="CONTAINS">
+      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:make_delivery_note" id="12" type="CONTAINS">
         <attvalues>
           <attvalue for="3" value="0" />
         </attvalues>
       </edge>
       <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:set_missing_values" id="13" type="CONTAINS">
         <attvalues>
-          <attvalue for="3" value="1" />
+          <attvalue for="3" value="0" />
         </attvalues>
       </edge>
-      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:update_item" id="14" type="CONTAINS">
+      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:set_missing_values" id="14" type="CONTAINS">
         <attvalues>
-          <attvalue for="3" value="0" />
+          <attvalue for="3" value="1" />
         </attvalues>
       </edge>
       <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:update_item" id="15" type="CONTAINS">
         <attvalues>
+          <attvalue for="3" value="0" />
+        </attvalues>
+      </edge>
+      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:update_item" id="16" type="CONTAINS">
+        <attvalues>
           <attvalue for="3" value="1" />
         </attvalues>
       </edge>
-      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:make_sales_return" id="16" type="CONTAINS">
+      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:make_sales_return" id="17" type="CONTAINS">
         <attvalues>
           <attvalue for="3" value="0" />
         </attvalues>
       </edge>
-      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:get_inter_company_details" id="17" type="CONTAINS">
+      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:get_inter_company_details" id="18" type="CONTAINS">
         <attvalues>
           <attvalue for="3" value="0" />
         </attvalues>
       </edge>
-      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:get_internal_party" id="18" type="CONTAINS">
+      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:get_internal_party" id="19" type="CONTAINS">
         <attvalues>
           <attvalue for="3" value="0" />
         </attvalues>
       </edge>
-      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:validate_inter_company_transaction" id="19" type="CONTAINS">
+      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:validate_inter_company_transaction" id="20" type="CONTAINS">
         <attvalues>
           <attvalue for="3" value="0" />
         </attvalues>
       </edge>
-      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:make_inter_company_purchase_invoice" id="20" type="CONTAINS">
+      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:make_inter_company_purchase_invoice" id="21" type="CONTAINS">
         <attvalues>
           <attvalue for="3" value="0" />
         </attvalues>
       </edge>
-      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:make_regional_gl_entries" id="21" type="CONTAINS">
+      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:make_regional_gl_entries" id="22" type="CONTAINS">
         <attvalues>
           <attvalue for="3" value="0" />
         </attvalues>
       </edge>
-      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:make_inter_company_transaction" id="22" type="CONTAINS">
+      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:make_inter_company_transaction" id="23" type="CONTAINS">
         <attvalues>
           <attvalue for="3" value="0" />
         </attvalues>
       </edge>
-      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:update_details" id="23" type="CONTAINS">
+      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:update_details" id="24" type="CONTAINS">
         <attvalues>
           <attvalue for="3" value="0" />
         </attvalues>
       </edge>
-      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:_validate_address_link" id="24" type="CONTAINS">
+      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:_validate_address_link" id="25" type="CONTAINS">
         <attvalues>
           <attvalue for="3" value="0" />
         </attvalues>
       </edge>
-      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:get_received_items" id="25" type="CONTAINS">
+      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:get_received_items" id="26" type="CONTAINS">
         <attvalues>
           <attvalue for="3" value="0" />
         </attvalues>
       </edge>
-      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:set_purchase_references" id="26" type="CONTAINS">
+      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:set_purchase_references" id="27" type="CONTAINS">
         <attvalues>
           <attvalue for="3" value="0" />
         </attvalues>
       </edge>
-      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:update_pi_items" id="27" type="CONTAINS">
+      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:update_pi_items" id="28" type="CONTAINS">
         <attvalues>
           <attvalue for="3" value="0" />
         </attvalues>
       </edge>
-      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:update_pr_items" id="28" type="CONTAINS">
+      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:update_pr_items" id="29" type="CONTAINS">
         <attvalues>
           <attvalue for="3" value="0" />
         </attvalues>
       </edge>
-      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:get_delivery_note_details" id="29" type="CONTAINS">
+      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:get_delivery_note_details" id="30" type="CONTAINS">
         <attvalues>
           <attvalue for="3" value="0" />
         </attvalues>
       </edge>
-      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:get_sales_invoice_details" id="30" type="CONTAINS">
+      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:get_sales_invoice_details" id="31" type="CONTAINS">
         <attvalues>
           <attvalue for="3" value="0" />
         </attvalues>
       </edge>
-      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:get_pd_details" id="31" type="CONTAINS">
+      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:get_pd_details" id="32" type="CONTAINS">
         <attvalues>
           <attvalue for="3" value="0" />
         </attvalues>
       </edge>
-      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:update_taxes" id="32" type="CONTAINS">
+      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:update_taxes" id="33" type="CONTAINS">
         <attvalues>
           <attvalue for="3" value="0" />
         </attvalues>
       </edge>
-      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:update_address" id="33" type="CONTAINS">
+      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:update_address" id="34" type="CONTAINS">
         <attvalues>
           <attvalue for="3" value="0" />
         </attvalues>
       </edge>
-      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:get_loyalty_programs" id="34" type="CONTAINS">
+      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:get_loyalty_programs" id="35" type="CONTAINS">
         <attvalues>
           <attvalue for="3" value="0" />
         </attvalues>
       </edge>
-      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:create_invoice_discounting" id="35" type="CONTAINS">
+      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:create_invoice_discounting" id="36" type="CONTAINS">
         <attvalues>
           <attvalue for="3" value="0" />
         </attvalues>
       </edge>
-      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:update_multi_mode_option" id="36" type="CONTAINS">
+      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:update_multi_mode_option" id="37" type="CONTAINS">
         <attvalues>
           <attvalue for="3" value="0" />
         </attvalues>
       </edge>
-      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:append_payment" id="37" type="CONTAINS">
+      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:append_payment" id="38" type="CONTAINS">
         <attvalues>
           <attvalue for="3" value="0" />
         </attvalues>
       </edge>
-      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:get_all_mode_of_payments" id="38" type="CONTAINS">
+      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:get_all_mode_of_payments" id="39" type="CONTAINS">
         <attvalues>
           <attvalue for="3" value="0" />
         </attvalues>
       </edge>
-      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:get_mode_of_payments_info" id="39" type="CONTAINS">
+      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:get_mode_of_payments_info" id="40" type="CONTAINS">
         <attvalues>
           <attvalue for="3" value="0" />
         </attvalues>
       </edge>
-      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:get_mode_of_payment_info" id="40" type="CONTAINS">
+      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:get_mode_of_payment_info" id="41" type="CONTAINS">
         <attvalues>
           <attvalue for="3" value="0" />
         </attvalues>
       </edge>
-      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:create_dunning" id="41" type="CONTAINS">
+      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:create_dunning" id="42" type="CONTAINS">
         <attvalues>
           <attvalue for="3" value="0" />
         </attvalues>
       </edge>
-      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:postprocess_dunning" id="42" type="CONTAINS">
+      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:postprocess_dunning" id="43" type="CONTAINS">
         <attvalues>
           <attvalue for="3" value="0" />
         </attvalues>
       </edge>
-      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:check_if_return_invoice_linked_with_payment_entry" id="43" type="CONTAINS">
+      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:check_if_return_invoice_linked_with_payment_entry" id="44" type="CONTAINS">
         <attvalues>
           <attvalue for="3" value="0" />
         </attvalues>
       </edge>
-      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:__init__" id="44" type="CONTAINS">
+      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:__init__" id="45" type="CONTAINS">
         <attvalues>
           <attvalue for="3" value="0" />
         </attvalues>
       </edge>
-      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:set_indicator" id="45" type="CONTAINS">
+      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:set_indicator" id="46" type="CONTAINS">
         <attvalues>
           <attvalue for="3" value="0" />
         </attvalues>
       </edge>
-      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:onload" id="46" type="CONTAINS">
+      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:onload" id="47" type="CONTAINS">
         <attvalues>
           <attvalue for="3" value="0" />
         </attvalues>
       </edge>
-      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:validate" id="47" type="CONTAINS">
+      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:validate" id="48" type="CONTAINS">
         <attvalues>
           <attvalue for="3" value="0" />
         </attvalues>
       </edge>
-      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:validate_accounts" id="48" type="CONTAINS">
+      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:validate_accounts" id="49" type="CONTAINS">
         <attvalues>
           <attvalue for="3" value="0" />
         </attvalues>
       </edge>
-      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:validate_for_repost" id="49" type="CONTAINS">
+      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:validate_for_repost" id="50" type="CONTAINS">
         <attvalues>
           <attvalue for="3" value="0" />
         </attvalues>
       </edge>
-      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:validate_fixed_asset" id="50" type="CONTAINS">
+      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:validate_fixed_asset" id="51" type="CONTAINS">
         <attvalues>
           <attvalue for="3" value="0" />
         </attvalues>
       </edge>
-      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:validate_item_cost_centers" id="51" type="CONTAINS">
+      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:validate_item_cost_centers" id="52" type="CONTAINS">
         <attvalues>
           <attvalue for="3" value="0" />
         </attvalues>
       </edge>
-      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:validate_income_account" id="52" type="CONTAINS">
+      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:validate_income_account" id="53" type="CONTAINS">
         <attvalues>
           <attvalue for="3" value="0" />
         </attvalues>
       </edge>
-      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:before_save" id="53" type="CONTAINS">
+      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:before_save" id="54" type="CONTAINS">
         <attvalues>
           <attvalue for="3" value="0" />
         </attvalues>
       </edge>
-      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:before_submit" id="54" type="CONTAINS">
+      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:before_submit" id="55" type="CONTAINS">
         <attvalues>
           <attvalue for="3" value="0" />
         </attvalues>
       </edge>
-      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:on_submit" id="55" type="CONTAINS">
+      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:on_submit" id="56" type="CONTAINS">
         <attvalues>
           <attvalue for="3" value="0" />
         </attvalues>
       </edge>
-      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:validate_pos_return" id="56" type="CONTAINS">
+      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:validate_pos_return" id="57" type="CONTAINS">
         <attvalues>
           <attvalue for="3" value="0" />
         </attvalues>
       </edge>
-      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:validate_pos_paid_amount" id="57" type="CONTAINS">
+      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:validate_pos_paid_amount" id="58" type="CONTAINS">
         <attvalues>
           <attvalue for="3" value="0" />
         </attvalues>
       </edge>
-      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:check_if_consolidated_invoice" id="58" type="CONTAINS">
+      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:check_if_consolidated_invoice" id="59" type="CONTAINS">
         <attvalues>
           <attvalue for="3" value="0" />
         </attvalues>
       </edge>
-      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:check_if_created_using_pos_and_pos_closing_entry_generated" id="59" type="CONTAINS">
+      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:check_if_created_using_pos_and_pos_closing_entry_generated" id="60" type="CONTAINS">
         <attvalues>
           <attvalue for="3" value="0" />
         </attvalues>
       </edge>
-      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:before_cancel" id="60" type="CONTAINS">
+      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:before_cancel" id="61" type="CONTAINS">
         <attvalues>
           <attvalue for="3" value="0" />
         </attvalues>
       </edge>
-      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:on_cancel" id="61" type="CONTAINS">
+      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:on_cancel" id="62" type="CONTAINS">
         <attvalues>
           <attvalue for="3" value="0" />
         </attvalues>
       </edge>
-      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:update_status_updater_args" id="62" type="CONTAINS">
+      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:update_status_updater_args" id="63" type="CONTAINS">
         <attvalues>
           <attvalue for="3" value="0" />
         </attvalues>
       </edge>
-      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:check_credit_limit" id="63" type="CONTAINS">
+      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:check_credit_limit" id="64" type="CONTAINS">
         <attvalues>
           <attvalue for="3" value="0" />
         </attvalues>
       </edge>
-      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:unlink_sales_invoice_from_timesheets" id="64" type="CONTAINS">
+      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:unlink_sales_invoice_from_timesheets" id="65" type="CONTAINS">
         <attvalues>
           <attvalue for="3" value="0" />
         </attvalues>
       </edge>
-      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:cancel_pos_invoice_credit_note_generated_during_sales_invoice_mode" id="65" type="CONTAINS">
+      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:cancel_pos_invoice_credit_note_generated_during_sales_invoice_mode" id="66" type="CONTAINS">
         <attvalues>
           <attvalue for="3" value="0" />
         </attvalues>
       </edge>
-      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:set_missing_values" id="66" type="CONTAINS">
+      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:set_missing_values" id="67" type="CONTAINS">
         <attvalues>
           <attvalue for="3" value="0" />
         </attvalues>
       </edge>
-      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:reset_mode_of_payments" id="67" type="CONTAINS">
+      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:reset_mode_of_payments" id="68" type="CONTAINS">
         <attvalues>
           <attvalue for="3" value="0" />
         </attvalues>
       </edge>
-      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:update_time_sheet" id="68" type="CONTAINS">
+      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:update_time_sheet" id="69" type="CONTAINS">
         <attvalues>
           <attvalue for="3" value="0" />
         </attvalues>
       </edge>
-      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:update_billed_qty_in_scio" id="69" type="CONTAINS">
+      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:update_billed_qty_in_scio" id="70" type="CONTAINS">
         <attvalues>
           <attvalue for="3" value="0" />
         </attvalues>
       </edge>
-      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:update_time_sheet_detail" id="70" type="CONTAINS">
+      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:update_time_sheet_detail" id="71" type="CONTAINS">
         <attvalues>
           <attvalue for="3" value="0" />
         </attvalues>
       </edge>
-      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:on_update_after_submit" id="71" type="CONTAINS">
+      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:on_update_after_submit" id="72" type="CONTAINS">
         <attvalues>
           <attvalue for="3" value="0" />
         </attvalues>
       </edge>
-      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:set_paid_amount" id="72" type="CONTAINS">
+      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:set_paid_amount" id="73" type="CONTAINS">
         <attvalues>
           <attvalue for="3" value="0" />
         </attvalues>
       </edge>
-      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:set_account_for_mode_of_payment" id="73" type="CONTAINS">
+      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:set_account_for_mode_of_payment" id="74" type="CONTAINS">
         <attvalues>
           <attvalue for="3" value="0" />
         </attvalues>
       </edge>
-      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:validate_time_sheets_are_submitted" id="74" type="CONTAINS">
+      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:validate_time_sheets_are_submitted" id="75" type="CONTAINS">
         <attvalues>
           <attvalue for="3" value="0" />
         </attvalues>
       </edge>
-      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:set_pos_fields" id="75" type="CONTAINS">
+      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:set_pos_fields" id="76" type="CONTAINS">
         <attvalues>
           <attvalue for="3" value="0" />
         </attvalues>
       </edge>
-      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:get_company_abbr" id="76" type="CONTAINS">
+      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:get_company_abbr" id="77" type="CONTAINS">
         <attvalues>
           <attvalue for="3" value="0" />
         </attvalues>
       </edge>
-      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:validate_debit_to_acc" id="77" type="CONTAINS">
+      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:validate_debit_to_acc" id="78" type="CONTAINS">
         <attvalues>
           <attvalue for="3" value="0" />
         </attvalues>
       </edge>
-      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:clear_unallocated_mode_of_payments" id="78" type="CONTAINS">
+      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:clear_unallocated_mode_of_payments" id="79" type="CONTAINS">
         <attvalues>
           <attvalue for="3" value="0" />
         </attvalues>
       </edge>
-      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:validate_with_previous_doc" id="79" type="CONTAINS">
+      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:validate_with_previous_doc" id="80" type="CONTAINS">
         <attvalues>
           <attvalue for="3" value="0" />
         </attvalues>
       </edge>
-      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:set_against_income_account" id="80" type="CONTAINS">
+      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:set_against_income_account" id="81" type="CONTAINS">
         <attvalues>
           <attvalue for="3" value="0" />
         </attvalues>
       </edge>
-      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:force_set_against_income_account" id="81" type="CONTAINS">
+      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:force_set_against_income_account" id="82" type="CONTAINS">
         <attvalues>
           <attvalue for="3" value="0" />
         </attvalues>
       </edge>
-      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:add_remarks" id="82" type="CONTAINS">
+      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:add_remarks" id="83" type="CONTAINS">
         <attvalues>
           <attvalue for="3" value="0" />
         </attvalues>
       </edge>
-      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:validate_auto_set_posting_time" id="83" type="CONTAINS">
+      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:validate_auto_set_posting_time" id="84" type="CONTAINS">
         <attvalues>
           <attvalue for="3" value="0" />
         </attvalues>
       </edge>
-      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:so_dn_required" id="84" type="CONTAINS">
+      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:so_dn_required" id="85" type="CONTAINS">
         <attvalues>
           <attvalue for="3" value="0" />
         </attvalues>
       </edge>
-      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:validate_proj_cust" id="85" type="CONTAINS">
+      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:validate_proj_cust" id="86" type="CONTAINS">
         <attvalues>
           <attvalue for="3" value="0" />
         </attvalues>
       </edge>
-      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:validate_pos" id="86" type="CONTAINS">
+      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:validate_pos" id="87" type="CONTAINS">
         <attvalues>
           <attvalue for="3" value="0" />
         </attvalues>
       </edge>
-      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:validate_created_using_pos" id="87" type="CONTAINS">
+      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:validate_created_using_pos" id="88" type="CONTAINS">
         <attvalues>
           <attvalue for="3" value="0" />
         </attvalues>
       </edge>
-      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:validate_full_payment" id="88" type="CONTAINS">
+      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:validate_full_payment" id="89" type="CONTAINS">
         <attvalues>
           <attvalue for="3" value="0" />
         </attvalues>
       </edge>
-      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:validate_pos_opening_entry" id="89" type="CONTAINS">
+      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:validate_pos_opening_entry" id="90" type="CONTAINS">
         <attvalues>
           <attvalue for="3" value="0" />
         </attvalues>
       </edge>
-      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:validate_warehouse" id="90" type="CONTAINS">
+      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:validate_warehouse" id="91" type="CONTAINS">
         <attvalues>
           <attvalue for="3" value="0" />
         </attvalues>
       </edge>
-      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:validate_delivery_note" id="91" type="CONTAINS">
+      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:validate_delivery_note" id="92" type="CONTAINS">
         <attvalues>
           <attvalue for="3" value="0" />
         </attvalues>
       </edge>
-      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:allow_write_off_only_on_pos" id="92" type="CONTAINS">
+      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:allow_write_off_only_on_pos" id="93" type="CONTAINS">
         <attvalues>
           <attvalue for="3" value="0" />
         </attvalues>
       </edge>
-      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:validate_subcontracted_sales_order" id="93" type="CONTAINS">
+      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:validate_subcontracted_sales_order" id="94" type="CONTAINS">
         <attvalues>
           <attvalue for="3" value="0" />
         </attvalues>
       </edge>
-      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:validate_scio_self_rm_qty" id="94" type="CONTAINS">
+      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:validate_scio_self_rm_qty" id="95" type="CONTAINS">
         <attvalues>
           <attvalue for="3" value="0" />
         </attvalues>
       </edge>
-      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:validate_write_off_account" id="95" type="CONTAINS">
+      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:validate_write_off_account" id="96" type="CONTAINS">
         <attvalues>
           <attvalue for="3" value="0" />
         </attvalues>
       </edge>
-      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:validate_account_for_change_amount" id="96" type="CONTAINS">
+      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:validate_account_for_change_amount" id="97" type="CONTAINS">
         <attvalues>
           <attvalue for="3" value="0" />
         </attvalues>
       </edge>
-      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:validate_dropship_item" id="97" type="CONTAINS">
+      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:validate_dropship_item" id="98" type="CONTAINS">
         <attvalues>
           <attvalue for="3" value="0" />
         </attvalues>
       </edge>
-      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:update_current_stock" id="98" type="CONTAINS">
+      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:update_current_stock" id="99" type="CONTAINS">
         <attvalues>
           <attvalue for="3" value="0" />
         </attvalues>
       </edge>
-      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:update_packing_list" id="99" type="CONTAINS">
+      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:update_packing_list" id="100" type="CONTAINS">
         <attvalues>
           <attvalue for="3" value="0" />
         </attvalues>
       </edge>
-      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:set_billing_hours_and_amount" id="100" type="CONTAINS">
+      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:set_billing_hours_and_amount" id="101" type="CONTAINS">
         <attvalues>
           <attvalue for="3" value="0" />
         </attvalues>
       </edge>
-      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:update_timesheet_billing_for_project" id="101" type="CONTAINS">
+      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:update_timesheet_billing_for_project" id="102" type="CONTAINS">
         <attvalues>
           <attvalue for="3" value="0" />
         </attvalues>
       </edge>
-      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:is_auto_fetch_timesheet_enabled" id="102" type="CONTAINS">
+      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:is_auto_fetch_timesheet_enabled" id="103" type="CONTAINS">
         <attvalues>
           <attvalue for="3" value="0" />
         </attvalues>
       </edge>
-      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:add_timesheet_data" id="103" type="CONTAINS">
+      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:add_timesheet_data" id="104" type="CONTAINS">
         <attvalues>
           <attvalue for="3" value="0" />
         </attvalues>
       </edge>
-      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:calculate_billing_amount_for_timesheet" id="104" type="CONTAINS">
+      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:calculate_billing_amount_for_timesheet" id="105" type="CONTAINS">
         <attvalues>
           <attvalue for="3" value="0" />
         </attvalues>
       </edge>
-      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:timesheet_sum" id="105" type="CONTAINS">
+      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:timesheet_sum" id="106" type="CONTAINS">
         <attvalues>
           <attvalue for="3" value="0" />
         </attvalues>
       </edge>
-      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:get_warehouse" id="106" type="CONTAINS">
+      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:get_warehouse" id="107" type="CONTAINS">
         <attvalues>
           <attvalue for="3" value="0" />
         </attvalues>
       </edge>
-      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:set_income_account_for_fixed_assets" id="107" type="CONTAINS">
+      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:set_income_account_for_fixed_assets" id="108" type="CONTAINS">
         <attvalues>
           <attvalue for="3" value="0" />
         </attvalues>
       </edge>
-      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:check_prev_docstatus" id="108" type="CONTAINS">
+      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:check_prev_docstatus" id="109" type="CONTAINS">
         <attvalues>
           <attvalue for="3" value="0" />
         </attvalues>
       </edge>
-      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:split_asset_based_on_sale_qty" id="109" type="CONTAINS">
+      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:split_asset_based_on_sale_qty" id="110" type="CONTAINS">
         <attvalues>
           <attvalue for="3" value="0" />
         </attvalues>
       </edge>
-      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:get_asset_qty" id="110" type="CONTAINS">
+      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:get_asset_qty" id="111" type="CONTAINS">
         <attvalues>
           <attvalue for="3" value="0" />
         </attvalues>
       </edge>
-      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:process_asset_depreciation" id="111" type="CONTAINS">
+      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:process_asset_depreciation" id="112" type="CONTAINS">
         <attvalues>
           <attvalue for="3" value="0" />
         </attvalues>
       </edge>
-      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:depreciate_asset_on_sale" id="112" type="CONTAINS">
+      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:depreciate_asset_on_sale" id="113" type="CONTAINS">
         <attvalues>
           <attvalue for="3" value="0" />
         </attvalues>
       </edge>
-      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:get_note_for_asset_sale" id="113" type="CONTAINS">
+      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:get_note_for_asset_sale" id="114" type="CONTAINS">
         <attvalues>
           <attvalue for="3" value="0" />
         </attvalues>
       </edge>
-      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:restore_asset" id="114" type="CONTAINS">
+      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:restore_asset" id="115" type="CONTAINS">
         <attvalues>
           <attvalue for="3" value="0" />
         </attvalues>
       </edge>
-      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:get_note_for_asset_return" id="115" type="CONTAINS">
+      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:get_note_for_asset_return" id="116" type="CONTAINS">
         <attvalues>
           <attvalue for="3" value="0" />
         </attvalues>
       </edge>
-      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:update_asset" id="116" type="CONTAINS">
+      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:update_asset" id="117" type="CONTAINS">
         <attvalues>
           <attvalue for="3" value="0" />
         </attvalues>
       </edge>
-      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:_update_asset" id="117" type="CONTAINS">
+      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:_update_asset" id="118" type="CONTAINS">
         <attvalues>
           <attvalue for="3" value="0" />
         </attvalues>
       </edge>
-      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:get_disposal_date" id="118" type="CONTAINS">
+      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:get_disposal_date" id="119" type="CONTAINS">
         <attvalues>
           <attvalue for="3" value="0" />
         </attvalues>
       </edge>
-      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:make_gl_entries" id="119" type="CONTAINS">
+      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:make_gl_entries" id="120" type="CONTAINS">
         <attvalues>
           <attvalue for="3" value="0" />
         </attvalues>
       </edge>
-      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:get_gl_entries" id="120" type="CONTAINS">
+      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:get_gl_entries" id="121" type="CONTAINS">
         <attvalues>
           <attvalue for="3" value="0" />
         </attvalues>
       </edge>
-      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:make_customer_gl_entry" id="121" type="CONTAINS">
+      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:make_customer_gl_entry" id="122" type="CONTAINS">
         <attvalues>
           <attvalue for="3" value="0" />
         </attvalues>
       </edge>
-      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:make_tax_gl_entries" id="122" type="CONTAINS">
+      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:make_tax_gl_entries" id="123" type="CONTAINS">
         <attvalues>
           <attvalue for="3" value="0" />
         </attvalues>
       </edge>
-      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:make_internal_transfer_gl_entries" id="123" type="CONTAINS">
+      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:make_internal_transfer_gl_entries" id="124" type="CONTAINS">
         <attvalues>
           <attvalue for="3" value="0" />
         </attvalues>
       </edge>
-      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:make_item_gl_entries" id="124" type="CONTAINS">
+      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:make_item_gl_entries" id="125" type="CONTAINS">
         <attvalues>
           <attvalue for="3" value="0" />
         </attvalues>
       </edge>
-      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:get_gl_entries_for_fixed_asset" id="125" type="CONTAINS">
+      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:get_gl_entries_for_fixed_asset" id="126" type="CONTAINS">
         <attvalues>
           <attvalue for="3" value="0" />
         </attvalues>
       </edge>
-      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:enable_discount_accounting" id="126" type="CONTAINS">
+      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:enable_discount_accounting" id="127" type="CONTAINS">
         <attvalues>
           <attvalue for="3" value="0" />
         </attvalues>
       </edge>
-      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:make_loyalty_point_redemption_gle" id="127" type="CONTAINS">
+      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:make_loyalty_point_redemption_gle" id="128" type="CONTAINS">
         <attvalues>
           <attvalue for="3" value="0" />
         </attvalues>
       </edge>
-      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:make_pos_gl_entries" id="128" type="CONTAINS">
+      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:make_pos_gl_entries" id="129" type="CONTAINS">
         <attvalues>
           <attvalue for="3" value="0" />
         </attvalues>
       </edge>
-      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:get_gle_for_change_amount" id="129" type="CONTAINS">
+      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:get_gle_for_change_amount" id="130" type="CONTAINS">
         <attvalues>
           <attvalue for="3" value="0" />
         </attvalues>
       </edge>
-      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:make_write_off_gl_entry" id="130" type="CONTAINS">
+      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:make_write_off_gl_entry" id="131" type="CONTAINS">
         <attvalues>
           <attvalue for="3" value="0" />
         </attvalues>
       </edge>
-      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:make_gle_for_rounding_adjustment" id="131" type="CONTAINS">
+      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:make_gle_for_rounding_adjustment" id="132" type="CONTAINS">
         <attvalues>
           <attvalue for="3" value="0" />
         </attvalues>
       </edge>
-      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:update_billing_status_in_dn" id="132" type="CONTAINS">
+      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:update_billing_status_in_dn" id="133" type="CONTAINS">
         <attvalues>
           <attvalue for="3" value="0" />
         </attvalues>
       </edge>
-      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:on_recurring" id="133" type="CONTAINS">
+      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:on_recurring" id="134" type="CONTAINS">
         <attvalues>
           <attvalue for="3" value="0" />
         </attvalues>
       </edge>
-      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:update_project" id="134" type="CONTAINS">
+      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:update_project" id="135" type="CONTAINS">
         <attvalues>
           <attvalue for="3" value="0" />
         </attvalues>
       </edge>
-      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:verify_payment_amount_is_positive" id="135" type="CONTAINS">
+      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:verify_payment_amount_is_positive" id="136" type="CONTAINS">
         <attvalues>
           <attvalue for="3" value="0" />
         </attvalues>
       </edge>
-      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:verify_payment_amount_is_negative" id="136" type="CONTAINS">
+      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:verify_payment_amount_is_negative" id="137" type="CONTAINS">
         <attvalues>
           <attvalue for="3" value="0" />
         </attvalues>
       </edge>
-      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:make_loyalty_point_entry" id="137" type="CONTAINS">
+      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:make_loyalty_point_entry" id="138" type="CONTAINS">
         <attvalues>
           <attvalue for="3" value="0" />
         </attvalues>
       </edge>
-      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:delete_loyalty_point_entry" id="138" type="CONTAINS">
+      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:delete_loyalty_point_entry" id="139" type="CONTAINS">
         <attvalues>
           <attvalue for="3" value="0" />
         </attvalues>
       </edge>
-      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:set_loyalty_program_tier" id="139" type="CONTAINS">
+      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:set_loyalty_program_tier" id="140" type="CONTAINS">
         <attvalues>
           <attvalue for="3" value="0" />
         </attvalues>
       </edge>
-      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:get_returned_amount" id="140" type="CONTAINS">
+      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:get_returned_amount" id="141" type="CONTAINS">
         <attvalues>
           <attvalue for="3" value="0" />
         </attvalues>
       </edge>
-      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:apply_loyalty_points" id="141" type="CONTAINS">
+      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:apply_loyalty_points" id="142" type="CONTAINS">
         <attvalues>
           <attvalue for="3" value="0" />
         </attvalues>
       </edge>
-      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:set_status" id="142" type="CONTAINS">
+      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:set_status" id="143" type="CONTAINS">
         <attvalues>
           <attvalue for="3" value="0" />
         </attvalues>
       </edge>
-      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:is_subcontracted" id="143" type="CONTAINS">
+      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:is_subcontracted" id="144" type="CONTAINS">
         <attvalues>
           <attvalue for="3" value="0" />
         </attvalues>
       </edge>
-      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:__init__" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:__init__" id="144" type="CALLS">
+      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:__init__" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:__init__" id="145" type="CALLS">
         <attvalues>
           <attvalue for="3" value="0" />
         </attvalues>
       </edge>
-      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:onload" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:onload" id="145" type="CALLS">
+      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:onload" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:onload" id="146" type="CALLS">
         <attvalues>
           <attvalue for="3" value="0" />
         </attvalues>
       </edge>
-      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:validate" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:validate_auto_set_posting_time" id="146" type="CALLS">
+      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:validate" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:validate_auto_set_posting_time" id="147" type="CALLS">
         <attvalues>
           <attvalue for="3" value="0" />
         </attvalues>
       </edge>
-      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:validate" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:validate" id="147" type="CALLS">
+      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:validate" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:validate" id="148" type="CALLS">
         <attvalues>
           <attvalue for="3" value="0" />
         </attvalues>
       </edge>
-      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:validate" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:is_subcontracted" id="148" type="CALLS">
+      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:validate" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:is_subcontracted" id="149" type="CALLS">
         <attvalues>
           <attvalue for="3" value="0" />
         </attvalues>
       </edge>
-      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:validate" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:so_dn_required" id="149" type="CALLS">
+      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:validate" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:so_dn_required" id="150" type="CALLS">
         <attvalues>
           <attvalue for="3" value="0" />
         </attvalues>
       </edge>
-      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:validate" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:validate_proj_cust" id="150" type="CALLS">
+      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:validate" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:validate_proj_cust" id="151" type="CALLS">
         <attvalues>
           <attvalue for="3" value="0" />
         </attvalues>
       </edge>
-      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:validate" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:validate_pos_return" id="151" type="CALLS">
+      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:validate" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:validate_pos_return" id="152" type="CALLS">
         <attvalues>
           <attvalue for="3" value="0" />
         </attvalues>
       </edge>
-      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:validate" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:validate_with_previous_doc" id="152" type="CALLS">
+      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:validate" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:validate_with_previous_doc" id="153" type="CALLS">
         <attvalues>
           <attvalue for="3" value="0" />
         </attvalues>
       </edge>
-      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:validate" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:validate_debit_to_acc" id="153" type="CALLS">
+      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:validate" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:validate_debit_to_acc" id="154" type="CALLS">
         <attvalues>
           <attvalue for="3" value="0" />
         </attvalues>
       </edge>
-      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:validate" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:validate_fixed_asset" id="154" type="CALLS">
+      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:validate" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:validate_fixed_asset" id="155" type="CALLS">
         <attvalues>
           <attvalue for="3" value="0" />
         </attvalues>
       </edge>
-      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:validate" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:set_income_account_for_fixed_assets" id="155" type="CALLS">
+      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:validate" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:set_income_account_for_fixed_assets" id="156" type="CALLS">
         <attvalues>
           <attvalue for="3" value="0" />
         </attvalues>
       </edge>
-      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:validate" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:validate_item_cost_centers" id="156" type="CALLS">
+      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:validate" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:validate_item_cost_centers" id="157" type="CALLS">
         <attvalues>
           <attvalue for="3" value="0" />
         </attvalues>
       </edge>
-      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:validate" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:validate_accounts" id="157" type="CALLS">
+      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:validate" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:validate_accounts" id="158" type="CALLS">
         <attvalues>
           <attvalue for="3" value="0" />
         </attvalues>
       </edge>
-      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:validate" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:validate_inter_company_party" id="158" type="CALLS">
+      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:validate" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:validate_inter_company_party" id="159" type="CALLS">
         <attvalues>
           <attvalue for="3" value="0" />
         </attvalues>
       </edge>
-      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:validate" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:validate_pos" id="159" type="CALLS">
+      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:validate" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:validate_pos" id="160" type="CALLS">
         <attvalues>
           <attvalue for="3" value="0" />
         </attvalues>
       </edge>
-      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:validate" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:validate_created_using_pos" id="160" type="CALLS">
+      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:validate" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:validate_created_using_pos" id="161" type="CALLS">
         <attvalues>
           <attvalue for="3" value="0" />
         </attvalues>
       </edge>
-      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:validate" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:validate_full_payment" id="161" type="CALLS">
+      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:validate" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:validate_full_payment" id="162" type="CALLS">
         <attvalues>
           <attvalue for="3" value="0" />
         </attvalues>
       </edge>
-      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:validate" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:validate_dropship_item" id="162" type="CALLS">
+      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:validate" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:validate_dropship_item" id="163" type="CALLS">
         <attvalues>
           <attvalue for="3" value="0" />
         </attvalues>
       </edge>
-      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:validate" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:validate_warehouse" id="163" type="CALLS">
+      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:validate" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:validate_warehouse" id="164" type="CALLS">
         <attvalues>
           <attvalue for="3" value="0" />
         </attvalues>
       </edge>
-      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:validate" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:update_current_stock" id="164" type="CALLS">
+      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:validate" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:update_current_stock" id="165" type="CALLS">
         <attvalues>
           <attvalue for="3" value="0" />
         </attvalues>
       </edge>
-      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:validate" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:validate_delivery_note" id="165" type="CALLS">
+      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:validate" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:validate_delivery_note" id="166" type="CALLS">
         <attvalues>
           <attvalue for="3" value="0" />
         </attvalues>
       </edge>
-      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:validate" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:set_against_income_account" id="166" type="CALLS">
+      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:validate" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:set_against_income_account" id="167" type="CALLS">
         <attvalues>
           <attvalue for="3" value="0" />
         </attvalues>
       </edge>
-      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:validate" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:validate_time_sheets_are_submitted" id="167" type="CALLS">
+      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:validate" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:validate_time_sheets_are_submitted" id="168" type="CALLS">
         <attvalues>
           <attvalue for="3" value="0" />
         </attvalues>
       </edge>
-      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:validate" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:update_packing_list" id="168" type="CALLS">
+      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:validate" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:update_packing_list" id="169" type="CALLS">
         <attvalues>
           <attvalue for="3" value="0" />
         </attvalues>
       </edge>
-      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:validate" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:set_billing_hours_and_amount" id="169" type="CALLS">
+      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:validate" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:set_billing_hours_and_amount" id="170" type="CALLS">
         <attvalues>
           <attvalue for="3" value="0" />
         </attvalues>
       </edge>
-      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:validate" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:update_timesheet_billing_for_project" id="170" type="CALLS">
+      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:validate" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:update_timesheet_billing_for_project" id="171" type="CALLS">
         <attvalues>
           <attvalue for="3" value="0" />
         </attvalues>
       </edge>
-      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:validate" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:set_status" id="171" type="CALLS">
+      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:validate" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:set_status" id="172" type="CALLS">
         <attvalues>
           <attvalue for="3" value="0" />
         </attvalues>
       </edge>
-      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:validate" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:verify_payment_amount_is_positive" id="172" type="CALLS">
+      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:validate" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:verify_payment_amount_is_positive" id="173" type="CALLS">
         <attvalues>
           <attvalue for="3" value="0" />
         </attvalues>
       </edge>
-      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:validate" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:verify_payment_amount_is_negative" id="173" type="CALLS">
+      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:validate" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:verify_payment_amount_is_negative" id="174" type="CALLS">
         <attvalues>
           <attvalue for="3" value="0" />
         </attvalues>
       </edge>
-      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:validate" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:allow_write_off_only_on_pos" id="174" type="CALLS">
+      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:validate" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:allow_write_off_only_on_pos" id="175" type="CALLS">
         <attvalues>
           <attvalue for="3" value="0" />
         </attvalues>
       </edge>
-      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:validate" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:validate_subcontracted_sales_order" id="175" type="CALLS">
+      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:validate" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:validate_subcontracted_sales_order" id="176" type="CALLS">
         <attvalues>
           <attvalue for="3" value="0" />
         </attvalues>
       </edge>
-      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:validate" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:validate_scio_self_rm_qty" id="176" type="CALLS">
+      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:validate" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:validate_scio_self_rm_qty" id="177" type="CALLS">
         <attvalues>
           <attvalue for="3" value="0" />
         </attvalues>
       </edge>
-      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:validate_accounts" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:validate_write_off_account" id="177" type="CALLS">
+      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:validate_accounts" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:validate_write_off_account" id="178" type="CALLS">
         <attvalues>
           <attvalue for="3" value="0" />
         </attvalues>
       </edge>
-      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:validate_accounts" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:validate_account_for_change_amount" id="178" type="CALLS">
+      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:validate_accounts" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:validate_account_for_change_amount" id="179" type="CALLS">
         <attvalues>
           <attvalue for="3" value="0" />
         </attvalues>
       </edge>
-      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:validate_accounts" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:validate_income_account" id="179" type="CALLS">
+      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:validate_accounts" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:validate_income_account" id="180" type="CALLS">
         <attvalues>
           <attvalue for="3" value="0" />
         </attvalues>
       </edge>
-      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:validate_for_repost" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:validate_write_off_account" id="180" type="CALLS">
+      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:validate_for_repost" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:validate_write_off_account" id="181" type="CALLS">
         <attvalues>
           <attvalue for="3" value="0" />
         </attvalues>
       </edge>
-      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:validate_for_repost" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:validate_account_for_change_amount" id="181" type="CALLS">
+      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:validate_for_repost" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:validate_account_for_change_amount" id="182" type="CALLS">
         <attvalues>
           <attvalue for="3" value="0" />
         </attvalues>
       </edge>
-      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:validate_for_repost" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:validate_income_account" id="182" type="CALLS">
+      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:validate_for_repost" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:validate_income_account" id="183" type="CALLS">
         <attvalues>
           <attvalue for="3" value="0" />
         </attvalues>
       </edge>
-      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:before_save" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:set_account_for_mode_of_payment" id="183" type="CALLS">
+      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:before_save" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:set_account_for_mode_of_payment" id="184" type="CALLS">
         <attvalues>
           <attvalue for="3" value="0" />
         </attvalues>
       </edge>
-      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:before_save" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:set_paid_amount" id="184" type="CALLS">
+      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:before_save" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:set_paid_amount" id="185" type="CALLS">
         <attvalues>
           <attvalue for="3" value="0" />
         </attvalues>
       </edge>
-      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:before_submit" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:add_remarks" id="185" type="CALLS">
+      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:before_submit" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:add_remarks" id="186" type="CALLS">
         <attvalues>
           <attvalue for="3" value="0" />
         </attvalues>
       </edge>
-      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:on_submit" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:validate_pos_paid_amount" id="186" type="CALLS">
+      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:on_submit" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:validate_pos_paid_amount" id="187" type="CALLS">
         <attvalues>
           <attvalue for="3" value="0" />
         </attvalues>
       </edge>
-      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:on_submit" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:check_prev_docstatus" id="187" type="CALLS">
+      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:on_submit" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:check_prev_docstatus" id="188" type="CALLS">
         <attvalues>
           <attvalue for="3" value="0" />
         </attvalues>
       </edge>
-      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:on_submit" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:on_submit" id="188" type="CALLS">
+      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:on_submit" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:on_submit" id="189" type="CALLS">
         <attvalues>
           <attvalue for="3" value="0" />
         </attvalues>
       </edge>
-      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:on_submit" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:update_status_updater_args" id="189" type="CALLS">
+      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:on_submit" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:update_status_updater_args" id="190" type="CALLS">
         <attvalues>
           <attvalue for="3" value="0" />
         </attvalues>
       </edge>
-      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:on_submit" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:update_billing_status_in_dn" id="190" type="CALLS">
+      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:on_submit" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:update_billing_status_in_dn" id="191" type="CALLS">
         <attvalues>
           <attvalue for="3" value="0" />
         </attvalues>
       </edge>
-      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:on_submit" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:clear_unallocated_mode_of_payments" id="191" type="CALLS">
+      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:on_submit" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:clear_unallocated_mode_of_payments" id="192" type="CALLS">
         <attvalues>
           <attvalue for="3" value="0" />
         </attvalues>
       </edge>
-      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:on_submit" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:split_asset_based_on_sale_qty" id="192" type="CALLS">
+      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:on_submit" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:split_asset_based_on_sale_qty" id="193" type="CALLS">
         <attvalues>
           <attvalue for="3" value="0" />
         </attvalues>
       </edge>
-      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:on_submit" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:process_asset_depreciation" id="193" type="CALLS">
+      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:on_submit" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:process_asset_depreciation" id="194" type="CALLS">
         <attvalues>
           <attvalue for="3" value="0" />
         </attvalues>
       </edge>
-      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:on_submit" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:make_gl_entries" id="194" type="CALLS">
+      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:on_submit" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:make_gl_entries" id="195" type="CALLS">
         <attvalues>
           <attvalue for="3" value="0" />
         </attvalues>
       </edge>
-      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:on_submit" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:check_credit_limit" id="195" type="CALLS">
+      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:on_submit" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:check_credit_limit" id="196" type="CALLS">
         <attvalues>
           <attvalue for="3" value="0" />
         </attvalues>
       </edge>
-      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:on_submit" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:update_time_sheet" id="196" type="CALLS">
+      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:on_submit" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:update_time_sheet" id="197" type="CALLS">
         <attvalues>
           <attvalue for="3" value="0" />
         </attvalues>
       </edge>
-      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:on_submit" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:update_project" id="197" type="CALLS">
+      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:on_submit" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:update_project" id="198" type="CALLS">
         <attvalues>
           <attvalue for="3" value="0" />
         </attvalues>
       </edge>
-      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:on_submit" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:update_linked_doc" id="198" type="CALLS">
-        <attvalues>
-          <attvalue for="3" value="0" />
-        </attvalues>
-      </edge>
-      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:on_submit" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:make_loyalty_point_entry" id="199" type="CALLS">
+      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:on_submit" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:update_linked_doc" id="199" type="CALLS">
         <attvalues>
           <attvalue for="3" value="0" />
         </attvalues>
       </edge>
       <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:on_submit" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:make_loyalty_point_entry" id="200" type="CALLS">
         <attvalues>
+          <attvalue for="3" value="0" />
+        </attvalues>
+      </edge>
+      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:on_submit" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:make_loyalty_point_entry" id="201" type="CALLS">
+        <attvalues>
           <attvalue for="3" value="1" />
         </attvalues>
       </edge>
-      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:on_submit" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:delete_loyalty_point_entry" id="201" type="CALLS">
+      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:on_submit" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:delete_loyalty_point_entry" id="202" type="CALLS">
         <attvalues>
           <attvalue for="3" value="0" />
         </attvalues>
       </edge>
-      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:on_submit" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:apply_loyalty_points" id="202" type="CALLS">
+      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:on_submit" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:apply_loyalty_points" id="203" type="CALLS">
         <attvalues>
           <attvalue for="3" value="0" />
         </attvalues>
       </edge>
-      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:on_submit" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:update_billed_qty_in_scio" id="203" type="CALLS">
+      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:on_submit" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:update_billed_qty_in_scio" id="204" type="CALLS">
         <attvalues>
           <attvalue for="3" value="0" />
         </attvalues>
       </edge>
-      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:before_cancel" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:check_if_created_using_pos_and_pos_closing_entry_generated" id="204" type="CALLS">
+      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:before_cancel" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:check_if_created_using_pos_and_pos_closing_entry_generated" id="205" type="CALLS">
         <attvalues>
           <attvalue for="3" value="0" />
         </attvalues>
       </edge>
-      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:before_cancel" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:check_if_consolidated_invoice" id="205" type="CALLS">
+      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:before_cancel" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:check_if_consolidated_invoice" id="206" type="CALLS">
         <attvalues>
           <attvalue for="3" value="0" />
         </attvalues>
       </edge>
-      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:before_cancel" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:before_cancel" id="206" type="CALLS">
+      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:before_cancel" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:before_cancel" id="207" type="CALLS">
         <attvalues>
           <attvalue for="3" value="0" />
         </attvalues>
       </edge>
-      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:before_cancel" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:update_time_sheet" id="207" type="CALLS">
+      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:before_cancel" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:update_time_sheet" id="208" type="CALLS">
         <attvalues>
           <attvalue for="3" value="0" />
         </attvalues>
       </edge>
-      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:on_cancel" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:check_if_return_invoice_linked_with_payment_entry" id="208" type="CALLS">
-        <attvalues>
-          <attvalue for="3" value="0" />
-        </attvalues>
-      </edge>
-      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:on_cancel" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:on_cancel" id="209" type="CALLS">
+      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:on_cancel" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:check_if_return_invoice_linked_with_payment_entry" id="209" type="CALLS">
         <attvalues>
           <attvalue for="3" value="0" />
         </attvalues>
       </edge>
       <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:on_cancel" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:on_cancel" id="210" type="CALLS">
         <attvalues>
+          <attvalue for="3" value="0" />
+        </attvalues>
+      </edge>
+      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:on_cancel" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:on_cancel" id="211" type="CALLS">
+        <attvalues>
           <attvalue for="3" value="1" />
         </attvalues>
       </edge>
-      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:on_cancel" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:update_status_updater_args" id="211" type="CALLS">
+      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:on_cancel" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:update_status_updater_args" id="212" type="CALLS">
         <attvalues>
           <attvalue for="3" value="0" />
         </attvalues>
       </edge>
-      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:on_cancel" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:update_billing_status_in_dn" id="212" type="CALLS">
+      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:on_cancel" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:update_billing_status_in_dn" id="213" type="CALLS">
         <attvalues>
           <attvalue for="3" value="0" />
         </attvalues>
       </edge>
-      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:on_cancel" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:process_asset_depreciation" id="213" type="CALLS">
+      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:on_cancel" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:process_asset_depreciation" id="214" type="CALLS">
         <attvalues>
           <attvalue for="3" value="0" />
         </attvalues>
       </edge>
-      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:on_cancel" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:update_project" id="214" type="CALLS">
-        <attvalues>
-          <attvalue for="3" value="0" />
-        </attvalues>
-      </edge>
-      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:on_cancel" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:delete_loyalty_point_entry" id="215" type="CALLS">
+      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:on_cancel" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:update_project" id="215" type="CALLS">
         <attvalues>
           <attvalue for="3" value="0" />
         </attvalues>
       </edge>
       <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:on_cancel" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:delete_loyalty_point_entry" id="216" type="CALLS">
         <attvalues>
+          <attvalue for="3" value="0" />
+        </attvalues>
+      </edge>
+      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:on_cancel" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:delete_loyalty_point_entry" id="217" type="CALLS">
+        <attvalues>
           <attvalue for="3" value="1" />
         </attvalues>
       </edge>
-      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:on_cancel" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:make_loyalty_point_entry" id="217" type="CALLS">
+      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:on_cancel" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:make_loyalty_point_entry" id="218" type="CALLS">
         <attvalues>
           <attvalue for="3" value="0" />
         </attvalues>
       </edge>
-      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:on_cancel" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:unlink_inter_company_doc" id="218" type="CALLS">
+      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:on_cancel" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:unlink_inter_company_doc" id="219" type="CALLS">
         <attvalues>
           <attvalue for="3" value="0" />
         </attvalues>
       </edge>
-      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:on_cancel" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:unlink_sales_invoice_from_timesheets" id="219" type="CALLS">
+      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:on_cancel" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:unlink_sales_invoice_from_timesheets" id="220" type="CALLS">
         <attvalues>
           <attvalue for="3" value="0" />
         </attvalues>
       </edge>
-      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:on_cancel" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:cancel_pos_invoice_credit_note_generated_during_sales_invoice_mode" id="220" type="CALLS">
+      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:on_cancel" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:cancel_pos_invoice_credit_note_generated_during_sales_invoice_mode" id="221" type="CALLS">
         <attvalues>
           <attvalue for="3" value="0" />
         </attvalues>
       </edge>
-      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:on_cancel" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:update_billed_qty_in_scio" id="221" type="CALLS">
+      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:on_cancel" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:update_billed_qty_in_scio" id="222" type="CALLS">
         <attvalues>
           <attvalue for="3" value="0" />
         </attvalues>
       </edge>
-      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:check_credit_limit" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:check_credit_limit" id="222" type="CALLS">
+      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:check_credit_limit" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:check_credit_limit" id="223" type="CALLS">
         <attvalues>
           <attvalue for="3" value="0" />
         </attvalues>
       </edge>
-      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:set_missing_values" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:set_pos_fields" id="223" type="CALLS">
+      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:set_missing_values" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:set_pos_fields" id="224" type="CALLS">
         <attvalues>
           <attvalue for="3" value="0" />
         </attvalues>
       </edge>
-      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:set_missing_values" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:set_missing_values" id="224" type="CALLS">
+      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:set_missing_values" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:set_missing_values" id="225" type="CALLS">
         <attvalues>
           <attvalue for="3" value="0" />
         </attvalues>
       </edge>
-      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:set_missing_values" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:set_purchase_references" id="225" type="CALLS">
+      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:set_missing_values" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:set_purchase_references" id="226" type="CALLS">
         <attvalues>
           <attvalue for="3" value="0" />
         </attvalues>
       </edge>
-      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:reset_mode_of_payments" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:update_multi_mode_option" id="226" type="CALLS">
+      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:reset_mode_of_payments" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:update_multi_mode_option" id="227" type="CALLS">
         <attvalues>
           <attvalue for="3" value="0" />
         </attvalues>
       </edge>
-      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:update_time_sheet" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:update_time_sheet_detail" id="227" type="CALLS">
+      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:update_time_sheet" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:update_time_sheet_detail" id="228" type="CALLS">
         <attvalues>
           <attvalue for="3" value="0" />
         </attvalues>
       </edge>
-      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:update_time_sheet" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:set_status" id="228" type="CALLS">
+      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:update_time_sheet" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:set_status" id="229" type="CALLS">
         <attvalues>
           <attvalue for="3" value="0" />
         </attvalues>
       </edge>
-      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:on_update_after_submit" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:validate_for_repost" id="229" type="CALLS">
+      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:on_update_after_submit" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:validate_for_repost" id="230" type="CALLS">
         <attvalues>
           <attvalue for="3" value="0" />
         </attvalues>
       </edge>
-      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:set_account_for_mode_of_payment" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:get_bank_cash_account" id="230" type="CALLS">
+      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:set_account_for_mode_of_payment" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:get_bank_cash_account" id="231" type="CALLS">
         <attvalues>
           <attvalue for="3" value="0" />
         </attvalues>
       </edge>
-      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:set_pos_fields" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:update_multi_mode_option" id="231" type="CALLS">
+      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:set_pos_fields" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:update_multi_mode_option" id="232" type="CALLS">
         <attvalues>
           <attvalue for="3" value="0" />
         </attvalues>
       </edge>
-      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:validate_with_previous_doc" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:validate_with_previous_doc" id="232" type="CALLS">
+      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:validate_with_previous_doc" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:validate_with_previous_doc" id="233" type="CALLS">
         <attvalues>
           <attvalue for="3" value="0" />
         </attvalues>
       </edge>
-      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:force_set_against_income_account" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:set_against_income_account" id="233" type="CALLS">
+      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:force_set_against_income_account" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:set_against_income_account" id="234" type="CALLS">
         <attvalues>
           <attvalue for="3" value="0" />
         </attvalues>
       </edge>
-      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:validate_created_using_pos" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:validate_pos_opening_entry" id="234" type="CALLS">
+      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:validate_created_using_pos" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:validate_pos_opening_entry" id="235" type="CALLS">
         <attvalues>
           <attvalue for="3" value="0" />
         </attvalues>
       </edge>
-      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:validate_warehouse" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:validate_warehouse" id="235" type="CALLS">
+      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:validate_warehouse" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:validate_warehouse" id="236" type="CALLS">
         <attvalues>
           <attvalue for="3" value="0" />
         </attvalues>
       </edge>
-      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:update_timesheet_billing_for_project" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:is_auto_fetch_timesheet_enabled" id="236" type="CALLS">
+      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:update_timesheet_billing_for_project" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:is_auto_fetch_timesheet_enabled" id="237" type="CALLS">
         <attvalues>
           <attvalue for="3" value="0" />
         </attvalues>
       </edge>
-      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:update_timesheet_billing_for_project" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:add_timesheet_data" id="237" type="CALLS">
+      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:update_timesheet_billing_for_project" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:add_timesheet_data" id="238" type="CALLS">
         <attvalues>
           <attvalue for="3" value="0" />
         </attvalues>
       </edge>
-      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:update_timesheet_billing_for_project" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:calculate_billing_amount_for_timesheet" id="238" type="CALLS">
+      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:update_timesheet_billing_for_project" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:calculate_billing_amount_for_timesheet" id="239" type="CALLS">
         <attvalues>
           <attvalue for="3" value="0" />
         </attvalues>
       </edge>
-      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:add_timesheet_data" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:calculate_billing_amount_for_timesheet" id="239" type="CALLS">
-        <attvalues>
-          <attvalue for="3" value="0" />
-        </attvalues>
-      </edge>
-      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:calculate_billing_amount_for_timesheet" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:timesheet_sum" id="240" type="CALLS">
+      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:add_timesheet_data" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:calculate_billing_amount_for_timesheet" id="240" type="CALLS">
         <attvalues>
           <attvalue for="3" value="0" />
         </attvalues>
       </edge>
       <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:calculate_billing_amount_for_timesheet" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:timesheet_sum" id="241" type="CALLS">
         <attvalues>
+          <attvalue for="3" value="0" />
+        </attvalues>
+      </edge>
+      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:calculate_billing_amount_for_timesheet" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:timesheet_sum" id="242" type="CALLS">
+        <attvalues>
           <attvalue for="3" value="1" />
         </attvalues>
       </edge>
-      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:split_asset_based_on_sale_qty" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:get_asset_qty" id="242" type="CALLS">
+      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:split_asset_based_on_sale_qty" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:get_asset_qty" id="243" type="CALLS">
         <attvalues>
           <attvalue for="3" value="0" />
         </attvalues>
       </edge>
-      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:process_asset_depreciation" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:depreciate_asset_on_sale" id="243" type="CALLS">
+      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:process_asset_depreciation" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:depreciate_asset_on_sale" id="244" type="CALLS">
         <attvalues>
           <attvalue for="3" value="0" />
         </attvalues>
       </edge>
-      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:process_asset_depreciation" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:restore_asset" id="244" type="CALLS">
+      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:process_asset_depreciation" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:restore_asset" id="245" type="CALLS">
         <attvalues>
           <attvalue for="3" value="0" />
         </attvalues>
       </edge>
-      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:process_asset_depreciation" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:update_asset" id="245" type="CALLS">
+      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:process_asset_depreciation" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:update_asset" id="246" type="CALLS">
         <attvalues>
           <attvalue for="3" value="0" />
         </attvalues>
       </edge>
-      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:depreciate_asset_on_sale" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:get_disposal_date" id="246" type="CALLS">
+      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:depreciate_asset_on_sale" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:get_disposal_date" id="247" type="CALLS">
         <attvalues>
           <attvalue for="3" value="0" />
         </attvalues>
       </edge>
-      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:depreciate_asset_on_sale" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:get_note_for_asset_sale" id="247" type="CALLS">
+      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:depreciate_asset_on_sale" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:get_note_for_asset_sale" id="248" type="CALLS">
         <attvalues>
           <attvalue for="3" value="0" />
         </attvalues>
       </edge>
-      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:restore_asset" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:get_note_for_asset_return" id="248" type="CALLS">
+      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:restore_asset" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:get_note_for_asset_return" id="249" type="CALLS">
         <attvalues>
           <attvalue for="3" value="0" />
         </attvalues>
       </edge>
-      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:update_asset" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:get_disposal_date" id="249" type="CALLS">
+      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:update_asset" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:get_disposal_date" id="250" type="CALLS">
         <attvalues>
           <attvalue for="3" value="0" />
         </attvalues>
       </edge>
-      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:update_asset" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:_update_asset" id="250" type="CALLS">
+      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:update_asset" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:_update_asset" id="251" type="CALLS">
         <attvalues>
           <attvalue for="3" value="0" />
         </attvalues>
       </edge>
-      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:_update_asset" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:set_status" id="251" type="CALLS">
+      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:_update_asset" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:set_status" id="252" type="CALLS">
         <attvalues>
           <attvalue for="3" value="0" />
         </attvalues>
       </edge>
-      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:make_gl_entries" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:get_gl_entries" id="252" type="CALLS">
+      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:make_gl_entries" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:get_gl_entries" id="253" type="CALLS">
         <attvalues>
           <attvalue for="3" value="0" />
         </attvalues>
       </edge>
-      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:make_gl_entries" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:make_gl_entries" id="253" type="CALLS">
+      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:make_gl_entries" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:make_gl_entries" id="254" type="CALLS">
         <attvalues>
           <attvalue for="3" value="0" />
         </attvalues>
       </edge>
-      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:get_gl_entries" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:make_customer_gl_entry" id="254" type="CALLS">
+      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:get_gl_entries" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:make_customer_gl_entry" id="255" type="CALLS">
         <attvalues>
           <attvalue for="3" value="0" />
         </attvalues>
       </edge>
-      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:get_gl_entries" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:make_tax_gl_entries" id="255" type="CALLS">
+      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:get_gl_entries" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:make_tax_gl_entries" id="256" type="CALLS">
         <attvalues>
           <attvalue for="3" value="0" />
         </attvalues>
       </edge>
-      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:get_gl_entries" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:make_internal_transfer_gl_entries" id="256" type="CALLS">
+      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:get_gl_entries" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:make_internal_transfer_gl_entries" id="257" type="CALLS">
         <attvalues>
           <attvalue for="3" value="0" />
         </attvalues>
       </edge>
-      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:get_gl_entries" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:make_item_gl_entries" id="257" type="CALLS">
+      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:get_gl_entries" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:make_item_gl_entries" id="258" type="CALLS">
         <attvalues>
           <attvalue for="3" value="0" />
         </attvalues>
       </edge>
-      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:get_gl_entries" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:make_regional_gl_entries" id="258" type="CALLS">
+      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:get_gl_entries" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:make_regional_gl_entries" id="259" type="CALLS">
         <attvalues>
           <attvalue for="3" value="0" />
         </attvalues>
       </edge>
-      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:get_gl_entries" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:make_loyalty_point_redemption_gle" id="259" type="CALLS">
+      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:get_gl_entries" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:make_loyalty_point_redemption_gle" id="260" type="CALLS">
         <attvalues>
           <attvalue for="3" value="0" />
         </attvalues>
       </edge>
-      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:get_gl_entries" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:make_pos_gl_entries" id="260" type="CALLS">
+      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:get_gl_entries" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:make_pos_gl_entries" id="261" type="CALLS">
         <attvalues>
           <attvalue for="3" value="0" />
         </attvalues>
       </edge>
-      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:get_gl_entries" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:make_write_off_gl_entry" id="261" type="CALLS">
+      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:get_gl_entries" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:make_write_off_gl_entry" id="262" type="CALLS">
         <attvalues>
           <attvalue for="3" value="0" />
         </attvalues>
       </edge>
-      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:get_gl_entries" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:make_gle_for_rounding_adjustment" id="262" type="CALLS">
+      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:get_gl_entries" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:make_gle_for_rounding_adjustment" id="263" type="CALLS">
         <attvalues>
           <attvalue for="3" value="0" />
         </attvalues>
       </edge>
-      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:make_item_gl_entries" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:get_gl_entries_for_fixed_asset" id="263" type="CALLS">
+      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:make_item_gl_entries" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:get_gl_entries_for_fixed_asset" id="264" type="CALLS">
         <attvalues>
           <attvalue for="3" value="0" />
         </attvalues>
       </edge>
-      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:make_item_gl_entries" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:get_gl_entries" id="264" type="CALLS">
+      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:make_item_gl_entries" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:get_gl_entries" id="265" type="CALLS">
         <attvalues>
           <attvalue for="3" value="0" />
         </attvalues>
       </edge>
-      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:make_pos_gl_entries" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:get_gle_for_change_amount" id="265" type="CALLS">
+      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:make_pos_gl_entries" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:get_gle_for_change_amount" id="266" type="CALLS">
         <attvalues>
           <attvalue for="3" value="0" />
         </attvalues>
       </edge>
-      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:make_loyalty_point_entry" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:get_returned_amount" id="266" type="CALLS">
+      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:make_loyalty_point_entry" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:get_returned_amount" id="267" type="CALLS">
         <attvalues>
           <attvalue for="3" value="0" />
         </attvalues>
       </edge>
-      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:make_loyalty_point_entry" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:set_loyalty_program_tier" id="267" type="CALLS">
+      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:make_loyalty_point_entry" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:set_loyalty_program_tier" id="268" type="CALLS">
         <attvalues>
           <attvalue for="3" value="0" />
         </attvalues>
       </edge>
-      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:delete_loyalty_point_entry" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:set_loyalty_program_tier" id="268" type="CALLS">
+      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:delete_loyalty_point_entry" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:set_loyalty_program_tier" id="269" type="CALLS">
         <attvalues>
           <attvalue for="3" value="0" />
         </attvalues>
       </edge>
-      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:set_status" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:get_total_in_party_account_currency" id="269" type="CALLS">
+      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:set_status" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:get_total_in_party_account_currency" id="270" type="CALLS">
         <attvalues>
           <attvalue for="3" value="0" />
         </attvalues>
       </edge>
-      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:set_status" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:is_overdue" id="270" type="CALLS">
+      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:set_status" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:is_overdue" id="271" type="CALLS">
         <attvalues>
           <attvalue for="3" value="0" />
         </attvalues>
       </edge>
-      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:set_status" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:get_discounting_status" id="271" type="CALLS">
+      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:set_status" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:get_discounting_status" id="272" type="CALLS">
         <attvalues>
           <attvalue for="3" value="0" />
         </attvalues>
       </edge>
-      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:get_list_context" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:get_list_context" id="272" type="CALLS">
-        <attvalues>
-          <attvalue for="3" value="0" />
-        </attvalues>
-      </edge>
-      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:get_inter_company_details" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:get_internal_party" id="273" type="CALLS">
+      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:get_list_context" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:get_list_context" id="273" type="CALLS">
         <attvalues>
           <attvalue for="3" value="0" />
         </attvalues>
       </edge>
       <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:get_inter_company_details" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:get_internal_party" id="274" type="CALLS">
         <attvalues>
-          <attvalue for="3" value="1" />
-        </attvalues>
-      </edge>
-      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:validate_inter_company_transaction" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:get_inter_company_details" id="275" type="CALLS">
-        <attvalues>
           <attvalue for="3" value="0" />
         </attvalues>
       </edge>
-      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:make_inter_company_purchase_invoice" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:make_inter_company_transaction" id="276" type="CALLS">
-        <attvalues>
-          <attvalue for="3" value="0" />
-        </attvalues>
-      </edge>
-      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:make_inter_company_transaction" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:get_received_items" id="277" type="CALLS">
-        <attvalues>
-          <attvalue for="3" value="0" />
-        </attvalues>
-      </edge>
-      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:make_inter_company_transaction" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:validate_inter_company_transaction" id="278" type="CALLS">
-        <attvalues>
-          <attvalue for="3" value="0" />
-        </attvalues>
-      </edge>
-      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:make_inter_company_transaction" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:get_inter_company_details" id="279" type="CALLS">
-        <attvalues>
-          <attvalue for="3" value="0" />
-        </attvalues>
-      </edge>
-      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:update_details" target="erpnext/accounts/doctype/sales_invoice/test_sales_invoice.py:TestSalesInvoice:_validate_address_link" id="280" type="CALLS">
-        <attvalues>
-          <attvalue for="3" value="0" />
-        </attvalues>
-      </edge>
-      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:update_details" target="erpnext/accounts/doctype/sales_invoice/test_sales_invoice.py:TestSalesInvoice:_validate_address_link" id="281" type="CALLS">
+      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:get_inter_company_details" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:get_internal_party" id="275" type="CALLS">
         <attvalues>
           <attvalue for="3" value="1" />
         </attvalues>
       </edge>
-      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:update_details" target="erpnext/accounts/doctype/sales_invoice/test_sales_invoice.py:TestSalesInvoice:_validate_address_link" id="282" type="CALLS">
+      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:validate_inter_company_transaction" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:get_inter_company_details" id="276" type="CALLS">
+        <attvalues>
+          <attvalue for="3" value="0" />
+        </attvalues>
+      </edge>
+      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:make_inter_company_purchase_invoice" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:make_inter_company_transaction" id="277" type="CALLS">
+        <attvalues>
+          <attvalue for="3" value="0" />
+        </attvalues>
+      </edge>
+      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:make_inter_company_transaction" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:get_received_items" id="278" type="CALLS">
+        <attvalues>
+          <attvalue for="3" value="0" />
+        </attvalues>
+      </edge>
+      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:make_inter_company_transaction" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:validate_inter_company_transaction" id="279" type="CALLS">
+        <attvalues>
+          <attvalue for="3" value="0" />
+        </attvalues>
+      </edge>
+      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:make_inter_company_transaction" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:get_inter_company_details" id="280" type="CALLS">
+        <attvalues>
+          <attvalue for="3" value="0" />
+        </attvalues>
+      </edge>
+      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:update_details" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:_validate_address_link" id="281" type="CALLS">
+        <attvalues>
+          <attvalue for="3" value="0" />
+        </attvalues>
+      </edge>
+      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:update_details" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:_validate_address_link" id="282" type="CALLS">
+        <attvalues>
+          <attvalue for="3" value="1" />
+        </attvalues>
+      </edge>
+      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:update_details" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:_validate_address_link" id="283" type="CALLS">
         <attvalues>
           <attvalue for="3" value="2" />
         </attvalues>
       </edge>
-      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:update_details" target="erpnext/accounts/doctype/sales_invoice/test_sales_invoice.py:TestSalesInvoice:_validate_address_link" id="283" type="CALLS">
+      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:update_details" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:_validate_address_link" id="284" type="CALLS">
         <attvalues>
           <attvalue for="3" value="3" />
         </attvalues>
       </edge>
-      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:update_details" target="erpnext/accounts/doctype/sales_invoice/test_sales_invoice.py:TestSalesInvoice:_validate_address_link" id="284" type="CALLS">
+      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:update_details" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:_validate_address_link" id="285" type="CALLS">
         <attvalues>
           <attvalue for="3" value="4" />
         </attvalues>
       </edge>
-      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:update_details" target="erpnext/accounts/doctype/sales_invoice/test_sales_invoice.py:TestSalesInvoice:_validate_address_link" id="285" type="CALLS">
+      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:update_details" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:_validate_address_link" id="286" type="CALLS">
         <attvalues>
           <attvalue for="3" value="5" />
         </attvalues>
       </edge>
-      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:update_details" target="erpnext/accounts/doctype/sales_invoice/test_sales_invoice.py:TestSalesInvoice:_validate_address_link" id="286" type="CALLS">
+      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:update_details" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:_validate_address_link" id="287" type="CALLS">
         <attvalues>
           <attvalue for="3" value="6" />
-        </attvalues>
-      </edge>
-      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:update_details" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:update_address" id="287" type="CALLS">
-        <attvalues>
-          <attvalue for="3" value="0" />
         </attvalues>
       </edge>
       <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:update_details" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:update_address" id="288" type="CALLS">
         <attvalues>
-          <attvalue for="3" value="1" />
+          <attvalue for="3" value="0" />
         </attvalues>
       </edge>
       <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:update_details" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:update_address" id="289" type="CALLS">
         <attvalues>
-          <attvalue for="3" value="2" />
+          <attvalue for="3" value="1" />
         </attvalues>
       </edge>
       <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:update_details" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:update_address" id="290" type="CALLS">
         <attvalues>
-          <attvalue for="3" value="3" />
+          <attvalue for="3" value="2" />
         </attvalues>
       </edge>
       <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:update_details" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:update_address" id="291" type="CALLS">
         <attvalues>
-          <attvalue for="3" value="4" />
+          <attvalue for="3" value="3" />
         </attvalues>
       </edge>
       <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:update_details" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:update_address" id="292" type="CALLS">
         <attvalues>
-          <attvalue for="3" value="5" />
+          <attvalue for="3" value="4" />
         </attvalues>
       </edge>
       <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:update_details" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:update_address" id="293" type="CALLS">
         <attvalues>
-          <attvalue for="3" value="6" />
+          <attvalue for="3" value="5" />
         </attvalues>
       </edge>
-      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:update_details" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:update_taxes" id="294" type="CALLS">
+      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:update_details" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:update_address" id="294" type="CALLS">
         <attvalues>
-          <attvalue for="3" value="0" />
+          <attvalue for="3" value="6" />
         </attvalues>
       </edge>
       <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:update_details" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:update_taxes" id="295" type="CALLS">
         <attvalues>
-          <attvalue for="3" value="1" />
-        </attvalues>
-      </edge>
-      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:set_purchase_references" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:get_delivery_note_details" id="296" type="CALLS">
-        <attvalues>
           <attvalue for="3" value="0" />
         </attvalues>
       </edge>
-      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:set_purchase_references" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:get_pd_details" id="297" type="CALLS">
+      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:update_details" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:update_taxes" id="296" type="CALLS">
+        <attvalues>
+          <attvalue for="3" value="1" />
+        </attvalues>
+      </edge>
+      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:set_purchase_references" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:get_delivery_note_details" id="297" type="CALLS">
         <attvalues>
           <attvalue for="3" value="0" />
         </attvalues>
       </edge>
       <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:set_purchase_references" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:get_pd_details" id="298" type="CALLS">
         <attvalues>
+          <attvalue for="3" value="0" />
+        </attvalues>
+      </edge>
+      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:set_purchase_references" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:get_pd_details" id="299" type="CALLS">
+        <attvalues>
           <attvalue for="3" value="1" />
         </attvalues>
       </edge>
-      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:set_purchase_references" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:update_pr_items" id="299" type="CALLS">
+      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:set_purchase_references" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:update_pr_items" id="300" type="CALLS">
         <attvalues>
           <attvalue for="3" value="0" />
         </attvalues>
       </edge>
-      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:set_purchase_references" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:get_sales_invoice_details" id="300" type="CALLS">
+      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:set_purchase_references" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:get_sales_invoice_details" id="301" type="CALLS">
         <attvalues>
           <attvalue for="3" value="0" />
         </attvalues>
       </edge>
-      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:set_purchase_references" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:update_pi_items" id="301" type="CALLS">
+      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:set_purchase_references" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:update_pi_items" id="302" type="CALLS">
         <attvalues>
           <attvalue for="3" value="0" />
         </attvalues>
       </edge>
-      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:get_loyalty_programs" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:get_loyalty_programs" id="302" type="CALLS">
+      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:get_loyalty_programs" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:get_loyalty_programs" id="303" type="CALLS">
         <attvalues>
           <attvalue for="3" value="0" />
         </attvalues>
       </edge>
-      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:update_multi_mode_option" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:get_mode_of_payments_info" id="303" type="CALLS">
+      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:update_multi_mode_option" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:get_mode_of_payments_info" id="304" type="CALLS">
         <attvalues>
           <attvalue for="3" value="0" />
         </attvalues>
       </edge>
-      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:update_multi_mode_option" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:append_payment" id="304" type="CALLS">
+      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:update_multi_mode_option" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:append_payment" id="305" type="CALLS">
         <attvalues>
           <attvalue for="3" value="0" />
         </attvalues>
       </edge>
-      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:postprocess_dunning" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:validate" id="305" type="CALLS">
-        <attvalues>
-          <attvalue for="3" value="0" />
-        </attvalues>
-      </edge>
-      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice_dashboard.py" target="erpnext/accounts/doctype/sales_invoice/sales_invoice_dashboard.py:get_data" id="306" type="CONTAINS">
+      <edge source="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:postprocess_dunning" target="erpnext/accounts/doctype/sales_invoice/sales_invoice.py:SalesInvoice:validate" id="306" type="CALLS">
         <attvalues>
           <attvalue for="3" value="0" />
         </attvalues>

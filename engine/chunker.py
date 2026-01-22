@@ -1,30 +1,30 @@
 from transformers import AutoTokenizer
-import requests
 import math
 from typing import List, Dict
 
 class HybridChunker:
-    def __init__(self, model_name: str = "nomic-embed-text", max_tokens: int = 2048, overlap: int = 150):
+    # UPDATED: Lowered default max_tokens to 500 to stay safely within the 512-token limit
+    def __init__(self, model_name: str = "nomic-embed-text", max_tokens: int = 500, overlap: int = 50):
         """
-        Refactored Chunker optimized for 2048 context window.
-        Uses BERT tokenizer locally to ensure alignment with Nomic's architecture.
+        Refactored Chunker optimized for BERT-based embedding limits.
+        Ensures chunks never exceed the 512-token boundary that triggers indexing errors.
         """
-        # Load the actual tokenizer from HuggingFace
         self.tokenizer = AutoTokenizer.from_pretrained("bert-base-uncased")
         self.max_tokens = max_tokens
         self.overlap = overlap
 
     def split_text(self, text: str) -> List[str]:
         """
-        FIX: Added this method to handle raw strings from main.py.
-        Returns a list of strings, each within the token limit.
+        Processes raw text and returns a list of chunks within the token limit.
+        Used to break down large files (like the 18,000+ token SalesInvoice) before embedding.
         """
         tokens = self.tokenizer.encode(text, add_special_tokens=False)
         if len(tokens) <= self.max_tokens:
             return [text]
 
         chunks = []
-        step = self.max_tokens - self.overlap
+        # Step ensures we move forward while maintaining the requested overlap
+        step = max(1, self.max_tokens - self.overlap)
         for i in range(0, len(tokens), step):
             chunk_tokens = tokens[i : i + self.max_tokens]
             chunks.append(self.tokenizer.decode(chunk_tokens))
@@ -33,29 +33,29 @@ class HybridChunker:
         return chunks
 
     def process_nodes(self, nodes: List[Dict]) -> List[Dict]:
-        """Processes structured code nodes into larger chunks."""
+        """Processes structured code nodes into chunks compatible with the vector store."""
         final_chunks = []
         for node in nodes:
             content = node['content']
             tokens = self.tokenizer.encode(content, add_special_tokens=False)
             token_count = len(tokens)
 
+            # Check if original node content fits within limits
             if token_count <= self.max_tokens:
                 node['token_count'] = token_count
                 node['is_partial'] = False
                 final_chunks.append(node)
             else:
+                # Use sliding window for oversized code blocks
                 final_chunks.extend(self._sliding_window(node, tokens))
         return final_chunks
 
     def _sliding_window(self, node: Dict, tokens: List[int]) -> List[Dict]:
-        """Splits large token arrays into overlapping windows."""
+        """Splits large token arrays into overlapping windows for partial indexing."""
         sub_chunks = []
-        step = self.max_tokens - self.overlap
-        num_windows = math.ceil(len(tokens) / step)
+        step = max(1, self.max_tokens - self.overlap)
         
-        for i in range(num_windows):
-            start = i * step
+        for i, start in enumerate(range(0, len(tokens), step)):
             end = start + self.max_tokens
             chunk_tokens = tokens[start:end]
             chunk_text = self.tokenizer.decode(chunk_tokens)
@@ -64,6 +64,7 @@ class HybridChunker:
                 'name': f"{node.get('name', 'chunk')}_part_{i+1}",
                 'type': node.get('type', 'code_block'),
                 'content': chunk_text,
+                'file_path': node.get('file_path', ''),
                 'start_line': node.get('start_line', 0),
                 'token_count': len(chunk_tokens),
                 'is_partial': True

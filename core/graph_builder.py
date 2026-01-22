@@ -3,9 +3,14 @@ import networkx as nx
 import requests
 import tree_sitter_python as tspython
 from tree_sitter import Language, Parser
+import logging
+from transformers import logging as transformers_logging
 
 class CodeGraphPipeline:
     def __init__(self):
+        # KEY CHANGE: Suppress the noisy tokenizer warning at the source
+        transformers_logging.set_verbosity_error() 
+        
         self.lang = Language(tspython.language())
         self.parser = Parser(self.lang)
         self.G = nx.MultiDiGraph() 
@@ -35,7 +40,6 @@ class CodeGraphPipeline:
             elif node.type == 'function_definition':
                 func_name = self._get_name(node, code_bytes)
                 if func_name:
-                    # Create a hierarchical ID
                     prefix = f"{rel_path}:{current_class}" if current_class else rel_path
                     node_id = f"{prefix}:{func_name}"
                     safe_parent = current_class if current_class is not None else ""
@@ -43,8 +47,6 @@ class CodeGraphPipeline:
                     self.G.add_node(node_id, type='function', name=func_name, parent_class=safe_parent)
                     parent_id = f"{rel_path}:{current_class}" if current_class else rel_path
                     self.G.add_edge(parent_id, node_id, type='CONTAINS')
-                    
-                    # Map the bare name to the full ID for resolution in Pass 2
                     self.symbol_table[func_name] = node_id
 
             for child in node.children: 
@@ -59,10 +61,9 @@ class CodeGraphPipeline:
         def traverse(node, current_caller_id=None):
             if node.type == 'function_definition':
                 func_name = self._get_name(node, code_bytes)
-                # Reconstruct the caller ID based on Pass 1 logic
-                # We search the graph to find the node we created in Pass 1
-                for n, attr in self.G.nodes(data=True):
-                    if attr.get('type') == 'function' and n.startswith(rel_path) and attr.get('name') == func_name:
+                prefix = f"{rel_path}"
+                for n in self.G.nodes:
+                    if n.startswith(rel_path) and n.endswith(f":{func_name}"):
                         current_caller_id = n
                         break
 
@@ -70,7 +71,6 @@ class CodeGraphPipeline:
                 func_node = node.child_by_field_name('function')
                 if func_node:
                     raw_call = code_bytes[func_node.start_byte:func_node.end_byte].decode()
-                    # Clean 'self.method' or 'cls.method' to just 'method'
                     callee_name = raw_call.split('.')[-1]
                     
                     if callee_name in self.symbol_table:
@@ -83,24 +83,28 @@ class CodeGraphPipeline:
                 
         traverse(tree.root_node)
 
+    def process_single_file(self, f_info, content):
+        """Processes a single file's symbols and adds them to the graph."""
+        if not f_info['path'].endswith('.py'): return
+        
+        content_bytes = content.encode('utf-8')
+        path = f_info['path']
+        
+        self.pass_1_symbols(path, content_bytes)
+        self.pass_2_calls(path, content_bytes)
+        print(f"   indexed graph symbols for: {path}")
+
     def process_remote_files(self, remote_file_list):
         contents = {}
-        headers = {"Authorization": f"token {os.getenv('GITHUB_TOKEN')}"} if os.getenv('GITHUB_TOKEN') else {}
-
         for f_info in remote_file_list:
             if not f_info['path'].endswith('.py'): continue
-            try:
-                resp = requests.get(f_info['download_url'], headers=headers)
-                if resp.status_code == 200:
-                    contents[f_info['path']] = resp.content
-            except Exception as e:
-                print(f"⚠️ Failed to fetch {f_info['path']}: {e}")
+            resp = requests.get(f_info['download_url'])
+            if resp.status_code == 200:
+                contents[f_info['path']] = resp.content
         
         for rel_path, code in contents.items(): 
             self.pass_1_symbols(rel_path, code)
-            
         for rel_path, code in contents.items(): 
             self.pass_2_calls(rel_path, code)
         
-        print(f"✅ Enhanced Graph built: {self.G.number_of_nodes()} nodes, {self.G.number_of_edges()} edges.")
         return self.G
