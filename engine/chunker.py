@@ -3,7 +3,6 @@ import math
 from typing import List, Dict
 
 class HybridChunker:
-    # UPDATED: Lowered default max_tokens to 500 to stay safely within the 512-token limit
     def __init__(self, model_name: str = "nomic-embed-text", max_tokens: int = 500, overlap: int = 50):
         """
         Refactored Chunker optimized for BERT-based embedding limits.
@@ -23,7 +22,6 @@ class HybridChunker:
             return [text]
 
         chunks = []
-        # Step ensures we move forward while maintaining the requested overlap
         step = max(1, self.max_tokens - self.overlap)
         for i in range(0, len(tokens), step):
             chunk_tokens = tokens[i : i + self.max_tokens]

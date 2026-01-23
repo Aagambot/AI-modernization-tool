@@ -8,6 +8,8 @@ import google.generativeai as genai
 from engine.embedder import BGEEmbedder 
 from data.storage import VectorStore 
 from dotenv import load_dotenv
+import numpy as np
+from sklearn.metrics.pairwise import cosine_similarity
 
 load_dotenv()
 
@@ -47,6 +49,47 @@ class ModernizationChat:
         
         print("💾 Pre-loading Graph into memory...")
         self.cached_graph = self.store.load_graph(self.entity_name)
+    
+    def compute_mmr(self,query_embedding, candidate_embeddings, lambda_param, top_k=8):
+        """
+        Core MMR Algorithm:
+        lambda_param: 1.0 is pure relevance, 0.0 is pure diversity.
+        """
+        if not candidate_embeddings:
+            return []
+
+        selected_indices = []
+        candidate_indices = list(range(len(candidate_embeddings)))
+
+        # Calculate similarities between query and all candidates
+        query_sims = cosine_similarity([query_embedding], candidate_embeddings)[0]
+
+        # Pick the best candidate first
+        first_best = np.argmax(query_sims)
+        selected_indices.append(first_best)
+        candidate_indices.remove(first_best)
+
+        while len(selected_indices) < top_k and candidate_indices:
+            mmr_scores = []
+            for cand_idx in candidate_indices:
+                # Relevance score
+                relevance = query_sims[cand_idx]
+                
+                # Diversity score (similarity to already selected chunks)
+                target_cand_emb = [candidate_embeddings[cand_idx]]
+                selected_embs = [candidate_embeddings[i] for i in selected_indices]
+                redundancy = np.max(cosine_similarity(target_cand_emb, selected_embs))
+                
+                # MMR Formula
+                score = lambda_param * relevance - (1 - lambda_param) * redundancy
+                mmr_scores.append((score, cand_idx))
+
+            # Select the candidate with the best MMR score
+            next_best = max(mmr_scores, key=lambda x: x[0])[1]
+            selected_indices.append(next_best)
+            candidate_indices.remove(next_best)
+
+        return selected_indices
 
     @property
     def table(self):
@@ -61,17 +104,39 @@ class ModernizationChat:
             
         metrics = {}
         t_start = time.perf_counter()
-
+        technical_keywords = ["function", "logic", "code", "method", "how", "where", "algorithm", "class"]
+        is_technical_query = any(word in query.lower() for word in technical_keywords)
         # Step 1: Embedding
         t0 = time.perf_counter()
         query_vec_results = await asyncio.to_thread(self.embedder.embed_batch, [query])
         query_vec = query_vec_results[0]
         metrics['embedding_ms'] = (time.perf_counter() - t0) * 1000
         
-        # Step 2: Vector Search
+        # Step 2: Vector Search with Candidate Oversampling
+        candidate_limit = 20 
         t1 = time.perf_counter()
-        results = await asyncio.to_thread(lambda: self.table.search(query_vec).limit(limit).to_list())
+        def perform_search():
+            search_query = self.table.search(query_vec).limit(20)
+            
+            # If it's a technical query, filter out non-python files
+            if is_technical_query:
+                # LanceDB uses SQL-like predicates
+                search_query = search_query.where("file_path LIKE '%.py'")
+                
+            return search_query.to_list()
+        initial_results = await asyncio.to_thread(perform_search)
         metrics['vector_search_ms'] = (time.perf_counter() - t1) * 1000
+
+        # Step 3: Apply MMR Re-ranking
+        if initial_results and len(initial_results) > limit:  
+            candidate_embs = [res['vector'] for res in initial_results] 
+            selected_indices = self.compute_mmr(
+                query_vec,          
+                candidate_embs,     
+                lambda_param=0.5,   
+                top_k=limit 
+            )
+            results = [initial_results[i] for i in selected_indices]
         
         top_distance = results[0]['_distance'] if results else 1.0
         context_blocks = []
@@ -79,6 +144,7 @@ class ModernizationChat:
         
         t2 = time.perf_counter()
         
+        # Step 4: Context Assembly (Existing logic)
         for res in results:
             path = res['file_path']
             chunk_calls = []
@@ -108,13 +174,18 @@ class ModernizationChat:
         total_retrieval_ms = (time.perf_counter() - t_start) * 1000
         
         return context_blocks, total_retrieval_ms, metrics
+    
 
+    
     async def generate_domain_model(self, folder_path, query=None):
-        intent = "summary" 
+        intent_prompt = f"Categorize this user query into 'summary', 'process_flow', or 'debugging': {query}"
+        intent_resp = self.llm.generate_content(intent_prompt)
+        intent = intent_resp.text.strip().lower()
         if query:
-            if any(word in query.lower() for word in ["how", "what happens", "flow", "process", "submit"]):
+            query_lower = query.lower()
+            if any(word in query_lower for word in ["how", "flow", "process", "submit", "step"]):
                 intent = "process_flow"
-            elif any(word in query.lower() for word in ["where", "debug", "error", "find"]):
+            elif any(word in query_lower for word in ["where", "debug", "function", "logic", "which", "allocat"]):
                 intent = "debugging"
 
         active_query = query if query else f"Overview of {self.entity_name}"
@@ -142,7 +213,7 @@ async def main():
         chat = ModernizationChat()
         # TARGET_DIR is technically dynamic but we focus on the indexed module
         TARGET_DIR = r"C:/Users/Aagam/OneDrive/Desktop/erpnext/erpnext/accounts/doctype/sales_invoice"
-        my_query = "Which function allocates advance payments against a Sales Invoice??"
+        my_query = "Which function allocates advance payments against a Sales Invoice?"
         print(f"🚀 Analyzing {TARGET_DIR}...")
         model_json, r_lat, g_lat = await chat.generate_domain_model(TARGET_DIR, query=my_query)
         

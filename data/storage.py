@@ -14,7 +14,6 @@ class VectorStore:
         self.graph_dir = project_root / "data" / "graphs"
         self.graph_dir.mkdir(parents=True, exist_ok=True)
         
-        # KEY CHANGE: Path for the hash registry to support incremental indexing
         self.hash_path = project_root / "data" / "file_hashes.json"
         self.hash_path.parent.mkdir(parents=True, exist_ok=True)
         

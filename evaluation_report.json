@@ -2,121 +2,121 @@
     {
         "query": "How does ERPNext handle deferred revenue when a Sales Invoice is submitted?",
         "found": true,
-        "rank": 3,
-        "retrieval_latency": 2199.2945671081543,
-        "generation_latency": 6232.956100000138,
+        "rank": 1,
+        "retrieval_latency": 3003.174304962158,
+        "generation_latency": 7800.546799999211,
         "scores": {
             "accuracy": 5,
             "completeness": 5,
-            "rationale": "The AI accurately and completely describes the deferred revenue process in ERPNext, including validation, accounting, and stock impacts."
+            "rationale": "The response accurately and comprehensively describes how ERPNext handles deferred revenue, including validation, accounting, and stock phases, with relevant code pointers."
         }
     },
     {
         "query": "Where is stock updated when 'Update Stock' is enabled on a Sales Invoice?",
         "found": true,
         "rank": 1,
-        "retrieval_latency": 2277.6925563812256,
-        "generation_latency": 5254.062299999987,
+        "retrieval_latency": 2170.6974506378174,
+        "generation_latency": 8973.929899999348,
         "scores": {
             "accuracy": 5,
             "completeness": 5,
-            "rationale": "The AI accurately pinpoints the `on_submit`, `on_cancel`, `update_stock_ledger`, and `update_stock_reservation_entries` methods, providing a complete overview of the stock update process in Sales Invoices."
+            "rationale": "The AI accurately identifies the stock update process and provides a detailed breakdown of the process including potential failures and dependencies."
         }
     },
     {
         "query": "Which function allocates advance payments against a Sales Invoice?",
         "found": true,
-        "rank": 2,
-        "retrieval_latency": 2156.399965286255,
-        "generation_latency": 6626.598999999942,
+        "rank": 3,
+        "retrieval_latency": 2134.8824501037598,
+        "generation_latency": 10192.089800000758,
         "scores": {
-            "accuracy": 1,
-            "completeness": 1,
-            "rationale": "The response provides the schema for a Sales Invoice, which is not the function requested in the prompt."
+            "accuracy": 3,
+            "completeness": 2,
+            "rationale": "The AI identifies set_advances() which is a function used to set the values of the advances, but doesn't call allocate_advances_against_sales_invoice() to allocate these advances."
         }
     },
     {
         "query": "How does the system validate POS paid amounts during submission?",
         "found": true,
         "rank": 1,
-        "retrieval_latency": 2175.8358478546143,
-        "generation_latency": 5834.055199999966,
+        "retrieval_latency": 2145.6780433654785,
+        "generation_latency": 3781.0106999995696,
         "scores": {
             "accuracy": 5,
             "completeness": 5,
-            "rationale": "The AI successfully identified and described the validation process using relevant functions, covering all key areas with detailed steps."
+            "rationale": "The response accurately and completely describes the validation of POS paid amounts during submission, covering the relevant function and conditions, and acknowledging the lack of accounting/stock impacts."
         }
     },
     {
         "query": "Where are inter-company transactions triggered from a Sales Invoice?",
         "found": true,
-        "rank": 2,
-        "retrieval_latency": 2334.7220420837402,
-        "generation_latency": 8639.175300000034,
+        "rank": 1,
+        "retrieval_latency": 2129.0507316589355,
+        "generation_latency": 6328.835499999514,
         "scores": {
             "accuracy": 5,
             "completeness": 5,
-            "rationale": "The response correctly identifies the relevant functions, dependencies, and potential issues with inter-company transactions in Sales Invoice, covering key aspects comprehensively."
+            "rationale": "The AI response correctly identifies the trigger function, validation steps, and overall process flow, providing a comprehensive explanation of inter-company transactions triggered from a Sales Invoice."
         }
     },
     {
         "query": "Which logic handles asset depreciation when a fixed asset is sold through a Sales Invoice?",
         "found": true,
-        "rank": 3,
-        "retrieval_latency": 2269.2747116088867,
-        "generation_latency": 7029.25399999981,
+        "rank": 1,
+        "retrieval_latency": 2134.439468383789,
+        "generation_latency": 9071.516899999551,
         "scores": {
-            "accuracy": 1,
-            "completeness": 1,
-            "rationale": "The AI fails to identify the correct function name, instead, provides a general description of Sales Invoice, therefore, it scores low in both accuracy and completeness."
+            "accuracy": 5,
+            "completeness": 5,
+            "rationale": "The AI response correctly identifies and describes the `process_asset_depreciation` function, along with the functions which it calls, and comprehensively explains how asset depreciation is handled when a fixed asset is sold through a Sales Invoice, covering relevant aspects such as the logic flow, dependencies, and potential failure points."
         }
     },
     {
         "query": "How are Serial and Batch Bundles updated during Sales Invoice submission?",
         "found": true,
-        "rank": 1,
-        "retrieval_latency": 2170.0448989868164,
-        "generation_latency": 6584.855500000003,
+        "rank": 2,
+        "retrieval_latency": 2131.2105655670166,
+        "generation_latency": 7366.950200000247,
         "scores": {
             "accuracy": 4,
-            "completeness": 3,
-            "rationale": "The response identifies the correct flow related to serial and batch bundles during Sales Invoice submission, focusing on the creation process, but misses to explain 'updates' specifically."
+            "completeness": 4,
+            "rationale": "The response provided covers the different phases of Sales Invoice submission and points to the correct area to update serial and batch bundles during the Stock Phase."
         }
     },
     {
         "query": "Where is the customer's outstanding amount updated after submission?",
         "found": true,
-        "rank": 2,
-        "retrieval_latency": 2258.5864067077637,
-        "generation_latency": 5065.460500000199,
+        "rank": 1,
+        "retrieval_latency": 2117.5129413604736,
+        "generation_latency": 7012.937500000589,
         "scores": {
             "accuracy": 5,
             "completeness": 5,
-            "rationale": "The AI accurately identifies the relevant functions and processes involved in updating the customer's outstanding amount during Sales Invoice submission and cancellation, including specific code locations and dependencies."
+            "rationale": "The AI accurately identifies the `make_gl_entries` function and its role in updating the customer's outstanding amount, providing complete details on dependencies and potential failure points."
         }
     },
     {
         "query": "Which function handles GL entry precision and rounding adjustments?",
         "found": true,
-        "rank": 5,
-        "retrieval_latency": 2295.96209526062,
-        "generation_latency": 8269.922599999973,
+        "rank": 1,
+        "retrieval_latency": 2146.968364715576,
+        "generation_latency": 7257.908200000202,
         "scores": {
             "accuracy": 1,
             "completeness": 1,
-            "rationale": "The AI provides SalesInvoice domain model and does not include the answer; the response is thus irrelevant and inaccurate."
+            "rationale": "The function provided is incorrect, it seems like the AI misunderstood the context of a General Ledger precision and rounding adjustment within the code base, and instead provided a sales invoice adjustment function."
         }
     },
     {
         "query": "How does ERPNext handle unlinking payments when a Sales Invoice is cancelled?",
         "found": true,
-        "rank": 1,
-        "retrieval_latency": 2253.2405853271484,
-        "generation_latency": 7225.099399999863,
+        "rank": 3,
+        "retrieval_latency": 2138.148307800293,
+        "generation_latency": 5159.002300000793,
         "scores": {
             "accuracy": 5,
             "completeness": 5,
-            "rationale": "The response provides a detailed and accurate breakdown of how ERPNext handles the unlinking of payments upon Sales Invoice cancellation, covering all relevant phases and conditions."
+            "rationale": "The response correctly outlines the flow for unlinking payments upon Sales Invoice cancellation, covering validation checks, accounting adjustments, and stock updates with good detail."
         }
     }
 ]

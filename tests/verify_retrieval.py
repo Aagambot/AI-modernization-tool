@@ -89,8 +89,6 @@ class RetrievalEvaluator:
             self.reciprocal_ranks.append(0.0)
 
         # --- STEP 2: GENERATION & JUDGING ---
-        # Generate the answer using your tool's actual RAG pipeline
-        # We assume the directory of the expected file as the target for context
         target_dir = os.path.dirname(expected_file)
         model_json, r_lat, g_lat = await self.chat.generate_domain_model(target_dir, query=query)
         

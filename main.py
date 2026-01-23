@@ -105,14 +105,18 @@ async def run_modernization_pipeline(github_url: str):
     # Evaluation
     print("🧠 Starting Evaluation...")
     eval_results = await evaluator.run_benchmark("golden_dataset.json") 
-    
+    detailed_data = eval_results.get("detailed_results", [])
+
+    report_path = "evaluation_report.json"
+    with open(report_path, "w") as f:
+        json.dump(detailed_data, f, indent=4)
+
     # MLflow Logging
     logger.log_run(
-        {"entity": entity_name, "chunk_size": 500}, 
-        {"accuracy": eval_results.get("avg_accuracy", 0), "mrr": eval_results.get("mrr", 0)}, 
-        {"detailed_results": "evaluation_report.json"}
+    config={"entity": entity_name, "chunk_size": 500}, 
+    metrics={"accuracy": eval_results.get("avg_accuracy", 0), "mrr": eval_results.get("mrr", 0)}, 
+    artifact_paths={"evaluation_report": "evaluation_report.json"}
     )
-    print("✅ Pipeline Complete.")
 
 if __name__ == "__main__":
     GITHUB_URL = "https://github.com/frappe/erpnext/tree/develop/erpnext/accounts/doctype/sales_invoice"
