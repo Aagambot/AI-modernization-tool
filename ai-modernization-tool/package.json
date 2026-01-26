@@ -1,0 +1,70 @@
+{
+  "name": "ai-modernization-tool",
+  "displayName": "AI Modernization Tool",
+  "description": "GraphRAG Modernization Agent for ERPNext.",
+  "version": "0.0.1",
+  "engines": {
+    "vscode": "^1.108.1"
+  },
+  "categories": [
+    "Other"
+  ],
+  "activationEvents": [
+    "onCommand:ai-modernization-tool.askLogic",
+    "onView:ai-modernization-view"
+  ],
+  "main": "./dist/extension.js",
+  "contributes": {
+    "commands": [
+      {
+        "command": "ai-modernization-tool.askLogic",
+        "title": "AI Modernization: Ask Logic"
+      }
+    ],
+    "viewsContainers": {
+      "activitybar": [
+        {
+          "id": "ai-modernization-sidebar",
+          "title": "AI Modernization",
+          "icon": "media/icon.svg"
+        }
+      ]
+    },
+    "views": {
+      "ai-modernization-sidebar": [
+        {
+          "type": "webview",
+          "id": "ai-modernization-view",
+          "name": "Chat Agent"
+        }
+      ]
+    }
+  },
+  "scripts": {
+    "vscode:prepublish": "npm run package",
+    "compile": "webpack",
+    "watch": "webpack --watch",
+    "package": "webpack --mode production --devtool hidden-source-map",
+    "compile-tests": "tsc -p . --outDir out",
+    "watch-tests": "tsc -p . -w --outDir out",
+    "pretest": "npm run compile-tests && npm run compile && npm run lint",
+    "lint": "eslint src",
+    "test": "vscode-test"
+  },
+  "devDependencies": {
+    "@types/mocha": "^10.0.10",
+    "@types/node": "22.x",
+    "@types/vscode": "^1.108.1",
+    "@vscode/test-cli": "^0.0.12",
+    "@vscode/test-electron": "^2.5.2",
+    "eslint": "^9.39.2",
+    "ts-loader": "^9.5.4",
+    "typescript": "^5.9.3",
+    "typescript-eslint": "^8.52.0",
+    "webpack": "^5.104.1",
+    "webpack-cli": "^6.0.1"
+  },
+  "dependencies": {
+    "axios": "^1.13.3"
+  }
+}
