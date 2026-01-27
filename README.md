@@ -40,18 +40,15 @@ This project builds a **local-first, graph-augmented RAG pipeline** that:
     },
     {
       "step": "validate_time_sheets_are_submitted",
-      "description": "Validates that the timesheets associated with the sales invoice are in a 'Submitted', 'Payslip', or 'Partially Billed' state. It al
-                                                                                                                                                        lso checks for duplicate invoices created for the same timesheet detail."
+      "description": "Validates that the timesheets associated with the sales invoice are in a 'Submitted', 'Payslip', or 'Partially Billed' state. It also checks for duplicate invoices created for the same timesheet detail."
     },
     {
       "step": "validate_for_repost",
-      "description": "Validates conditions required before reposting the sales invoice, including write-off account, account for change amount, income ac
-                                                                                                                                                        ccount, voucher types, and deferred accounting."
+      "description": "Validates conditions required before reposting the sales invoice, including write-off account, account for change amount, income account, voucher types, and deferred accounting."
     },
     {
       "step": "validate_accounts",
-      "description": "Validates the accounts associated with the sales invoice, including write-off account, account for change amount, and income accoun
-                                                                                                                                                        nt."
+      "description": "Validates the accounts associated with the sales invoice, including write-off account, account for change amount, and income account."
     },
     {
       "step": "validate_income_account",
@@ -61,16 +58,11 @@ This project builds a **local-first, graph-augmented RAG pipeline** that:
   "ACCOUNTING": [
     {
       "step": "on_cancel",
-      "description": "Handles the cancellation of the sales invoice. This involves several sub-steps, including checking for linked return invoices, upda
-                                                                                                                                                        ating status, updating billing status in delivery notes, updating billing status for zero amount reference documents, cancelling sales tax withholding, ma
-                                                                                                                                                        aking general ledger entries, updating coupon code count, updating company current month sales, updating project, deleting loyalty point entry, unlinking 
-                                                                                                                                                         inter-company document, unlinking sales invoice from timesheets, deleting auto-created batches, and cancelling POS invoice credit note generated during s
-                                                                                                                                                        sales invoice mode."
+      "description": "Handles the cancellation of the sales invoice. This involves several sub-steps, including checking for linked return invoices, updating status, updating billing status in delivery notes, updating billing status for zero amount reference documents, cancelling sales tax withholding, making general ledger entries, updating coupon code count, updating company current month sales, updating project, deleting loyalty point entry, unlinking inter-company document, unlinking sales invoice from timesheets, deleting auto-created batches, and cancelling POS invoice credit note generated during sales invoice mode."
     },
     {
       "step": "process_asset_depreciation",
-      "description": "Handles asset depreciation or restoration based on whether the sales invoice is a return and its status. It depreciates the asset o
-                                                                                                                                                        on sale or restores it and updates the asset."
+      "description": "Handles asset depreciation or restoration based on whether the sales invoice is a return and its status. It depreciates the asset on sale or restores it and updates the asset."
     }
   ],
     {
