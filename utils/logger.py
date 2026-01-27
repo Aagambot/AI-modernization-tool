@@ -3,15 +3,19 @@ import os
 from datetime import datetime
 
 class PipelineLogger:
-    def __init__(self, experiment_name="ERP_Modernization"):
-        mlflow.set_experiment(experiment_name)
+    def __init__(self):
+        # Set the remote tracking URI from .env
+        self.tracking_uri = os.getenv("MLFLOW_TRACKING_URI")
+        if self.tracking_uri:
+            mlflow.set_tracking_uri(self.tracking_uri)
+        
+        mlflow.set_experiment("AI-Modernization-Evaluation")
 
     def log_run(self, config, metrics, artifact_paths):
         """
         Updated to accept three arguments: config, metrics, and artifact_paths.
         """
-        run_name = f"{config['entity']}_{datetime.now().strftime('%m%d_%H%M')}"
-        with mlflow.start_run(run_name=run_name):
+        with mlflow.start_run():
             # 1. Log Config/Params
             mlflow.log_params(config)
 
@@ -30,7 +34,7 @@ class PipelineLogger:
             scripts = [
                 "main.py", "chat.py", "utils/logger.py", "engine/chunker.py",
                 "core/graph_builder.py", "core/scanner.py", "data/storage.py", 
-                "engine/embedder.py","engine/utils.py"
+                "engine/embedder.py","engine/utils.py ", "core/parser.py" , "tests/verify_retrieval.py" ,"utils/graph_to_mermaid.py" ,"evaluation_report.json","golden_dataset.json"
             ]
             for script in scripts:
                 if os.path.exists(script):

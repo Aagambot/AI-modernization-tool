@@ -29,131 +29,64 @@ This project builds a **local-first, graph-augmented RAG pipeline** that:
 
 ## Example Query
 
-`What happens internally when a Sales Invoice is submitted in ERPNext?`
+`Explain the validation and accounting process flow`
 
 ```json
 {
-    "event": "What happens internally when a Sales Invoice is submitted in ERPNext?",
-    "executive_summary": "When a Sales Invoice is submitted in ERPNext, the system validates the data, creates accounting entries, updates stock (if applicable), and triggers post-submission processes. This ensures accurate financial reporting, inventory management, and fulfillment of inter-company transactions.",
-    "execution_phases": {
-        "VALIDATION": [
-            {
-                "function": "validate",
-                "description": "Performs various data integrity checks, including auto-setting posting time, validating write-off accounts, fixed assets, item cost centers, and income accounts.",
-                "condition": "Mandatory"
-            },
-            {
-                "function": "validate_accounts",
-                "description": "Validates the accounts associated with the Sales Invoice, such as ensuring the write-off account is valid.",
-                "condition": "Mandatory"
-            },
-            {
-                "function": "validate_for_repost",
-                "description": "Validates the document for reposting scenarios, ensuring data consistency.",
-                "condition": "Mandatory"
-            },
-            {
-                "function": "validate_fixed_asset",
-                "description": "Validates the fixed asset details if any asset is linked to the sales invoice.",
-                "condition": "If Asset"
-            },
-            {
-                "function": "validate_item_cost_centers",
-                "description": "Validates the cost centers associated with each item in the Sales Invoice.",
-                "condition": "Mandatory"
-            },
-            {
-                "function": "validate_income_account",
-                "description": "Validates the income account associated with the Sales Invoice.",
-                "condition": "Mandatory"
-            },
-            {
-                "function": "validate_pos_paid_amount",
-                "description": "Validates the paid amount in POS invoices.",
-                "condition": "If POS"
-            },
-            {
-                "function": "validate_warehouse",
-                "description": "Validates the warehouse selected in the Sales Invoice.",
-                "condition": "Mandatory"
-            },
-            {
-                "function": "validate_created_using_pos",
-                "description": "Validates POS opening entry.",
-                "condition": "If POS"
-            }
-        ],
-        "ACCOUNTING_LOGIC": [
-            {
-                "function": "make_gl_entries",
-                "description": "Generates General Ledger (GL) entries based on the Sales Invoice data. This includes creating customer GL entries and GL entries for fixed assets.",
-                "condition": "Mandatory"
-            },
-            {
-                "function": "get_gl_entries",
-                "description": "Retrieves the GL entries for the Sales Invoice, including entries for customers and fixed assets.",
-                "condition": "Mandatory"
-            },
-            {
-                "function": "make_customer_gl_entry",
-                "description": "Creates GL entries specifically for the customer involved in the Sales Invoice.",
-                "condition": "Mandatory"
-            },
-            {
-                "function": "get_gl_entries_for_fixed_asset",
-                "description": "Creates GL entries for fixed assets.",
-                "condition": "If Perpetual Inventory"
-            },
-            {
-                "function": "make_pos_gl_entries",
-                "description": "Creates GL entries for POS invoices, including entries for change amounts.",
-                "condition": "If POS"
-            },
-            {
-                "function": "get_gle_for_change_amount",
-                "description": "Retrieves GL entries for change amounts in POS invoices.",
-                "condition": "If POS"
-            }
-        ],
-        "STOCK_LOGIC": [
-            {
-                "function": "update_stock",
-                "description": "Updates the stock levels in the warehouse based on the items sold in the Sales Invoice.",
-                "condition": "If update_stock is checked"
-            }
-        ],
-        "POST_SUBMISSION_HOOKS": [
-            {
-                "function": "make_inter_company_purchase_invoice",
-                "description": "Creates an inter-company purchase invoice if the Sales Invoice involves an inter-company transaction.",
-                "condition": "If Inter-company"
-            },
-            {
-                "function": "make_inter_company_transaction",
-                "description": "Creates an inter-company transaction document.",
-                "condition": "If Inter-company"
-            },
-            {
-                "function": "update_time_sheet",
-                "description": "Updates the time sheet details if the Sales Invoice is linked to a time sheet.",
-                "condition": "If Time Sheet"
-            },
-            {
-                "function": "update_billed_qty_in_scio",
-                "description": "Updates the billed quantity in subcontracting inward order received item.",
-                "condition": "If Subcontracting"
-            }
-        ]
+  "VALIDATION": [
+    {
+      "step": "check_if_return_invoice_linked_with_payment_entry",
+      "description": "Checks if the return invoice is linked with any payment entry where the allocated amount is negative, indicating a potential issue with payment allocation upon cancellation. If found and 'unlink_payment_on_cancellation_of_invoice' is enabled, it throws an error, prompting the user to cancel and amend the payment entry to unallocate the amount."
     },
-    "accounting_impact": "The submission of a Sales Invoice results in GL entries that debit the Debtors account (or a similar receivable account) and credit the Sales account (or relevant income account). If applicable, entries are also made for taxes, discounts, cost of goods sold (COGS), and inventory. For POS invoices, entries are made for the mode of payment and change amount.",    
-    "stock_impact": "If 'update_stock' is enabled, the submission of a Sales Invoice decreases the quantity of items in the specified warehouse. Stock Ledger Entries are created to track these changes.",
-    "critical_business_rules": [
-        "Credit limit validation: The system checks if the customer's credit limit is exceeded by the invoice amount.",
-        "Mandatory fields: Certain fields, such as customer, posting date, and item details, must be filled in for the Sales Invoice to be submitted.",
-        "Accounting period: The posting date must fall within an open accounting period.",
-        "Stock availability: If 'update_stock' is enabled, there must be sufficient stock in the warehouse to fulfill the order.",
-        "Inter-company transaction rules: If the Sales Invoice involves an inter-company transaction, specific rules and validations apply to ensure proper accounting between the companies."     
+    {
+      "step": "validate_time_sheets_are_submitted",
+      "description": "Validates that the timesheets associated with the sales invoice are in a 'Submitted', 'Payslip', or 'Partially Billed' state. It al
+                                                                                                                                                        lso checks for duplicate invoices created for the same timesheet detail."
+    },
+    {
+      "step": "validate_for_repost",
+      "description": "Validates conditions required before reposting the sales invoice, including write-off account, account for change amount, income ac
+                                                                                                                                                        ccount, voucher types, and deferred accounting."
+    },
+    {
+      "step": "validate_accounts",
+      "description": "Validates the accounts associated with the sales invoice, including write-off account, account for change amount, and income accoun
+                                                                                                                                                        nt."
+    },
+    {
+      "step": "validate_income_account",
+      "description": "Iterates through the items in the sales invoice and validates the income account associated with each item."
+    }
+  ],
+  "ACCOUNTING": [
+    {
+      "step": "on_cancel",
+      "description": "Handles the cancellation of the sales invoice. This involves several sub-steps, including checking for linked return invoices, upda
+                                                                                                                                                        ating status, updating billing status in delivery notes, updating billing status for zero amount reference documents, cancelling sales tax withholding, ma
+                                                                                                                                                        aking general ledger entries, updating coupon code count, updating company current month sales, updating project, deleting loyalty point entry, unlinking 
+                                                                                                                                                         inter-company document, unlinking sales invoice from timesheets, deleting auto-created batches, and cancelling POS invoice credit note generated during s
+                                                                                                                                                        sales invoice mode."
+    },
+    {
+      "step": "process_asset_depreciation",
+      "description": "Handles asset depreciation or restoration based on whether the sales invoice is a return and its status. It depreciates the asset o
+                                                                                                                                                        on sale or restores it and updates the asset."
+    }
+  ],
+    {
+  "STOCK": [
+    {
+      "step": "on_cancel",
+      "description": "Within the `on_cancel` method, if `update_stock` is enabled, the stock ledger is updated, stock reservation entries are updated, and future stock ledger entries and general ledger entries are reposted."
+    }
+  ],
+  "TESTING": [
+        {
+        "step": "test_rounding_validation_for_opening_with_inclusive_tax",
+        "description": "This is a test method that validates rounding for opening with inclusive tax. It creates an opening invoice with inclusive tax and asserts that a validation error is raised if 'Round Off for Opening' is not set in the Company master."
+        }
     ]
+}
 }
 ```
 
@@ -188,7 +121,7 @@ This project builds a **local-first, graph-augmented RAG pipeline** that:
    - **MLflow Integration:** All metrics (Hit Rate @ 5, MRR, Accuracy scores) and artifacts (GEXF graphs, reports) are logged to an MLflow dashboard for experiment tracking.
 
 <p align="center">
-  <img src="assets/sales_invoice_er.png" alt="System Dependency Map">
+  <img src="assets/diagram-export-27-1-2026-2_27_51-pm.png" alt="System Dependency Map">
   <br>
   <i>Figure 2: Automated Graph-to-Mermaid export showing SalesInvoice dependencies.</i>
 </p>

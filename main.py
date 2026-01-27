@@ -1,4 +1,5 @@
 import os
+import dagshub
 import json
 import asyncio
 import hashlib
@@ -13,6 +14,8 @@ from engine.chunker import HybridChunker
 from utils.logger import PipelineLogger
 from tests.verify_retrieval import RetrievalEvaluator
 from utils.graph_to_mermaid import export_folder_to_mermaid
+
+dagshub.init(repo_owner='Aagambot', repo_name='AI-modernization-tool', mlflow=True)
 
 def get_content_hash(content: str) -> str:
     """Generates a SHA-256 hash to detect file changes."""
