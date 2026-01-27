@@ -6,6 +6,14 @@ from tree_sitter import Language, Parser
 import logging
 from transformers import logging as transformers_logging
 
+# ERPNext lifecycle hooks to prioritize
+ERPNEXT_HOOKS = {
+    'validate', 'before_validate', 'after_validate',
+    'on_submit', 'before_submit', 'on_cancel',
+    'on_update', 'after_insert', 'before_save',
+    'on_trash', 'after_delete'
+}
+
 class CodeGraphPipeline:
     def __init__(self):
         # KEY CHANGE: Suppress the noisy tokenizer warning at the source
@@ -25,14 +33,22 @@ class CodeGraphPipeline:
     def pass_1_symbols(self, rel_path, code_bytes):
         """Phase 1: Build a granular symbol table (File -> Class -> Method)."""
         tree = self.parser.parse(code_bytes)
-        self.G.add_node(rel_path, type='file')
+        # Ensure attributes are never None
+        self.G.add_node(rel_path, type='file', name=rel_path)
 
         def traverse(node, current_class=None):
+            node_id = None  # Initialize to avoid UnboundLocalError
+
             if node.type == 'class_definition':
                 class_name = self._get_name(node, code_bytes)
                 if class_name:
                     node_id = f"{rel_path}:{class_name}"
-                    self.G.add_node(node_id, type='class', name=class_name)
+                    # Use empty strings instead of None for GEXF compatibility
+                    self.G.add_node(node_id, 
+                        type='class', 
+                        name=class_name,
+                        doctype="Sales Invoice" if "SalesInvoice" in class_name else "" 
+                    )
                     self.G.add_edge(rel_path, node_id, type='CONTAINS')
                     self.symbol_table[class_name] = node_id
                     current_class = class_name
@@ -42,9 +58,17 @@ class CodeGraphPipeline:
                 if func_name:
                     prefix = f"{rel_path}:{current_class}" if current_class else rel_path
                     node_id = f"{prefix}:{func_name}"
-                    safe_parent = current_class if current_class is not None else ""
                     
-                    self.G.add_node(node_id, type='function', name=func_name, parent_class=safe_parent)
+                    # Identify hook or use empty string
+                    hook = func_name if func_name in ERPNEXT_HOOKS else ""
+                    
+                    self.G.add_node(node_id, 
+                        type='function', 
+                        name=func_name, 
+                        parent_class=current_class or "",
+                        hook_type=hook
+                    )
+                    
                     parent_id = f"{rel_path}:{current_class}" if current_class else rel_path
                     self.G.add_edge(parent_id, node_id, type='CONTAINS')
                     self.symbol_table[func_name] = node_id

@@ -2,37 +2,36 @@ import os
 import time
 import json
 import asyncio
-import networkx as nx
-import lancedb
+import numpy as np
 import google.generativeai as genai
+from rank_bm25 import BM25Okapi
 from engine.embedder import BGEEmbedder 
 from data.storage import VectorStore 
 from dotenv import load_dotenv
-import numpy as np
-from sklearn.metrics.pairwise import cosine_similarity
 
 load_dotenv()
 
 TEMPLATES = {
-    "summary": """
-        Act as a Technical Architect. Provide a high-level Domain Model for {entity_name}.
-        Focus on: Fields, Core Methods, and Primary Business Rules.
-        CONTEXT: {context_data}
-    """,
     "process_flow": """
-        Act as a Senior System Analyst. Explain the step-by-step internal execution flow 
-        for {user_query} in {entity_name}. Group by VALIDATION, ACCOUNTING, and STOCK phases.
-        CONTEXT: {context_data}
+        ## Domain Context: {entity_name} (Selling Bounded Context)
+        Act as a Senior System Analyst. Explain the step-by-step internal execution flow.
+        
+        {context_data}
+        
+        INSTRUCTIONS:
+        1. Use the 'Call Flow' section to trace logic.
+        2. Group by VALIDATION, ACCOUNTING, and STOCK phases.
     """,
     "debugging": """
+        ## Domain Context: {entity_name} (Technical Logic Trace)
         Act as a Lead Developer. Help me understand the specific logic for: {user_query}.
-        Trace the dependencies and potential failure points in {entity_name}.
-        CONTEXT: {context_data}
+        
+        {context_data}
     """
 }
 
 class ModernizationChat:
-    def __init__(self, target_folder=None):
+    def __init__(self, db_path=None, graph_path=None):
         self.api_key = os.getenv("GENAI_API_KEY")
         if not self.api_key:
             raise ValueError("❌ GENAI_API_KEY not found.")
@@ -40,163 +39,98 @@ class ModernizationChat:
         genai.configure(api_key=self.api_key)
         self.llm = genai.GenerativeModel('gemini-2.0-flash') 
         self.embedder = BGEEmbedder()
-        self.store = VectorStore() 
-        
+        self.store = VectorStore(db_path=db_path) if db_path else VectorStore()
         
         self._table = None 
+        self.entity_name = "Sales Invoice"
         
-        self.entity_name = "SalesInvoice"
-        
-        print("💾 Pre-loading Graph into memory...")
+        # Load graph for expansion
         self.cached_graph = self.store.load_graph(self.entity_name)
-    
-    def compute_mmr(self,query_embedding, candidate_embeddings, lambda_param, top_k=8):
-        """
-        Core MMR Algorithm:
-        lambda_param: 1.0 is pure relevance, 0.0 is pure diversity.
-        """
-        if not candidate_embeddings:
-            return []
-
-        selected_indices = []
-        candidate_indices = list(range(len(candidate_embeddings)))
-
-        # Calculate similarities between query and all candidates
-        query_sims = cosine_similarity([query_embedding], candidate_embeddings)[0]
-
-        # Pick the best candidate first
-        first_best = np.argmax(query_sims)
-        selected_indices.append(first_best)
-        candidate_indices.remove(first_best)
-
-        while len(selected_indices) < top_k and candidate_indices:
-            mmr_scores = []
-            for cand_idx in candidate_indices:
-                # Relevance score
-                relevance = query_sims[cand_idx]
-                
-                # Diversity score (similarity to already selected chunks)
-                target_cand_emb = [candidate_embeddings[cand_idx]]
-                selected_embs = [candidate_embeddings[i] for i in selected_indices]
-                redundancy = np.max(cosine_similarity(target_cand_emb, selected_embs))
-                
-                # MMR Formula
-                score = lambda_param * relevance - (1 - lambda_param) * redundancy
-                mmr_scores.append((score, cand_idx))
-
-            # Select the candidate with the best MMR score
-            next_best = max(mmr_scores, key=lambda x: x[0])[1]
-            selected_indices.append(next_best)
-            candidate_indices.remove(next_best)
-
-        return selected_indices
 
     @property
     def table(self):
-        """Lazy-load the table from the store only when accessed."""
         if self._table is None:
             self._table = self.store.get_table()
         return self._table
 
-    async def get_smart_context(self, query: str, limit: int = 8):
+    async def get_hybrid_context(self, query: str, limit: int = 8):
+        """
+        Implements Hybrid Retrieval (Vector + BM25) with RRF fusion.
+        """
         if self.table is None:
-            return "Error: Vector table not found. Please run ingestion first.", 0, 0
-            
-        metrics = {}
+            return "Error: Vector table not found.", 0, 0
+
         t_start = time.perf_counter()
-        technical_keywords = ["function", "logic", "code", "method", "how", "where", "algorithm", "class"]
-        is_technical_query = any(word in query.lower() for word in technical_keywords)
-        # Step 1: Embedding
-        t0 = time.perf_counter()
-        query_vec_results = await asyncio.to_thread(self.embedder.embed_batch, [query])
-        query_vec = query_vec_results[0]
-        metrics['embedding_ms'] = (time.perf_counter() - t0) * 1000
         
-        # Step 2: Vector Search with Candidate Oversampling
-        candidate_limit = 20 
-        t1 = time.perf_counter()
-        def perform_search():
-            search_query = self.table.search(query_vec).limit(20)
-            
-            # If it's a technical query, filter out non-python files
-            if is_technical_query:
-                # LanceDB uses SQL-like predicates
-                search_query = search_query.where("file_path LIKE '%.py'")
-                
-            return search_query.to_list()
-        initial_results = await asyncio.to_thread(perform_search)
-        metrics['vector_search_ms'] = (time.perf_counter() - t1) * 1000
+        # 1. Dense Search (Vector)
+        query_vec = (await asyncio.to_thread(self.embedder.embed_batch, [query]))[0]
+        dense_results = self.table.search(query_vec).limit(limit * 2).to_list()
 
-        # Step 3: Apply MMR Re-ranking
-        if initial_results and len(initial_results) > limit:  
-            candidate_embs = [res['vector'] for res in initial_results] 
-            selected_indices = self.compute_mmr(
-                query_vec,          
-                candidate_embs,     
-                lambda_param=0.5,   
-                top_k=limit 
-            )
-            results = [initial_results[i] for i in selected_indices]
+        # 2. Sparse Search (BM25)
+        all_chunks = self.table.to_pandas()
+        tokenized_corpus = [str(c).lower().split() for c in all_chunks['content']]
+        bm25 = BM25Okapi(tokenized_corpus)
+        sparse_scores = bm25.get_scores(query.lower().split())
         
-        top_distance = results[0]['_distance'] if results else 1.0
-        context_blocks = []
-        global_seen_calls = set()
-        
-        t2 = time.perf_counter()
-        
-        # Step 4: Context Assembly (Existing logic)
-        for res in results:
-            path = res['file_path']
-            chunk_calls = []
-            
-            if self.cached_graph:
-                for node in self.cached_graph.nodes():
-                    if node.startswith(path) and ":" in node:
-                        out_edges = self.cached_graph.out_edges(node)
-                        for _, target in out_edges:
-                            caller = node.split(":")[-1]
-                            callee = target.split(":")[-1]
-                            call_str = f"{caller} calls {callee}"
-                            
-                            if call_str not in global_seen_calls:
-                                chunk_calls.append(call_str)
-                                global_seen_calls.add(call_str)
-                                if len(chunk_calls) > 10: break 
+        # 3. Reciprocal Rank Fusion (RRF)
+        fused_indices = self._rrf_fusion(dense_results, all_chunks, sparse_scores, limit)
+        top_chunks = all_chunks.iloc[fused_indices]
 
-            context_blocks.append({
-                "file": path,
-                "confidence": round(1 - top_distance, 2),
-                "call_relationships": chunk_calls,
-                "code": res['content'][:5000]
-            })
+        # 4. Context Assembly 
+        formatted_context = self._format_3_part_context(top_chunks, query)
         
-        metrics['graph_lookup_ms'] = (time.perf_counter() - t2) * 1000
         total_retrieval_ms = (time.perf_counter() - t_start) * 1000
-        
-        return context_blocks, total_retrieval_ms, metrics
-    
+        return formatted_context, total_retrieval_ms
 
-    
+    def _rrf_fusion(self, dense, all_df, sparse_scores, limit, k=60):
+        """Reciprocal Rank Fusion logic from Case Study."""
+        scores = {}
+        # Dense Ranks
+        for rank, res in enumerate(dense):
+            idx = all_df[all_df['id'] == res['id']].index[0]
+            scores[idx] = scores.get(idx, 0) + 1.0 / (k + rank + 1)
+        # Sparse Ranks
+        sparse_rank_indices = np.argsort(sparse_scores)[::-1][:limit*2]
+        for rank, idx in enumerate(sparse_rank_indices):
+            scores[idx] = scores.get(idx, 0) + 1.0 / (k + rank + 1)
+        
+        return sorted(scores.keys(), key=lambda x: scores[x], reverse=True)[:limit]
+
+    def _format_3_part_context(self, chunks_df, query):
+        """Formats context into two sections: Relevant Code & Call Flow Diagram."""
+        context_parts = ["## Relevant Code\n"]
+        
+        for _, row in chunks_df.iterrows():
+            chunk_header = f"### {row['symbol_name']} ({row['symbol_type']})\n"
+            chunk_meta = f"**File**: `{row['file_path']}:{row['start_line']}`\n"
+            chunk_meta += f"**Hook**: {row.get('hook_type') or 'N/A'}\n"
+            
+            chunk_code = f"```python\n{row['content']}\n```\n"
+            context_parts.append(chunk_header + chunk_meta + chunk_code)
+
+        # Call Flow Diagram (Placeholder logic)
+        context_parts.append("\n## Call Flow\n```\n" + self._generate_mermaid_flow(chunks_df) + "\n```")
+        return "\n".join(context_parts)
+
+    def _generate_mermaid_flow(self, chunks_df):
+        """Basic representation of relationships."""
+        flow = []
+        for name in chunks_df['symbol_name'].unique():
+            flow.append(f"  └── {name}()")
+        return "\n".join(flow)
+
     async def generate_domain_model(self, folder_path, query=None):
-        intent_prompt = f"Categorize this user query into 'summary', 'process_flow', or 'debugging': {query}"
-        intent_resp = self.llm.generate_content(intent_prompt)
-        intent = intent_resp.text.strip().lower()
-        if query:
-            query_lower = query.lower()
-            if any(word in query_lower for word in ["how", "flow", "process", "submit", "step"]):
-                intent = "process_flow"
-            elif any(word in query_lower for word in ["where", "debug", "function", "logic", "which", "allocat"]):
-                intent = "debugging"
-
         active_query = query if query else f"Overview of {self.entity_name}"
-        context, r_lat, _ = await self.get_smart_context(active_query, limit=8)
-
-        selected_template = TEMPLATES.get(intent, TEMPLATES["summary"])
         
+        # Retrieval
+        context_text, r_lat = await self.get_hybrid_context(active_query)
+
+        # Generation
+        selected_template = TEMPLATES["process_flow"] if "flow" in active_query.lower() else TEMPLATES["debugging"]
         final_prompt = selected_template.format(
             entity_name=self.entity_name,
             user_query=active_query,
-            context_data=json.dumps(context, indent=2)
+            context_data=context_text
         )
 
         start_gen = time.perf_counter()
@@ -208,27 +142,19 @@ class ModernizationChat:
 
         return response.text, r_lat, g_lat
     
-async def main():
-    try:
-        chat = ModernizationChat()
-        # TARGET_DIR is technically dynamic but we focus on the indexed module
-        TARGET_DIR = r"C:/Users/Aagam/OneDrive/Desktop/erpnext/erpnext/accounts/doctype/sales_invoice"
-        my_query = "Which function allocates advance payments against a Sales Invoice?"
-        print(f"🚀 Analyzing {TARGET_DIR}...")
-        model_json, r_lat, g_lat = await chat.generate_domain_model(TARGET_DIR, query=my_query)
-        
-        output = json.loads(model_json)
-        print("\n✅ EXTRACTED DOMAIN MODEL:")
-        print(json.dumps(output, indent=4))
-        
-        print("\n" + "="*40)
-        print(f"⏱️ TOTAL Retrieval: {r_lat:.2f}ms")
-        print(f"⏱️ TOTAL Generation (API): {g_lat:.2f}ms")
-        print("="*40)  
-    except Exception as e:
-        print(f"❌ Critical Error: {e}")
-        import traceback
-        traceback.print_exc()
-
 if __name__ == "__main__":
+    import nest_asyncio
+    nest_asyncio.apply()
+    
+    async def main():
+        chat_agent = ModernizationChat()
+        response, retrieval_time, gen_time = await chat_agent.generate_domain_model(
+            folder_path="path/to/local/repo",
+            query="Explain the validation and accounting process flow"
+        )
+        print("=== Generated Response ===")
+        print(response)
+        print(f"\nRetrieval Time: {retrieval_time:.2f} ms")
+        print(f"Generation Time: {gen_time:.2f} ms")
+    
     asyncio.run(main())

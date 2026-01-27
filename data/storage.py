@@ -2,89 +2,79 @@ import lancedb
 import pyarrow as pa
 import networkx as nx
 import os
+import pickle
 import json
-from pathlib import Path
 
 class VectorStore:
-    def __init__(self, db_path: str = None):
-        project_root = Path(__file__).resolve().parent.parent
-        if db_path is None:
-            db_path = str(project_root / "code_index_db")
-        
-        self.graph_dir = project_root / "data" / "graphs"
-        self.graph_dir.mkdir(parents=True, exist_ok=True)
-        
-        self.hash_path = project_root / "data" / "file_hashes.json"
-        self.hash_path.parent.mkdir(parents=True, exist_ok=True)
-        
-        self.db = lancedb.connect(db_path)
+    def __init__(self, db_path="code_index_db"):
+        self.db_path = db_path
+        self.db = lancedb.connect(self.db_path)
         self.table_name = "code_vectors"
         self.schema = pa.schema([
             pa.field("vector", pa.list_(pa.float32(), 768)),
-            pa.field("content", pa.string()),
-            pa.field("file_path", pa.string()),
-            pa.field("name", pa.string())
+            pa.field("id", pa.string()),           # Unique symbol ID
+            pa.field("content", pa.string()),      # The code snippet
+            pa.field("file_path", pa.string()),    # Source file
+            pa.field("symbol_name", pa.string()),  # Function/Class name
+            pa.field("symbol_type", pa.string()),  # 'class', 'method', etc.
+            pa.field("hook_type", pa.string()),    # ERPNext hook (validate, etc.)
+            pa.field("start_line", pa.int32()),    # Line number
+            pa.field("end_line", pa.int32())       # Line number
         ])
 
-    # --- Hash Management for Delta Indexing ---
-    
+    def get_table(self):
+        """Opens or creates the table with the updated schema."""
+        if self.table_name not in self.db.table_names():
+            return self.db.create_table(self.table_name, schema=self.schema)
+        return self.db.open_table(self.table_name)
+
+    def save_chunks(self, chunks: list):
+        """
+        Saves AST-based chunks into LanceDB.
+        Includes 'on_bad_vectors' handling for reliability.
+        """
+        table = self.get_table()
+        if chunks:
+            # LanceDB will automatically align these dicts to the Arrow schema
+            table.add(chunks, on_bad_vectors="drop")
+
+    def save_graph(self, G, entity_name):
+        """Saves the NetworkX call graph for later retrieval."""
+        graph_path = f"{entity_name}_graph.gpickle"
+        with open(graph_path, 'wb') as f:
+            pickle.dump(G, f)
+        print(f"✅ Graph saved to {graph_path}")
+
+    def load_graph(self, entity_name):
+        """Loads the graph into memory for context expansion."""
+        graph_path = f"{entity_name}_graph.gpickle"
+        if os.path.exists(graph_path):
+            with open(graph_path, 'rb') as f:
+                return pickle.load(f)
+        return None
+
+    def check_file_hash(self, file_path, current_hash):
+        """Placeholder for incremental indexing logic."""
+        # You can implement a simple JSON or SQLite store for file hashes here
+        return False
+
     def load_hashes(self):
-        """Loads the registry of processed file hashes."""
-        if self.hash_path.exists():
-            with open(self.hash_path, "r") as f:
+        """Loads existing file hashes to check for changes."""
+        hash_path = "file_hashes.json"
+        if os.path.exists(hash_path):
+            with open(hash_path, 'r') as f:
                 return json.load(f)
         return {}
 
-    def save_hashes(self, hashes):
-        """Saves the current file hashes to the registry."""
-        with open(self.hash_path, "w") as f:
+    def save_hashes(self, hashes: dict):
+        """Persists the current file hashes."""
+        hash_path = "file_hashes.json"
+        with open(hash_path, 'w') as f:
             json.dump(hashes, f, indent=4)
+        print(f"✅ File hashes saved to {hash_path}")
 
-    def delete_file_vectors(self, file_path):
-        """Removes existing vectors for a specific file to prevent duplicates."""
+    def delete_file_vectors(self, file_path: str):
+        """Removes old vectors for a file before re-indexing."""
         table = self.get_table()
-        if table:
-            # LanceDB uses SQL-like predicates for deletion
-            table.delete(f"file_path = '{file_path}'")
-
-    # --- Existing Methods ---
-
-    def save_graph(self, G, entity_name):
-        path = self.graph_dir / f"{entity_name}_graph.gexf"
-        nx.write_gexf(G, str(path))
-        return str(path)
-
-    def load_graph(self, entity_name):
-        path = self.graph_dir / f"{entity_name}_graph.gexf"
-        if path.exists():
-            return nx.read_gexf(str(path))
-        return None
-
-    def get_neighbors(self, G, file_path):
-        if not G or not G.has_node(file_path):
-            return []
-        neighbors = list(G.neighbors(file_path)) + list(G.predecessors(file_path))
-        return list(set(neighbors))
-
-    def get_table(self):
-        try:
-            return self.db.open_table(self.table_name)
-        except Exception:
-            return None
-    
-    def save_chunks(self, chunks, mode="add"):
-        """Saves chunks with strict dimensional validation."""
-        try:
-            if self.table_name not in self.db.table_names():
-                self.db.create_table(
-                    self.table_name, 
-                    data=chunks, 
-                    schema=self.schema,
-                    on_bad_vectors="drop" 
-                )
-            else:
-                table = self.db.open_table(self.table_name)
-                table.add(chunks, on_bad_vectors="drop")
-            print(f"✅ Successfully updated {self.table_name}")
-        except Exception as e:
-            print(f"❌ Error saving to LanceDB: {e}")
+        # LanceDB uses SQL-like filtering for deletions
+        table.delete(f"file_path = '{file_path}'")

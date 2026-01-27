@@ -1,72 +1,88 @@
-from transformers import AutoTokenizer
-import math
-from typing import List, Dict
+import tree_sitter_python as tspython
+from tree_sitter import Language, Parser
+from typing import List, Dict, Any
+from dataclasses import dataclass
+
+# ERPNext lifecycle hooks to prioritize
+ERPNEXT_HOOKS = {
+    'validate', 'before_validate', 'after_validate',
+    'on_submit', 'before_submit', 'on_cancel',
+    'on_update', 'after_insert', 'before_save',
+    'on_trash', 'after_delete'
+}
 
 class HybridChunker:
-    def __init__(self, model_name: str = "nomic-embed-text", max_tokens: int = 500, overlap: int = 50):
+    def __init__(self):
         """
-        Refactored Chunker optimized for BERT-based embedding limits.
-        Ensures chunks never exceed the 512-token boundary that triggers indexing errors.
+        AST-based chunker for ERPNext.
+        Replaces token-based sliding windows with structural code extraction.
         """
-        self.tokenizer = AutoTokenizer.from_pretrained("bert-base-uncased")
-        self.max_tokens = max_tokens
-        self.overlap = overlap
+        self.PY_LANGUAGE = Language(tspython.language())
+        self.parser = Parser(self.PY_LANGUAGE)
 
-    def split_text(self, text: str) -> List[str]:
+    def chunk_erpnext_file(self, content: str, file_path: str) -> List[Dict[str, Any]]:
         """
-        Processes raw text and returns a list of chunks within the token limit.
-        Used to break down large files (like the 18,000+ token SalesInvoice) before embedding.
+        Main entry point for AST-based chunking.
         """
-        tokens = self.tokenizer.encode(text, add_special_tokens=False)
-        if len(tokens) <= self.max_tokens:
-            return [text]
-
+        tree = self.parser.parse(bytes(content, "utf8"))
         chunks = []
-        step = max(1, self.max_tokens - self.overlap)
-        for i in range(0, len(tokens), step):
-            chunk_tokens = tokens[i : i + self.max_tokens]
-            chunks.append(self.tokenizer.decode(chunk_tokens))
-            if i + self.max_tokens >= len(tokens):
-                break
+        
+        # Traverse the AST to find classes and functions
+        self._traverse_tree(tree.root_node, content, file_path, chunks)
         return chunks
 
-    def process_nodes(self, nodes: List[Dict]) -> List[Dict]:
-        """Processes structured code nodes into chunks compatible with the vector store."""
-        final_chunks = []
-        for node in nodes:
-            content = node['content']
-            tokens = self.tokenizer.encode(content, add_special_tokens=False)
-            token_count = len(tokens)
+    def _traverse_tree(self, node: Any, code: str, file_path: str, chunks: List[Dict]):
+        """
+        Recursively extracts significant symbols (classes/methods).
+        """
+        # Extract Classes (DocType controllers)
+        if node.type == 'class_definition':
+            chunks.append(self._create_chunk(node, code, file_path, "class"))
 
-            # Check if original node content fits within limits
-            if token_count <= self.max_tokens:
-                node['token_count'] = token_count
-                node['is_partial'] = False
-                final_chunks.append(node)
-            else:
-                # Use sliding window for oversized code blocks
-                final_chunks.extend(self._sliding_window(node, tokens))
-        return final_chunks
-
-    def _sliding_window(self, node: Dict, tokens: List[int]) -> List[Dict]:
-        """Splits large token arrays into overlapping windows for partial indexing."""
-        sub_chunks = []
-        step = max(1, self.max_tokens - self.overlap)
-        
-        for i, start in enumerate(range(0, len(tokens), step)):
-            end = start + self.max_tokens
-            chunk_tokens = tokens[start:end]
-            chunk_text = self.tokenizer.decode(chunk_tokens)
+        # Extract Functions/Methods (Business Logic)
+        elif node.type == 'function_definition':
+            symbol_name = self._get_node_name(node, code)
+            symbol_type = "method" if node.parent and node.parent.type == 'block' and \
+                          node.parent.parent and node.parent.parent.type == 'class_definition' \
+                          else "function"
             
-            sub_chunks.append({
-                'name': f"{node.get('name', 'chunk')}_part_{i+1}",
-                'type': node.get('type', 'code_block'),
-                'content': chunk_text,
-                'file_path': node.get('file_path', ''),
-                'start_line': node.get('start_line', 0),
-                'token_count': len(chunk_tokens),
-                'is_partial': True
-            })
-            if end >= len(tokens):
-                break
-        return sub_chunks
+            chunk = self._create_chunk(node, code, file_path, symbol_type)
+            
+            # Identify if it's an ERPNext hook
+            if symbol_name in ERPNEXT_HOOKS:
+                chunk['hook_type'] = symbol_name
+            
+            chunks.append(chunk)
+
+        # Continue traversal for child nodes
+        for child in node.children:
+            self._traverse_tree(child, code, file_path, chunks)
+
+    def _create_chunk(self, node: Any, code: str, file_path: str, symbol_type: str) -> Dict:
+        """
+        Formats a node into the CodeChunk schema.
+        """
+        start_line = node.start_point[0] + 1
+        end_line = node.end_point[0] + 1
+        symbol_name = self._get_node_name(node, code)
+        
+        # Extract source code for the specific node
+        node_code = code.encode('utf8')[node.start_byte:node.end_byte].decode('utf8')
+
+        return {
+            "id": f"{file_path}:{symbol_name}",
+            "file_path": file_path,
+            "symbol_name": symbol_name,
+            "symbol_type": symbol_type,
+            "code": node_code,
+            "start_line": start_line,
+            "end_line": end_line,
+            "hook_type": None
+        }
+
+    def _get_node_name(self, node: Any, code: str) -> str:
+        """Helper to extract the name identifier from a node."""
+        for child in node.children:
+            if child.type == 'identifier':
+                return code.encode('utf8')[child.start_byte:child.end_byte].decode('utf8')
+        return "unknown"
