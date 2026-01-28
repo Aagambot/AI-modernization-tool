@@ -191,6 +191,30 @@ The system achieves an **Accuracy Delta of +2.5** over baseline RAG by incorpora
 - **Accuracy:** Correct identification of ERPNext functions and triggers.
 - **Completeness:** Coverage of the full business workflow (Validation → Accounting → Stock).
 
-## Conclusion
 
-This project demonstrates that **graph-augmented retrieval** can make complex ERP codebases more understandable and measurable. By incorporating **automated evaluation** and **MLflow tracking**, it provides a verifiable foundation for safer legacy modernization.
+## 🚀 Getting Started
+
+1. **Clone & Install**:
+```bash
+git clone <repo-url>
+pip install -r requirements.txt
+
+```
+
+
+2. **Environment Setup**:
+Configure your `.env` with GitHub API tokens and Gemini API keys.
+3. **Run Pipeline**:
+```bash
+python main.py  # Builds the index and graph
+python chat.py  # Launches the interactive Modernization agent
+
+```
+
+---
+
+### 📍 Status Checklist
+
+* [x] **Target-side Unit Tests**: 89.1% coverage verified.
+* [x] **Behavior Parity**: Verified against `golden_dataset.json`.
+* [ ] **Shadow Mode Deployment**: Planned for next phase.

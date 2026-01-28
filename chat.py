@@ -150,7 +150,7 @@ if __name__ == "__main__":
         chat_agent = ModernizationChat()
         response, retrieval_time, gen_time = await chat_agent.generate_domain_model(
             folder_path="path/to/local/repo",
-            query="Explain the validation and accounting process flow"
+            query="What exactly does clear_unallocated_mode_of_payments do? Does it delete records or just clear a field?"
         )
         print("=== Generated Response ===")
         print(response)

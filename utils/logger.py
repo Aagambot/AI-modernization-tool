@@ -40,4 +40,4 @@ class PipelineLogger:
                 if os.path.exists(script):
                     mlflow.log_artifact(script, "source_code")
 
-            print(f"✅ MLflow Run Logged: {run_name}")
+            print(f"✅ MLflow Run Logged:")
