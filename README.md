@@ -1,7 +1,7 @@
 # Project Documentation: Legacy ERP Modernization Pipeline
 
 ## Overview
-
+Parity Report : [PARITY_VERIFICATION_SALES_INVOICE.md](https://github.com/Aagambot/AI-modernization-tool/blob/main/doc/PARITY_VERIFICATION_SALES_INVOICE.md)
 ### Purpose of the Project
 
 This project investigates how **code intelligence techniques** can improve the safety and confidence of legacy ERP modernization. Rather than migrating or rewriting code, the goal is to **make existing business-critical logic understandable, traceable, and verifiable** before any changes are attempted.
