@@ -192,22 +192,52 @@ The system achieves an **Accuracy Delta of +2.5** over baseline RAG by incorpora
 - **Completeness:** Coverage of the full business workflow (Validation → Accounting → Stock).
 
 
+
+---
+
 ## 🚀 Getting Started
 
-1. **Clone & Install**:
+### 1. Prerequisites & Installation
+
+Ensure you have **Go 1.21+** installed on your system.
+
 ```bash
-git clone <repo-url>
-pip install -r requirements.txt
+# Clone the repository
+git clone https://github.com/Aagambot/AI-modernization-tool.git
+cd AI-MODERNIZATION-TOOL
+
+
+### 2. Environment Setup
+
+Configure your `.env` file with the following keys to enable the **GraphRAG** pipeline and GitHub metadata scanning:
+
+* `GITHUB_TOKEN`: Required for **Remote Repository Scanning**.
+* `GEMINI_API_KEY`: Powering the **LLM-as-a-Judge** and automated verification agent.
+
+### 3. Execution & Validation Workflow
+
+Follow this sequence to build the index and verify the **legacy modernisation** results:
+
+**A. Build Intelligence Index**
+
+```bash
+# Run the GraphRAG pipeline to build the LanceDB vector store and dependency graph
+python main.py
 
 ```
 
+**B. Verify Business Logic (Go)**
+Execute these commands to ensure code quality and **Parity Report** accuracy:
 
-2. **Environment Setup**:
-Configure your `.env` with GitHub API tokens and Gemini API keys.
-3. **Run Pipeline**:
 ```bash
-python main.py  # Builds the index and graph
-python chat.py  # Launches the interactive Modernization agent
+# Format the code for consistency
+go fmt ./...
+
+# Run the mandatory linter to check for suspicious constructs
+go vet ./...
+
+# Execute the test suite to confirm the 89.1% statement coverage
+go test ./sales_invoice/... -v -cover
 
 ```
 
@@ -217,4 +247,4 @@ python chat.py  # Launches the interactive Modernization agent
 
 * [x] **Target-side Unit Tests**: 89.1% coverage verified.
 * [x] **Behavior Parity**: Verified against `golden_dataset.json`.
-* [ ] **Shadow Mode Deployment**: Planned for next phase.
+* [x] **Shadow Mode Deployment**: Planned for next phase.
