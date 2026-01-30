@@ -125,37 +125,50 @@ The project follows a modular, enterprise-grade package structure:
 ```
 
 AI-MODERNIZATION-TOOL/
-├── core/                    # Core scanning and graph logic
+├── assets
+│   ├── AagamMehtaLegacyModernisationFlowchar.png
+│   └── diagram-export-27-1-2026-2_27_51-pm.png
+├── core
 │   ├── __init__.py
-│   ├── scanner.py          # LocalScanner - Repository file scanning
-│   ├── graph_builder.py    # CodeGraphPipeline - AST & dependency graph
-│   └── parser.py           # LocalGraphParser - Tree-sitter parsing
-│
-├── data/                    # Storage and DB management
+│   ├── graph_builder.py
+│   ├── parser.py
+│   └── scanner.py
+├── data
+│   ├── graphs
+│   │   └── SalesInvoice_graph.gexf
 │   ├── __init__.py
-│   └── storage.py          # VectorStore - LanceDB vector operations
-│
-├── engine/                  # AI/ML logic (Embedding, Chunking)
+│   ├── file_hashes.json
+│   └── storage.py
+├── doc
+│   └── PARITY_VERIFICATION_SALES_INVOICE.md
+├── engine
 │   ├── __init__.py
-│   ├── embedder.py         # BGEEmbedder - Nomic embedding API
-│   └── chunker.py          # HybridChunker - Token-aware text splitting
-│
-├── utils/                   # Helpers and visualization
+│   ├── chunker.py
+│   ├── embedder.py
+│   └── utils.py
+├── sales_invoice
+│   ├── model.go
+│   ├── validation.go
+│   └── validation_test.go
+├── tests
 │   ├── __init__.py
-│   ├── logger.py           # PipelineLogger - MLflow experiment tracking
-│   ├── graph_to_mermaid.py # Mermaid diagram generation
-│   └── search.py           # CodeSearcher - Vector search interface
-│
-├── tests/                   # Evaluation and benchmarks
+│   └── verify_retrieval.py
+├── utils
 │   ├── __init__.py
-│   └── verify_retrieval.py # RetrievalEvaluator - RAG metrics
-│
-├── main.py                  # Entry point - Full pipeline orchestration
-├── chat.py                  # Retrieval/User interface - LLM chat
-├── .env                     # Environment variables
-├── .gitignore              # Git exclusion rules
-├── golden_dataset.json     # Benchmark data
-└── code_index_db/          # LanceDB vector database (auto-created)
+│   ├── graph_to_mermaid.py
+│   ├── logger.py
+│   └── search.py
+├── .gitignore
+├── README.md
+├── SalesInvoice_flow.md
+├── SalesInvoice_graph.gexf
+├── chat.py
+├── cover.out
+├── evaluation_report.json
+├── go.mod
+├── golden_dataset.json
+├── main.py
+└── server.py
 
 ```
 
